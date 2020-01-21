@@ -3,9 +3,71 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        WindowStartupLocation="CenterScreen"
+        Height="450"
+        Width="800">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static vm:MainWindowViewModel.BrowseCommand}"
+                        CanExecute="BrowseCommand_CanExecute"
+                        Executed="BrowseCommand_Executed" />
+        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ParseCommand}"
+                        CanExecute="ParseCommand_CanExecute"
+                        Executed="ParseCommand_Executed" />
+    </Window.CommandBindings>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+
+            <!-- Menu -->
+            <RowDefinition Height="Auto" />
+            
+            <!-- Directory to parse groupbox -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Main area -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Menu -->
+        <Menu Grid.Column="0"
+              Grid.Row="0"
+              Margin="0,4,0,4"
+              Padding="2">
+            <MenuItem Header="Folder">
+                <MenuItem Header="Browse..."
+                          Command="{x:Static vm:MainWindowViewModel.BrowseCommand}" />
+                <MenuItem Header="Generate"
+                          Command="{x:Static vm:MainWindowViewModel.ParseCommand}" />
+            </MenuItem>
+
+            <MenuItem Header="Options" />
+        </Menu>
+
+        <!-- Directory to parse groupbox -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="1"
+                  Margin="4"
+                  Header="Folder to parse:">
+            <TextBlock HorizontalAlignment="Stretch"
+                       Text="{Binding DirectoryToParse }"/>
+        </GroupBox>
+
+        <!-- Main area -->
+        <TreeView Grid.Column="0"
+                  Grid.Row="2"
+                  Margin="4"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+            
+        </TreeView>
+
     </Grid>
 </Window>
