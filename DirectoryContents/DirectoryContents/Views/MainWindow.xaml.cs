@@ -42,14 +42,7 @@ namespace DirectoryContents
 
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = true;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.IsParsing().Equals(false);
-            }
+            e.CanExecute = true;
 
             e.Handled = true;
         }
@@ -66,9 +59,15 @@ namespace DirectoryContents
                     m_ViewModel.DirectoryToParse = diag.SelectedPath;
                 }
             }
+
+            treeView.Items.Clear();
+
+            treeView.Items.Add(m_ViewModel.RootNode);
+
+            treeView.UpdateLayout();
         }
 
-        private void ParseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void ExportCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
             {
@@ -82,7 +81,7 @@ namespace DirectoryContents
             e.Handled = true;
         }
 
-        private void ParseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void ExportCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
 
         }

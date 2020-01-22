@@ -4,19 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
+        xmlns:models="clr-namespace:DirectoryContents.Models"
         mc:Ignorable="d"
         Title="MainWindow"
         WindowStartupLocation="CenterScreen"
-        Height="450"
-        Width="800">
+        WindowStyle="ToolWindow"
+        Height="700"
+        Width="800"
+        FontSize="14">
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static vm:MainWindowViewModel.BrowseCommand}"
                         CanExecute="BrowseCommand_CanExecute"
                         Executed="BrowseCommand_Executed" />
-        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ParseCommand}"
-                        CanExecute="ParseCommand_CanExecute"
-                        Executed="ParseCommand_Executed" />
+        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ExportCommand}"
+                        CanExecute="ExportCommand_CanExecute"
+                        Executed="ExportCommand_Executed" />
     </Window.CommandBindings>
 
     <Grid>
@@ -28,7 +31,7 @@
 
             <!-- Menu -->
             <RowDefinition Height="Auto" />
-            
+
             <!-- Directory to parse groupbox -->
             <RowDefinition Height="Auto" />
 
@@ -41,12 +44,11 @@
               Grid.Row="0"
               Margin="0,4,0,4"
               Padding="2">
-            <MenuItem Header="Folder">
-                <MenuItem Header="Browse..."
-                          Command="{x:Static vm:MainWindowViewModel.BrowseCommand}" />
-                <MenuItem Header="Generate"
-                          Command="{x:Static vm:MainWindowViewModel.ParseCommand}" />
-            </MenuItem>
+            <MenuItem Header="Browse..."
+                      Command="{x:Static vm:MainWindowViewModel.BrowseCommand}" />
+            <MenuItem Header="Export"
+                      Command="{x:Static vm:MainWindowViewModel.ExportCommand}" />
+
 
             <MenuItem Header="Options" />
         </Menu>
@@ -57,17 +59,30 @@
                   Margin="4"
                   Header="Folder to parse:">
             <TextBlock HorizontalAlignment="Stretch"
-                       Text="{Binding DirectoryToParse }"/>
+                       Text="{Binding DirectoryToParse }" />
         </GroupBox>
 
         <!-- Main area -->
+
         <TreeView Grid.Column="0"
                   Grid.Row="2"
-                  Margin="4"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch">
-            
+                  Name="treeView"
+                  Margin="4,4,4,-311"
+                  Width="775"
+                  Height="570"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type models:DirectoryItem}"
+                                          ItemsSource="{Binding Items}">
+                    <TextBlock Text="{Binding ItemName}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+
         </TreeView>
+
+
 
     </Grid>
 </Window>
