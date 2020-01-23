@@ -1,14 +1,51 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using DirectoryContents.Classes;
 
 namespace DirectoryContents.Models
 {
-    public class DirectoryItem
+    public class DirectoryItem : NotifyObject
     {
+        #region Private Members
+
+        private bool m_IsExpanded;
+        private bool m_IsSelected;
+
+        #endregion Private Members
+
         #region Public Properties
 
-        public string ItemName { get; private set; }
+        internal int Depth { get; set; }
 
-        public bool IsHidden { get; private set; }
+        public string FullyQualifiedFilename { get; private set; }
+
+        public bool IsDirectory { get; private set; }
+
+        public bool IsExpanded
+        {
+            get => m_IsExpanded;
+
+            set
+            {
+                m_IsExpanded = value;
+
+                RaisePropertyChanged(nameof(IsExpanded));
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => m_IsSelected;
+
+            set
+            {
+                m_IsSelected = value;
+
+                RaisePropertyChanged(nameof(IsSelected));
+            }
+        }
+
+        public string ItemName { get; private set; }
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
 
@@ -21,12 +58,29 @@ namespace DirectoryContents.Models
             Items = new ObservableCollection<DirectoryItem>();
         }
 
-        public DirectoryItem(string itemName) : this()
+        public DirectoryItem(DirectoryInfo directoryInfo) : this()
         {
-            ItemName = itemName;
+            FullyQualifiedFilename = directoryInfo.FullName;
+            ItemName = directoryInfo.Name;
+            IsDirectory = true;
+        }
+
+        public DirectoryItem(FileInfo fileInfo) : this()
+        {
+            FullyQualifiedFilename = fileInfo.FullName;
+            ItemName = fileInfo.Name;
+            IsDirectory = false;
         }
 
         #endregion constructors
 
+        #region Public Methods
+
+        public override string ToString()
+        {
+            return ItemName;
+        }
+
+        #endregion Public Methods
     }
 }

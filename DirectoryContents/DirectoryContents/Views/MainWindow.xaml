@@ -49,7 +49,6 @@
             <MenuItem Header="Export"
                       Command="{x:Static vm:MainWindowViewModel.ExportCommand}" />
 
-
             <MenuItem Header="Options" />
         </Menu>
 
@@ -71,7 +70,8 @@
                   Width="775"
                   Height="570"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}">
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type models:DirectoryItem}"
@@ -79,10 +79,6 @@
                     <TextBlock Text="{Binding ItemName}" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-
         </TreeView>
-
-
-
     </Grid>
 </Window>

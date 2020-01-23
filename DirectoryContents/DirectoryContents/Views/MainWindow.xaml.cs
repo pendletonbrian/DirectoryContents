@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents
@@ -26,7 +15,7 @@ namespace DirectoryContents
 
         private MainWindowViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -38,7 +27,9 @@ namespace DirectoryContents
             DataContext = m_ViewModel;
         }
 
-        #endregion
+        #endregion constructor
+
+        #region Private Methods
 
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -83,7 +74,39 @@ namespace DirectoryContents
 
         private void ExportCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string filepath;
 
+            using (SaveFileDialog diag = new SaveFileDialog())
+            {
+                diag.Title = "Export file as:";
+                diag.OverwritePrompt = true;
+                diag.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+                if (diag.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+
+                filepath = diag.FileName;
+            }
+
+            if (string.IsNullOrWhiteSpace(filepath))
+            {
+                return;
+            }
+
+            try
+            {
+                m_ViewModel.Export(treeView, filepath);
+
+                System.Windows.MessageBox.Show(this, "File exported!", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(this, $"Exception: {ex.Message}", Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
+        #endregion Private Methods
     }
 }
