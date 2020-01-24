@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject>DirectoryContents.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>folder-tree-48.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -112,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\folder-tree-48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="folder-tree-48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
