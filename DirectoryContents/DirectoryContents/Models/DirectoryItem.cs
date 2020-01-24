@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using DirectoryContents.Classes;
 
@@ -18,6 +19,11 @@ namespace DirectoryContents.Models
         internal int Depth { get; set; }
 
         public string FullyQualifiedFilename { get; private set; }
+
+        public bool HasChildren
+        {
+            get { return Items.Count > 0; }
+        }
 
         public bool IsDirectory { get; private set; }
 

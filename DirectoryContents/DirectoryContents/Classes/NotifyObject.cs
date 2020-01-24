@@ -38,8 +38,8 @@ namespace DirectoryContents.Classes
 
             PropertyChangedEventArgs args;
 
-            // Get the event args from the cache, creating them and adding to the
-            // cache if necessary.
+            // Get the event args from the cache, creating them and adding to
+            // the cache if necessary.
             lock (m_LockObject)
             {
                 bool isCached = m_EventArgCache.ContainsKey(propertyName);
@@ -68,13 +68,13 @@ namespace DirectoryContents.Classes
 
         #region constructors
 
+        protected NotifyObject()
+        {
+        }
+
         static NotifyObject()
         {
             m_EventArgCache = new Dictionary<string, PropertyChangedEventArgs>();
-        }
-
-        protected NotifyObject()
-        {
         }
 
         #endregion constructors
@@ -85,7 +85,9 @@ namespace DirectoryContents.Classes
         /// Derived classes can override this method to execute logic after a
         /// property is set. The base implementation does nothing.
         /// </summary>
-        /// <param name="propertyName">The property which was changed.</param>
+        /// <param name="propertyName">
+        /// The property which was changed.
+        /// </param>
         protected virtual void AfterPropertyChanged(string propertyName)
         {
         }
@@ -95,7 +97,9 @@ namespace DirectoryContents.Classes
         /// AfterPropertyChanged method, regardless of whether the event was
         /// raised or not.
         /// </summary>
-        /// <param name="propertyName">The property which was changed.</param>
+        /// <param name="propertyName">
+        /// The property which was changed.
+        /// </param>
         protected void RaisePropertyChanged(string propertyName)
         {
             this.VerifyProperty(propertyName);
@@ -128,7 +132,8 @@ namespace DirectoryContents.Classes
 
             if (propInfo is null)
             {
-                // The property could not be found, so alert the developer of the problem.
+                // The property could not be found, so alert the developer of
+                // the problem.
 
                 string msg = string.Format(
                     ERROR_MSG,

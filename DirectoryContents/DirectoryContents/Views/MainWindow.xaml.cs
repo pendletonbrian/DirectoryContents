@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -51,9 +52,67 @@ namespace DirectoryContents
                 }
             }
 
+            //string startupDir = AppDomain.CurrentDomain.BaseDirectory;
+            //if (startupDir.EndsWith(Path.DirectorySeparatorChar.ToString()))
+            //{
+            //    startupDir = startupDir.Substring(0, startupDir.Length - 1);
+            //}
+
+            //startupDir = startupDir.Substring(0, startupDir.LastIndexOf(Path.DirectorySeparatorChar));
+            //startupDir = startupDir.Substring(0, startupDir.LastIndexOf(Path.DirectorySeparatorChar));
+
+            //if (Directory.Exists(startupDir) == false)
+            //{
+            //    throw new Exception($"Solution directory couldn't be found...  \"{startupDir}\".");
+            //}
+
+            //m_ViewModel.DirectoryToParse = Path.Combine(startupDir, @"Test\RootFolder");
+
             treeView.Items.Clear();
 
             treeView.Items.Add(m_ViewModel.RootNode);
+
+            treeView.UpdateLayout();
+        }
+
+        private void CollapseAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
+
+            e.Handled = true;
+        }
+
+        private void CollapseAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.CollapseAll();
+
+            treeView.UpdateLayout();
+        }
+
+        private void ExpandAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
+
+            e.Handled = true;
+        }
+
+        private void ExpandAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.ExpandAll();
 
             treeView.UpdateLayout();
         }
@@ -81,6 +140,10 @@ namespace DirectoryContents
                 diag.Title = "Export file as:";
                 diag.OverwritePrompt = true;
                 diag.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                diag.Filter = "Text Files | *.txt";
+                diag.FilterIndex = 0;
+                diag.DefaultExt = "txt";
+                diag.AddExtension = true;
 
                 if (diag.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 {
@@ -95,11 +158,23 @@ namespace DirectoryContents
                 return;
             }
 
+            //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "results.txt");
+
             try
             {
                 m_ViewModel.Export(treeView, filepath);
 
-                System.Windows.MessageBox.Show(this, "File exported!", Title, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBoxResult result = System.Windows.MessageBox.Show(
+                    this,
+                    "File exported!  Would you like to view the result?",
+                    Title,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    Process.Start(filepath);
+                }
             }
             catch (Exception ex)
             {
