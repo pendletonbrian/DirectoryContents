@@ -14,7 +14,7 @@ namespace DirectoryContents
     {
         #region Private Members
 
-        private MainWindowViewModel m_ViewModel;
+        private readonly MainWindowViewModel m_ViewModel;
 
         #endregion Private Members
 

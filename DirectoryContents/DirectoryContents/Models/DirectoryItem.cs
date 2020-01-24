@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using DirectoryContents.Classes;
 
@@ -24,6 +23,8 @@ namespace DirectoryContents.Models
         {
             get { return Items.Count > 0; }
         }
+
+        public string IconUri { get; private set; }
 
         public bool IsDirectory { get; private set; }
 
@@ -69,6 +70,8 @@ namespace DirectoryContents.Models
             FullyQualifiedFilename = directoryInfo.FullName;
             ItemName = directoryInfo.Name;
             IsDirectory = true;
+
+            IconUri = "/Images/folder-16.png";
         }
 
         public DirectoryItem(FileInfo fileInfo) : this()
@@ -76,6 +79,8 @@ namespace DirectoryContents.Models
             FullyQualifiedFilename = fileInfo.FullName;
             ItemName = fileInfo.Name;
             IsDirectory = false;
+
+            IconUri = "/Images/file-16.png";
         }
 
         #endregion constructors
