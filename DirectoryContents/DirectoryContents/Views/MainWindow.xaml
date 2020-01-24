@@ -71,6 +71,7 @@
                   Height="570"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectedItemChanged="treeView_SelectedItemChanged"
                   ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}">
 
             <TreeView.ItemTemplate>
@@ -93,13 +94,38 @@
                         <CommandBinding Command="{x:Static vm:MainWindowViewModel.ExpandAllCommand}"
                                         CanExecute="ExpandAllCommand_CanExecute"
                                         Executed="ExpandAllCommand_Executed" />
+                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ViewInFileExplorerCommand}"
+                                        CanExecute="ViewInFileExplorerCommand_CanExecute"
+                                        Executed="ViewInFileExplorerCommand_Executed" />
                     </ContextMenu.CommandBindings>
 
                     <MenuItem Header="Expand All"
-                              Command="{x:Static vm:MainWindowViewModel.ExpandAllCommand}" />
-                    <Separator />
+                              Margin="2"
+                              Command="{x:Static vm:MainWindowViewModel.ExpandAllCommand}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource EnableDisableImageStyle}"
+                                   Source="/Images/double-down-16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="Collapse All"
-                              Command="{x:Static vm:MainWindowViewModel.CollapseAllCommand}" />
+                              Margin="2"
+                              Command="{x:Static vm:MainWindowViewModel.CollapseAllCommand}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource EnableDisableImageStyle}"
+                                   Source="/Images/double-up-16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+
+                    <Separator />
+
+                    <MenuItem Header="Open selected item in File Explorer"
+                              Margin="2"
+                              Command="{x:Static vm:MainWindowViewModel.ViewInFileExplorerCommand}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource EnableDisableImageStyle}"
+                                   Source="/Images/redo-16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

@@ -5,6 +5,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Image.xaml" />
                 <ResourceDictionary Source="Resources/TreeView.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

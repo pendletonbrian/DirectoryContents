@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using DirectoryContents.Classes;
 
 namespace DirectoryContents.Models
 {
-    public class DirectoryItem : NotifyObject
+    public class DirectoryItem : NotifyObject, IEquatable<DirectoryItem>
     {
         #region Private Members
 
@@ -87,9 +88,51 @@ namespace DirectoryContents.Models
 
         #region Public Methods
 
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            DirectoryItem item = obj as DirectoryItem;
+
+            if (item is null)
+            {
+                return false;
+            }
+
+            return Equals(item);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashName = string.IsNullOrWhiteSpace(ItemName) ? 0 : ItemName.GetHashCode();
+
+            int hash = 17;
+
+            unchecked
+            {
+                hash = (hash * 23) + hashName;
+                hash = (hash * 23) + Depth.GetHashCode();
+            }
+
+            return hash;
+        }
+
         public override string ToString()
         {
             return ItemName;
+        }
+
+        public bool Equals(DirectoryItem other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            return GetHashCode().Equals(other.GetHashCode());
         }
 
         #endregion Public Methods

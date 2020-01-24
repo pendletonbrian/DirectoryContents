@@ -63,9 +63,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Page Include="Resources\Image.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\TreeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +123,22 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="folder-tree-48.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\collapse-arrow-16.png" />
+    <Resource Include="Images\expand-arrow-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\double-down-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\double-up-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\up-2-16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\redo-16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -23,6 +24,7 @@ namespace DirectoryContents.ViewModels
         public static RoutedCommand CollapseAllCommand = new RoutedCommand();
         public static RoutedCommand ExpandAllCommand = new RoutedCommand();
         public static RoutedCommand ExportCommand = new RoutedCommand();
+        public static RoutedCommand ViewInFileExplorerCommand = new RoutedCommand();
 
         #endregion Public Members
 
@@ -30,6 +32,7 @@ namespace DirectoryContents.ViewModels
 
         private string m_DirectoryToParse = string.Empty;
         private DirectoryItem m_RootNode;
+        private DirectoryItem m_SelectedItem;
 
         #endregion Private Members
 
@@ -64,6 +67,21 @@ namespace DirectoryContents.ViewModels
                 m_RootNode = value;
 
                 RaisePropertyChanged(nameof(RootNode));
+            }
+        }
+
+        public DirectoryItem SelectedItem
+        {
+            get { return m_SelectedItem; }
+            set
+            {
+                if (m_SelectedItem is null ||
+                    m_SelectedItem.Equals(value).Equals(false))
+                {
+                    m_SelectedItem = value;
+
+                    RaisePropertyChanged(nameof(SelectedItem));
+                }
             }
         }
 
@@ -173,6 +191,67 @@ namespace DirectoryContents.ViewModels
             RaisePropertyChanged(nameof(DirectoryItems));
 
             m_RootNode.IsExpanded = true;
+        }
+
+        internal bool ItemIsSelected()
+        {
+            return m_SelectedItem != null;
+        }
+
+        internal void ShowSelectedItemInFileExplorer()
+        {
+            if (SelectedItem is null)
+            {
+                Debug.WriteLine($"{nameof(SelectedItem)} is null.");
+
+                return;
+            }
+
+            string fullyQualifiedPath = SelectedItem.FullyQualifiedFilename;
+
+            if (string.IsNullOrWhiteSpace(fullyQualifiedPath))
+            {
+                Debug.WriteLine($"{SelectedItem.FullyQualifiedFilename} is empty/null.");
+
+                return;
+            }
+
+            if (SelectedItem.IsDirectory)
+            {
+                if (Directory.Exists(fullyQualifiedPath).Equals(false))
+                {
+                    Debug.WriteLine($"The directory \"{fullyQualifiedPath}\" does not exist.");
+
+                    return;
+                }
+            }
+            else
+            {
+                if (File.Exists(fullyQualifiedPath).Equals(false))
+                {
+                    Debug.WriteLine($"The file \"{fullyQualifiedPath}\" does not exist.");
+
+                    return;
+                }
+            }
+
+            IntPtr intPtr = NativeMethods.ILCreateFromPathW(fullyQualifiedPath);
+
+            if (intPtr == IntPtr.Zero)
+            {
+                Debug.WriteLine($"Couldn't get the pointer to the file.");
+
+                return;
+            }
+
+            try
+            {
+                Marshal.ThrowExceptionForHR(NativeMethods.SHOpenFolderAndSelectItems(intPtr, 0, IntPtr.Zero, 0));
+            }
+            finally
+            {
+                NativeMethods.ILFree(intPtr);
+            }
         }
 
         #endregion Public Methods

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents
@@ -31,6 +32,32 @@ namespace DirectoryContents
         #endregion constructor
 
         #region Private Methods
+
+        private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.ItemIsSelected();
+            }
+
+            e.Handled = true;
+        }
+
+        private void ViewInFileExplorerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                m_ViewModel.ShowSelectedItemInFileExplorer();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(this, $"Exception: {ex.Message}", Title, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -182,6 +209,20 @@ namespace DirectoryContents
             }
         }
 
+        private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            DirectoryItem item = e.NewValue as DirectoryItem;
+
+            if (item is null)
+            {
+                return;
+            }
+
+            m_ViewModel.SelectedItem = item;
+        }
+
         #endregion Private Methods
+
+
     }
 }
