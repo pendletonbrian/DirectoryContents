@@ -10,6 +10,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow"
         ResizeMode="NoResize"
+        AllowDrop="True"
         Height="700"
         Width="800"
         FontSize="14"
@@ -39,6 +40,8 @@
 
             <!-- Main area -->
             <RowDefinition Height="Auto" />
+
+            <!--<RowDefinition Height="200" />-->
         </Grid.RowDefinitions>
 
         <!-- Menu -->
@@ -66,12 +69,14 @@
         <TreeView Grid.Column="0"
                   Grid.Row="2"
                   Name="treeView"
-                  Margin="4,4,4,-311"
-                  Width="775"
-                  Height="570"
+                  Margin="4"
+                  Width="770"
+                  Height="560"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  SelectedItemChanged="treeView_SelectedItemChanged"
+                  SelectedItemChanged="TreeView_SelectedItemChanged"
+                  DragEnter="TreeView_DragEnter"
+                  Drop="TreeView_Drop"
                   ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}">
 
             <TreeView.ItemTemplate>
@@ -129,5 +134,13 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
+
+        <!--<TextBox Grid.Column="0"
+                 Grid.Row="3"
+                 Margin="4"
+                 Text="{Binding DebugText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="True"
+                 AcceptsReturn="True"
+                 TextWrapping="Wrap" />-->
     </Grid>
 </Window>

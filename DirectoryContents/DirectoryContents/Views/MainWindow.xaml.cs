@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -32,6 +33,17 @@ namespace DirectoryContents
         #endregion constructor
 
         #region Private Methods
+
+        private void LoadDirectory(string fullyQualifiedDirectoryPath)
+        {
+            m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
+
+            treeView.Items.Clear();
+
+            treeView.Items.Add(m_ViewModel.RootNode);
+
+            treeView.UpdateLayout();
+        }
 
         private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -68,6 +80,8 @@ namespace DirectoryContents
 
         private void BrowseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string directoryPath = null;
+
             using (FolderBrowserDialog diag = new FolderBrowserDialog())
             {
                 diag.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
@@ -75,7 +89,7 @@ namespace DirectoryContents
 
                 if (diag.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    m_ViewModel.DirectoryToParse = diag.SelectedPath;
+                    directoryPath = diag.SelectedPath;
                 }
             }
 
@@ -95,11 +109,12 @@ namespace DirectoryContents
 
             //m_ViewModel.DirectoryToParse = Path.Combine(startupDir, @"Test\RootFolder");
 
-            treeView.Items.Clear();
+            if (string.IsNullOrWhiteSpace(directoryPath))
+            {
+                return;
+            }
 
-            treeView.Items.Add(m_ViewModel.RootNode);
-
-            treeView.UpdateLayout();
+            LoadDirectory(directoryPath);
         }
 
         private void CollapseAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -209,7 +224,7 @@ namespace DirectoryContents
             }
         }
 
-        private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             DirectoryItem item = e.NewValue as DirectoryItem;
 
@@ -221,8 +236,34 @@ namespace DirectoryContents
             m_ViewModel.SelectedItem = item;
         }
 
-        #endregion Private Methods
+        private void TreeView_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            bool isValidData = e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop);
 
+            if (isValidData == false)
+            {
+                e.Effects = System.Windows.DragDropEffects.None;
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy;
+            }
+        }
+
+        private void TreeView_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            string[] filenameList = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+
+            if (filenameList is null ||
+                filenameList.Length.Equals(0))
+            {
+                return;
+            }
+
+            LoadDirectory(filenameList[0]);
+        }
+
+        #endregion Private Methods
 
     }
 }

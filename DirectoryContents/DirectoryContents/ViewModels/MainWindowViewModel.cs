@@ -33,6 +33,7 @@ namespace DirectoryContents.ViewModels
         private string m_DirectoryToParse = string.Empty;
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
+        private StringBuilder m_DebugText = new StringBuilder();
 
         #endregion Private Members
 
@@ -85,6 +86,18 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        public string DebugText
+        {
+            get { return m_DebugText.ToString(); }
+
+            set
+            {
+                m_DebugText.AppendLine(value);
+
+                RaisePropertyChanged(nameof(DebugText));
+            }
+        }
+
         #endregion Public Properties
 
         #region constructor
@@ -94,6 +107,8 @@ namespace DirectoryContents.ViewModels
             DirectoryItems = new ObservableCollection<DirectoryItem>
             {
             };
+
+            DebugText = $"{nameof(MainWindowViewModel)}: ctor";
         }
 
         #endregion constructor
