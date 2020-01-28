@@ -63,6 +63,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\FileHash\Hasher.cs" />
+    <Compile Include="Classes\FileHash\Checksum.cs" />
+    <Compile Include="Classes\FileHash\IFileHash.cs" />
+    <Compile Include="Classes\FileHash\MD5.cs" />
+    <Compile Include="Classes\FileHash\SHA1.cs" />
+    <Compile Include="Classes\FileHash\SHA256.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
