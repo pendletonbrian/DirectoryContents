@@ -20,11 +20,41 @@ namespace DirectoryContents.ViewModels
     {
         #region Public Members
 
+        /// <summary>
+        /// Main menu command to browse for the target directory.
+        /// </summary>
         public static RoutedCommand BrowseCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Context menu command to collapse all nodes of the tree.
+        /// </summary>
         public static RoutedCommand CollapseAllCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Context menu command to expand al nodes of the tree.
+        /// </summary>
         public static RoutedCommand ExpandAllCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Main menu command to export the directory structure to a file.
+        /// </summary>
         public static RoutedCommand ExportCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Context menu command to open a file explorer at the selected
+        /// file's location, with the file selected.
+        /// </summary>
         public static RoutedCommand ViewInFileExplorerCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Main menu command to show the settings page.
+        /// </summary>
+        public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Context menu command to show the generate file hash page.
+        /// </summary>
+        public static RoutedCommand GenerateFileHashCommand = new RoutedCommand();
 
         #endregion Public Members
 
@@ -34,6 +64,8 @@ namespace DirectoryContents.ViewModels
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
         private StringBuilder m_DebugText = new StringBuilder();
+        private string m_StatusText = string.Empty;
+        private bool m_ShowProgressBar = false;
 
         #endregion Private Members
 
@@ -96,6 +128,38 @@ namespace DirectoryContents.ViewModels
 
                 RaisePropertyChanged(nameof(DebugText));
             }
+        }
+
+        public string StatusText
+        {
+            get { return m_StatusText; }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(m_StatusText) ||
+                    m_StatusText.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    m_StatusText = value;
+
+                    RaisePropertyChanged(nameof(StatusText));
+                }
+            }
+        }
+
+        public bool ShowProgressBar
+        {
+            get { return m_ShowProgressBar; }
+
+            set
+            {
+                if (m_ShowProgressBar.Equals(value) == false)
+                {
+                    m_ShowProgressBar = value;
+
+                    RaisePropertyChanged(nameof(ShowProgressBar));
+                }
+            }
+
         }
 
         #endregion Public Properties

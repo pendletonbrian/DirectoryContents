@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
         xmlns:models="clr-namespace:DirectoryContents.Models"
+        xmlns:classes="clr-namespace:DirectoryContents.Classes"
         mc:Ignorable="d"
         Title="Directory Contents"
         WindowStartupLocation="CenterScreen"
@@ -23,8 +24,14 @@
         <CommandBinding Command="{x:Static vm:MainWindowViewModel.ExportCommand}"
                         CanExecute="ExportCommand_CanExecute"
                         Executed="ExportCommand_Executed" />
+        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ViewSettingsCommand}"
+                        Executed="ViewSettingsCommand_Executed" />
     </Window.CommandBindings>
 
+    <Window.Resources>
+        <classes:VisibilityConverter x:Key="VisibilityConverter" />
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -41,7 +48,8 @@
             <!-- Main area -->
             <RowDefinition Height="Auto" />
 
-            <!--<RowDefinition Height="200" />-->
+            <!-- Status bar -->
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Menu -->
@@ -53,19 +61,20 @@
                       Command="{x:Static vm:MainWindowViewModel.BrowseCommand}" />
             <MenuItem Header="Export"
                       Command="{x:Static vm:MainWindowViewModel.ExportCommand}" />
+            <MenuItem Header="Settings"
+                      Command="{x:Static vm:MainWindowViewModel.ViewSettingsCommand}" />
         </Menu>
 
         <!-- Directory to parse groupbox -->
         <GroupBox Grid.Column="0"
                   Grid.Row="1"
                   Margin="4"
-                  Header="Folder to parse:">
+                  Header="Target Directory:">
             <TextBlock HorizontalAlignment="Stretch"
                        Text="{Binding DirectoryToParse }" />
         </GroupBox>
 
         <!-- Main area -->
-
         <TreeView Grid.Column="0"
                   Grid.Row="2"
                   Name="treeView"
@@ -102,6 +111,9 @@
                         <CommandBinding Command="{x:Static vm:MainWindowViewModel.ViewInFileExplorerCommand}"
                                         CanExecute="ViewInFileExplorerCommand_CanExecute"
                                         Executed="ViewInFileExplorerCommand_Executed" />
+                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.GenerateFileHashCommand}"
+                                        CanExecute="GenerateFileHashCommand_CanExecute"
+                                        Executed="GenerateFileHashCommand_Executed" />
                     </ContextMenu.CommandBindings>
 
                     <MenuItem Header="Expand All"
@@ -135,12 +147,39 @@
             </TreeView.ContextMenu>
         </TreeView>
 
-        <!--<TextBox Grid.Column="0"
-                 Grid.Row="3"
-                 Margin="4"
-                 Text="{Binding DebugText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                 IsReadOnly="True"
-                 AcceptsReturn="True"
-                 TextWrapping="Wrap" />-->
+        <!-- Status bar -->
+        <Border Grid.Column="0"
+              Grid.Row="3"
+                Margin="2,1,2,2">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="150" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Status label -->
+                <TextBlock Grid.Column="0"
+                           Grid.Row="0"
+                           Padding="2"
+                           MinHeight="20"
+                           Text="{Binding StatusText}" />
+
+                <!-- Progress bar -->
+                <ProgressBar Grid.Column="1"
+                             Grid.Row="0"
+                             Minimum="0"
+                             Maximum="100"
+                             Margin="2"
+                             IsIndeterminate="{Binding ShowProgressBar}"
+                             Visibility="{Binding ShowProgressBar, Converter={StaticResource VisibilityConverter}}" />
+            </Grid>
+            
+        </Border>
     </Grid>
 </Window>

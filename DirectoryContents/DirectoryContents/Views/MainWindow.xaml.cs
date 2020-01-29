@@ -34,6 +34,28 @@ namespace DirectoryContents
 
         #region Private Methods
 
+        private void CheckItemIsSelected(CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.ItemIsSelected();
+            }
+
+            e.Handled = true;
+        }
+
+        private void ViewSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                return;
+            }
+
+        }
         private void LoadDirectory(string fullyQualifiedDirectoryPath)
         {
             m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
@@ -47,16 +69,7 @@ namespace DirectoryContents
 
         private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = false;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.ItemIsSelected();
-            }
-
-            e.Handled = true;
+            CheckItemIsSelected(e);
         }
 
         private void ViewInFileExplorerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -85,7 +98,7 @@ namespace DirectoryContents
             using (FolderBrowserDialog diag = new FolderBrowserDialog())
             {
                 diag.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                diag.Description = "Select the folder to parse.";
+                diag.Description = "Select the directory:";
 
                 if (diag.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
@@ -261,6 +274,16 @@ namespace DirectoryContents
             }
 
             LoadDirectory(filenameList[0]);
+        }
+
+        private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            CheckItemIsSelected(e);
+        }
+
+        private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
         }
 
         #endregion Private Methods
