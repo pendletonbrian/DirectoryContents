@@ -5,7 +5,16 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                
+                <!-- Colors needs to be listed prior to brushes. -->
+                <ResourceDictionary Source="Resources/Colors.xaml" />
+                
+                <!-- Brushes needs to be listed prior to any files that reference its brushes. -->
+                <ResourceDictionary Source="Resources/Brushes.xaml" />
+                <ResourceDictionary Source="Resources/DefaultMeasurements.xaml" />
                 <ResourceDictionary Source="Resources/Image.xaml" />
+                <ResourceDictionary Source="Resources/Separator.xaml" />
+                <ResourceDictionary Source="Resources/TextBlock.xaml" />
                 <ResourceDictionary Source="Resources/TreeView.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

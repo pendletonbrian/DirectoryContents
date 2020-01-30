@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Models;
+using DirectoryContents.Views;
+using WpfPageTransitions;
 
 namespace DirectoryContents.ViewModels
 {
@@ -18,105 +22,41 @@ namespace DirectoryContents.ViewModels
     /// </summary>
     public class MainWindowViewModel : NotifyObject
     {
-        #region Public Members
-
-        /// <summary>
-        /// Main menu command to browse for the target directory.
-        /// </summary>
-        public static RoutedCommand BrowseCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Context menu command to collapse all nodes of the tree.
-        /// </summary>
-        public static RoutedCommand CollapseAllCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Context menu command to expand al nodes of the tree.
-        /// </summary>
-        public static RoutedCommand ExpandAllCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Main menu command to export the directory structure to a file.
-        /// </summary>
-        public static RoutedCommand ExportCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Context menu command to open a file explorer at the selected
-        /// file's location, with the file selected.
-        /// </summary>
-        public static RoutedCommand ViewInFileExplorerCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Main menu command to show the settings page.
-        /// </summary>
-        public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
-
-        /// <summary>
-        /// Context menu command to show the generate file hash page.
-        /// </summary>
-        public static RoutedCommand GenerateFileHashCommand = new RoutedCommand();
-
-        #endregion Public Members
-
         #region Private Members
-
-        private string m_DirectoryToParse = string.Empty;
-        private DirectoryItem m_RootNode;
-        private DirectoryItem m_SelectedItem;
+        
         private StringBuilder m_DebugText = new StringBuilder();
         private string m_StatusText = string.Empty;
         private bool m_ShowProgressBar = false;
+
+        /// <summary>
+        /// The timer for the status message.
+        /// </summary>
+        private readonly Timer m_StatusMsgTimer = new Timer();
+
+        /// <summary>
+        /// How long, in seconds, to display the status bar message.
+        /// </summary>
+        private const int MAX_STATUS_MSG_COUNT = 8;
+
+        /// <summary>
+        /// The current number of seconds for which the timer has been counting.
+        /// </summary>
+        private int m_MessageTimerCount;
+
+        private readonly PageTransition m_PageTransition;
+
+        private static readonly Logger m_Logger;
+
+        /// <summary>
+        /// The list of the controls that have been used in the current path.
+        /// </summary>
+        private readonly Stack<UserControl> m_PageList = new Stack<UserControl>();
 
         #endregion Private Members
 
         #region Public Properties
 
-        public ObservableCollection<DirectoryItem> DirectoryItems { get; private set; }
-
-        public string DirectoryToParse
-        {
-            get { return m_DirectoryToParse; }
-
-            set
-            {
-                if (string.IsNullOrWhiteSpace(m_DirectoryToParse) ||
-                    m_DirectoryToParse.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    m_DirectoryToParse = value;
-
-                    RaisePropertyChanged(nameof(DirectoryToParse));
-
-                    Parse();
-                }
-            }
-        }
-
-        public DirectoryItem RootNode
-        {
-            get { return m_RootNode; }
-
-            private set
-            {
-                m_RootNode = value;
-
-                RaisePropertyChanged(nameof(RootNode));
-            }
-        }
-
-        public DirectoryItem SelectedItem
-        {
-            get { return m_SelectedItem; }
-            set
-            {
-                if (m_SelectedItem is null ||
-                    m_SelectedItem.Equals(value).Equals(false))
-                {
-                    m_SelectedItem = value;
-
-                    RaisePropertyChanged(nameof(SelectedItem));
-                }
-            }
-        }
+        internal Enumerations.PageControl CurrentPage { get; private set; } = Enumerations.PageControl.None;
 
         public string DebugText
         {
@@ -162,249 +102,143 @@ namespace DirectoryContents.ViewModels
 
         }
 
+        public string TitleText { get; internal set; }
+
         #endregion Public Properties
 
-        #region constructor
+        #region constructors
 
-        public MainWindowViewModel()
+        static MainWindowViewModel()
         {
-            DirectoryItems = new ObservableCollection<DirectoryItem>
+            try
             {
-            };
+                string startupDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+
+                m_Logger = new Logger(Path.Combine(startupDirectory, $"log_{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log"));
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"Exception in static constructor:{Environment.NewLine}{ex.ToString()}");
+            }
+        }
+
+        public MainWindowViewModel(PageTransition pageTransition)
+        {
+            m_PageTransition = pageTransition;
 
             DebugText = $"{nameof(MainWindowViewModel)}: ctor";
+
+            m_StatusMsgTimer.Elapsed += StatusMsgTimer_Elapsed;
         }
+
+
 
         #endregion constructor
 
-        #region Public Methods
-
-        internal bool CanGenerate()
-        {
-            return string.IsNullOrWhiteSpace(m_DirectoryToParse).Equals(false);
-        }
-
-        internal void CollapseAll()
-        {
-            m_RootNode.IsExpanded = true;
-
-            foreach (DirectoryItem node in m_RootNode.Items)
-            {
-                SetIsExpanded(node, false);
-            }
-        }
-
-        internal void ExpandAll()
-        {
-            m_RootNode.IsExpanded = true;
-
-            foreach (DirectoryItem node in m_RootNode.Items)
-            {
-                SetIsExpanded(node, true);
-            }
-        }
-
-        internal void Export(TreeView tree, string fullyQualifiedPath)
-        {
-            if (tree is null)
-            {
-                throw new ArgumentNullException($"The TreeView is null.", nameof(tree));
-            }
-
-            if (string.IsNullOrEmpty(fullyQualifiedPath))
-            {
-                throw new ArgumentException("The export file name was not set.", nameof(fullyQualifiedPath));
-            }
-
-            DirectoryItem rootNode = tree.Items[0] as DirectoryItem;
-
-            if (rootNode is null)
-            {
-                throw new ArgumentException("Root node is null.", nameof(fullyQualifiedPath));
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(rootNode.ItemName);
-
-            foreach (DirectoryItem node in rootNode.Items)
-            {
-                sb.AppendLine($"|\t{node.ItemName}");
-
-                if (node.HasChildren)
-                {
-                    ExportNode(sb, node);
-                }
-            }
-
-            using (StreamWriter writer = new StreamWriter(fullyQualifiedPath))
-            {
-                writer.Write(sb.ToString());
-                writer.Flush();
-            }
-
-            Debug.WriteLine($"File written to: \"{fullyQualifiedPath}\".");
-        }
-
-        internal void Parse()
-        {
-            if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
-            {
-                Debug.WriteLine($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
-
-                return;
-            }
-
-            DirectoryItems.Clear();
-
-            DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
-
-            m_RootNode = new DirectoryItem(dirInfo)
-            {
-                Depth = 0
-            };
-
-            DirectoryItems.Add(m_RootNode);
-
-            ParseDirectory(m_RootNode, dirInfo.FullName);
-
-            RaisePropertyChanged(nameof(DirectoryItems));
-
-            m_RootNode.IsExpanded = true;
-        }
-
-        internal bool ItemIsSelected()
-        {
-            return m_SelectedItem != null;
-        }
-
-        internal void ShowSelectedItemInFileExplorer()
-        {
-            if (SelectedItem is null)
-            {
-                Debug.WriteLine($"{nameof(SelectedItem)} is null.");
-
-                return;
-            }
-
-            string fullyQualifiedPath = SelectedItem.FullyQualifiedFilename;
-
-            if (string.IsNullOrWhiteSpace(fullyQualifiedPath))
-            {
-                Debug.WriteLine($"{SelectedItem.FullyQualifiedFilename} is empty/null.");
-
-                return;
-            }
-
-            if (SelectedItem.IsDirectory)
-            {
-                if (Directory.Exists(fullyQualifiedPath).Equals(false))
-                {
-                    Debug.WriteLine($"The directory \"{fullyQualifiedPath}\" does not exist.");
-
-                    return;
-                }
-            }
-            else
-            {
-                if (File.Exists(fullyQualifiedPath).Equals(false))
-                {
-                    Debug.WriteLine($"The file \"{fullyQualifiedPath}\" does not exist.");
-
-                    return;
-                }
-            }
-
-            IntPtr intPtr = NativeMethods.ILCreateFromPathW(fullyQualifiedPath);
-
-            if (intPtr == IntPtr.Zero)
-            {
-                Debug.WriteLine($"Couldn't get the pointer to the file.");
-
-                return;
-            }
-
-            try
-            {
-                Marshal.ThrowExceptionForHR(NativeMethods.SHOpenFolderAndSelectItems(intPtr, 0, IntPtr.Zero, 0));
-            }
-            finally
-            {
-                NativeMethods.ILFree(intPtr);
-            }
-        }
-
-        #endregion Public Methods
-
         #region Private Methods
 
-        private void ExportNode(StringBuilder sb, DirectoryItem node)
+        private void StatusMsgTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Depth first
-
-            /*
-
-                // get the file attributes for file or directory
-                FileAttributes attr = File.GetAttributes(@"c:\Temp");
-
-                //detect whether its a directory or file
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {}
-            */
-
-            string tabs = new string('\t', node.Depth);
-
-            foreach (DirectoryItem childNode in node.Items)
+            if (MAX_STATUS_MSG_COUNT <= (m_MessageTimerCount++))
             {
-                sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
+                m_StatusMsgTimer.Stop();
 
-                if (childNode.HasChildren)
-                {
-                    ExportNode(sb, childNode);
-
-                    continue;
-                }
+                StatusText = string.Empty;
             }
         }
 
-        private void ParseDirectory(DirectoryItem node, string directoryPath)
+        private UserControl GetPageUserControl(Enumerations.PageControl pageControl, object additionalData = null)
         {
-            DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
+            UserControl newPage = null;
 
-            DirectoryItem fileNode;
-
-            foreach (DirectoryInfo directory in dirInfo.GetDirectories())
+            switch (pageControl)
             {
-                DirectoryItem directoryNode = new DirectoryItem(directory)
-                {
-                    Depth = node.Depth + 1
-                };
+                case Enumerations.PageControl.None:
+                    break;
 
-                node.Items.Add(directoryNode);
+                case Enumerations.PageControl.Directory:
 
-                ParseDirectory(directoryNode, directory.FullName);
+                    newPage = new DirectoryView(this);
+                    break;
+
+                case Enumerations.PageControl.Settings:
+                    newPage = new SettingsView(this);
+                    break;
+
+                default:
+                    throw new DirectoryContentsException($"Unhandled PageControl enumeration: {pageControl}");
             }
 
-            foreach (FileInfo file in dirInfo.GetFiles())
-            {
-                fileNode = new DirectoryItem(file)
-                {
-                    Depth = node.Depth + 1
-                };
+            return newPage;
+        }
 
-                node.Items.Add(fileNode);
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Writes the message to the log file, prepending a timestamp (if 
+        /// desired) and appending a new line. Calls flush after logging
+        /// the message.
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="prependTimeStamp"></param>
+        internal static void Log(string msg, bool prependTimeStamp = true)
+        {
+            m_Logger.Log(msg, prependTimeStamp);
+        }
+
+        internal void ShowStatusMessage(string msg, bool autoRemove = true)
+        {
+            Log(msg);
+
+            StatusText = msg;
+
+            if (autoRemove)
+            {
+                m_MessageTimerCount = 0;
+
+                m_StatusMsgTimer.Stop();
+
+                m_StatusMsgTimer.Start();
             }
         }
 
-        private void SetIsExpanded(DirectoryItem node, bool isExpanded)
+        internal void ShowNextPage(Enumerations.PageControl pageControl,
+            object additionalData = null,
+            PageTransitionType transitionType = PageTransitionType.SlideAndFade)
         {
-            node.IsExpanded = isExpanded;
-
-            foreach (DirectoryItem childNode in node.Items)
+            if (pageControl.Equals(Enumerations.PageControl.None))
             {
-                SetIsExpanded(childNode, isExpanded);
+                Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The page control type \"{pageControl}\" is unhandled.", true);
             }
+
+            UserControl newPageControl = GetPageUserControl(pageControl, additionalData);
+
+            if (newPageControl is null)
+            {
+                Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The user control came back null for page type: {pageControl}", true);
+
+                return;
+            }
+
+            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The page type is: {pageControl}", true);
+
+            if (CurrentPage.Equals(pageControl) == true)
+            {
+                return;
+            }
+
+            CurrentPage = pageControl;
+
+            // The stack is only really used for going back to a previous page.
+            m_PageList.Push(newPageControl);
+
+            m_PageTransition.TransitionType = transitionType;
+            m_PageTransition.ShowPage(newPageControl);
+
         }
 
-        #endregion Private Methods
+        #endregion
     }
 }

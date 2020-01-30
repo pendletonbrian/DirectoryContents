@@ -63,27 +63,59 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\AttachedProperties.cs" />
     <Compile Include="Classes\ConverterMethods.cs" />
+    <Compile Include="Classes\DirectoryContentsException.cs" />
+    <Compile Include="Classes\Enumerations.cs" />
     <Compile Include="Classes\FileHash\Hasher.cs" />
     <Compile Include="Classes\FileHash\Checksum.cs" />
     <Compile Include="Classes\FileHash\IFileHash.cs" />
     <Compile Include="Classes\FileHash\MD5.cs" />
     <Compile Include="Classes\FileHash\SHA1.cs" />
     <Compile Include="Classes\FileHash\SHA256.cs" />
+    <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
     <Compile Include="Classes\VisibilityConverter.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
+    <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\BaseUserControlView.cs" />
+    <Compile Include="Views\DirectoryView.xaml.cs">
+      <DependentUpon>DirectoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\Brushes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\DefaultMeasurements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Image.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Separator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\TreeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DirectoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

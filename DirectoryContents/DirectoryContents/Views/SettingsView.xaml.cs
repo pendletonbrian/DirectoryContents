@@ -12,15 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsView : UserControl
+    public partial class SettingsView : BaseUserControlView
     {
-        public SettingsView()
+        public SettingsView(MainWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
         }

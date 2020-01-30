@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
-        xmlns:models="clr-namespace:DirectoryContents.Models"
         xmlns:classes="clr-namespace:DirectoryContents.Classes"
+        xmlns:pageTransitions="clr-namespace:WpfPageTransitions;assembly=WpfPageTransitions"
         mc:Ignorable="d"
         Title="Directory Contents"
+        Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow"
         ResizeMode="NoResize"
@@ -16,17 +17,6 @@
         Width="800"
         FontSize="14"
         Icon="/Images/folder-tree-48.png">
-
-    <Window.CommandBindings>
-        <CommandBinding Command="{x:Static vm:MainWindowViewModel.BrowseCommand}"
-                        CanExecute="BrowseCommand_CanExecute"
-                        Executed="BrowseCommand_Executed" />
-        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ExportCommand}"
-                        CanExecute="ExportCommand_CanExecute"
-                        Executed="ExportCommand_Executed" />
-        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ViewSettingsCommand}"
-                        Executed="ViewSettingsCommand_Executed" />
-    </Window.CommandBindings>
 
     <Window.Resources>
         <classes:VisibilityConverter x:Key="VisibilityConverter" />
@@ -52,100 +42,14 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Menu -->
-        <Menu Grid.Column="0"
-              Grid.Row="0"
-              Margin="0,4,0,4"
-              Padding="2">
-            <MenuItem Header="Browse..."
-                      Command="{x:Static vm:MainWindowViewModel.BrowseCommand}" />
-            <MenuItem Header="Export"
-                      Command="{x:Static vm:MainWindowViewModel.ExportCommand}" />
-            <MenuItem Header="Settings"
-                      Command="{x:Static vm:MainWindowViewModel.ViewSettingsCommand}" />
-        </Menu>
-
-        <!-- Directory to parse groupbox -->
-        <GroupBox Grid.Column="0"
-                  Grid.Row="1"
-                  Margin="4"
-                  Header="Target Directory:">
-            <TextBlock HorizontalAlignment="Stretch"
-                       Text="{Binding DirectoryToParse }" />
-        </GroupBox>
+        
 
         <!-- Main area -->
-        <TreeView Grid.Column="0"
-                  Grid.Row="2"
-                  Name="treeView"
-                  Margin="4"
-                  Width="770"
-                  Height="560"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  SelectedItemChanged="TreeView_SelectedItemChanged"
-                  DragEnter="TreeView_DragEnter"
-                  Drop="TreeView_Drop"
-                  ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}">
-
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type models:DirectoryItem}"
-                                          ItemsSource="{Binding Items}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding IconUri}"
-                               Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding ItemName}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-
-            <TreeView.ContextMenu>
-                <ContextMenu>
-                    <ContextMenu.CommandBindings>
-                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.CollapseAllCommand}"
-                                        CanExecute="CollapseAllCommand_CanExecute"
-                                        Executed="CollapseAllCommand_Executed" />
-                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ExpandAllCommand}"
-                                        CanExecute="ExpandAllCommand_CanExecute"
-                                        Executed="ExpandAllCommand_Executed" />
-                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.ViewInFileExplorerCommand}"
-                                        CanExecute="ViewInFileExplorerCommand_CanExecute"
-                                        Executed="ViewInFileExplorerCommand_Executed" />
-                        <CommandBinding Command="{x:Static vm:MainWindowViewModel.GenerateFileHashCommand}"
-                                        CanExecute="GenerateFileHashCommand_CanExecute"
-                                        Executed="GenerateFileHashCommand_Executed" />
-                    </ContextMenu.CommandBindings>
-
-                    <MenuItem Header="Expand All"
-                              Margin="2"
-                              Command="{x:Static vm:MainWindowViewModel.ExpandAllCommand}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource EnableDisableImageStyle}"
-                                   Source="/Images/double-down-16.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Collapse All"
-                              Margin="2"
-                              Command="{x:Static vm:MainWindowViewModel.CollapseAllCommand}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource EnableDisableImageStyle}"
-                                   Source="/Images/double-up-16.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-
-                    <Separator />
-
-                    <MenuItem Header="Open selected item in File Explorer"
-                              Margin="2"
-                              Command="{x:Static vm:MainWindowViewModel.ViewInFileExplorerCommand}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource EnableDisableImageStyle}"
-                                   Source="/Images/redo-16.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </ContextMenu>
-            </TreeView.ContextMenu>
-        </TreeView>
+        <pageTransitions:PageTransition x:Name="pageTransitionControl"
+                                        Margin="12"
+                                        Grid.Column="0"
+                                        Grid.Row="2"
+                                        TransitionType="SlideAndFade" />
 
         <!-- Status bar -->
         <Border Grid.Column="0"

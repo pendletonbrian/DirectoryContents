@@ -16,14 +16,19 @@ namespace DirectoryContents.Views
 
         #endregion
 
-        #region constructors
+        #region Public Properties
 
-        public BaseUserControlView() : base()
+        public string TitleText
+
         {
-            Loaded += BaseUserControlView_Loaded;
+            get { return m_ViewModel.TitleText; }
         }
 
-        public BaseUserControlView(MainWindowViewModel viewModel) : this()
+        #endregion
+
+        #region constructor
+
+        public BaseUserControlView(MainWindowViewModel viewModel)
         {
             m_ViewModel = viewModel;
         }
@@ -45,11 +50,16 @@ namespace DirectoryContents.Views
         }
 
         /// <summary>
-        /// Log the given message with a timestamp.
+        /// Writes the message to the log file, prepending a timestamp (if 
+        /// desired) and appending a new line. Calls flush after logging
+        /// the message.
         /// </summary>
         /// <param name="msg"></param>
-        protected void Log(string msg)
-        { }
+        /// <param name="prependTimeStamp"></param>
+        protected void Log(string msg, bool prependTimeStamp = true)
+        {
+            MainWindowViewModel.Log(msg, prependTimeStamp);
+        }
 
         #endregion
     }
