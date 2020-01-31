@@ -210,6 +210,8 @@ namespace DirectoryContents.ViewModels
         /// <param name="prependTimeStamp"></param>
         internal static void Log(string msg, bool prependTimeStamp = true)
         {
+            Debug.WriteLine(msg);
+
             m_Logger.Log(msg, prependTimeStamp);
         }
 

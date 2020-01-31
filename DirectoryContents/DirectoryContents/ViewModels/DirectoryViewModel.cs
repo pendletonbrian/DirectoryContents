@@ -99,6 +99,8 @@ namespace DirectoryContents.ViewModels
                 if (m_SelectedItem is null ||
                     m_SelectedItem.Equals(value).Equals(false))
                 {
+                    Log($"Updating {nameof(SelectedItem)} from \"{m_SelectedItem}\" to \"{value}\".");
+
                     m_SelectedItem = value;
 
                     RaisePropertyChanged(nameof(SelectedItem));
@@ -115,6 +117,8 @@ namespace DirectoryContents.ViewModels
                 if (string.IsNullOrWhiteSpace(m_DirectoryToParse) ||
                     m_DirectoryToParse.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
                 {
+                    Log($"Updating {nameof(DirectoryToParse)} from \"{m_DirectoryToParse}\" to \"{value}\".");
+
                     m_DirectoryToParse = value;
 
                     RaisePropertyChanged(nameof(DirectoryToParse));
@@ -202,6 +206,8 @@ namespace DirectoryContents.ViewModels
 
         internal bool CanGenerate()
         {
+            Log($"{nameof(CanGenerate)}: \"{DirectoryToParse}\".");
+
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
 

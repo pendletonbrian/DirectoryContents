@@ -122,7 +122,7 @@ namespace DirectoryContents.Models
 
         public override string ToString()
         {
-            return ItemName;
+            return ItemName ?? "Name not set.";
         }
 
         public bool Equals(DirectoryItem other)

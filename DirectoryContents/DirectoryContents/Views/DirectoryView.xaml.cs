@@ -44,15 +44,6 @@ namespace DirectoryContents.Views
 
         #region Private Methods
 
-        private void ViewSettingsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            if (m_ViewModel is null)
-            {
-                return;
-            }
-
-        }
-
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -75,27 +66,12 @@ namespace DirectoryContents.Views
                 }
             }
 
-            //string startupDir = AppDomain.CurrentDomain.BaseDirectory;
-            //if (startupDir.EndsWith(Path.DirectorySeparatorChar.ToString()))
-            //{
-            //    startupDir = startupDir.Substring(0, startupDir.Length - 1);
-            //}
-
-            //startupDir = startupDir.Substring(0, startupDir.LastIndexOf(Path.DirectorySeparatorChar));
-            //startupDir = startupDir.Substring(0, startupDir.LastIndexOf(Path.DirectorySeparatorChar));
-
-            //if (Directory.Exists(startupDir) == false)
-            //{
-            //    throw new Exception($"Solution directory couldn't be found...  \"{startupDir}\".");
-            //}
-
-            //m_ViewModel.DirectoryToParse = Path.Combine(startupDir, @"Test\RootFolder");
-
             if (string.IsNullOrWhiteSpace(directoryPath))
             {
                 return;
             }
 
+            LoadDirectory(directoryPath);
         }
 
         private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)

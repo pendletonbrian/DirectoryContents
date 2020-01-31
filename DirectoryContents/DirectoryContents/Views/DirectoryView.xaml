@@ -14,11 +14,9 @@
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.BrowseCommand}"
                         CanExecute="BrowseCommand_CanExecute"
                         Executed="BrowseCommand_Executed" />
-        <!--<CommandBinding Command="{x:Static vm:DirectoryViewModel.ExportCommand}"
+        <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExportCommand}"
                         CanExecute="ExportCommand_CanExecute"
-                        Executed="ExportCommand_Executed" />-->
-        <CommandBinding Command="{x:Static vm:DirectoryViewModel.ViewSettingsCommand}"
-                        Executed="ViewSettingsCommand_Executed" />
+                        Executed="ExportCommand_Executed" />
     </local:BaseUserControlView.CommandBindings>
     
     <Grid>
@@ -44,8 +42,8 @@
               Padding="2">
             <MenuItem Header="Browse..."
                       Command="{x:Static vm:DirectoryViewModel.BrowseCommand}" />
-            <MenuItem Header="Settings"
-                      Command="{x:Static vm:DirectoryViewModel.ViewSettingsCommand}" />
+            <MenuItem Header="Export"
+                      Command="{x:Static vm:DirectoryViewModel.ExportCommand}" />
         </Menu>
         
         <!-- Directory to parse groupbox -->
@@ -117,7 +115,14 @@
 
                     <Separator />
 
-                    <MenuItem Header="Open selected item in File Explorer"
+                    <MenuItem Header="Selected Item"
+                              FontStyle="Italic"
+                              FontWeight="Bold"
+                              IsEnabled="False" />
+
+                    <MenuItem Header="Open in File Explorer"
+                              FontStyle="Normal"
+                              FontWeight="Normal"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.ViewInFileExplorerCommand}">
                         <MenuItem.Icon>
