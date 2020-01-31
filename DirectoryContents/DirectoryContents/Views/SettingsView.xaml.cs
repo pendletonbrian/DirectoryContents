@@ -21,9 +21,32 @@ namespace DirectoryContents.Views
     /// </summary>
     public partial class SettingsView : BaseUserControlView
     {
+        #region Private Members
+
+        private readonly SettingsViewModel m_ViewModel;
+
+        #endregion
+
+        #region constructor
+
         public SettingsView(MainWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
+
+            m_ViewModel = new SettingsViewModel(viewModel);
+
+            DataContext = m_ViewModel;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void NextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, null, WpfPageTransitions.PageTransitionType.SlideAndFade);
+        }
+
+        #endregion
     }
 }

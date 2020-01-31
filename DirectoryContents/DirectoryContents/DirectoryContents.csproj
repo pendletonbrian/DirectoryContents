@@ -78,8 +78,10 @@
     <Compile Include="Classes\NotifyObject.cs" />
     <Compile Include="Classes\VisibilityConverter.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
+    <Compile Include="ViewModels\BaseUserControlViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
     <Compile Include="Views\BaseUserControlView.cs" />
     <Compile Include="Views\DirectoryView.xaml.cs">
       <DependentUpon>DirectoryView.xaml</DependentUpon>
@@ -193,6 +195,12 @@
       <Project>{22a46d61-1d40-43a9-802c-b9d43dadd9ec}</Project>
       <Name>WpfPageTransitions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\right-arrow-26.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\left-arrow-26.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

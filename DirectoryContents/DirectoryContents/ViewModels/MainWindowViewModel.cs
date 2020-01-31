@@ -172,6 +172,31 @@ namespace DirectoryContents.ViewModels
             return newPage;
         }
 
+        /// <summary>
+        /// Given a control, attempt to discern the enumerated type that is associated with it.
+        /// </summary>
+        /// <param name="pageControl"></param>
+        /// <returns></returns>
+        internal static Enumerations.PageControl GetPageEnumerationType(UserControl pageControl)
+        {
+            Enumerations.PageControl currentPage = Enumerations.PageControl.None;
+
+            if (pageControl is DirectoryView)
+            {
+                currentPage = Enumerations.PageControl.Directory;
+            }
+            else if (pageControl is SettingsView)
+            {
+                currentPage = Enumerations.PageControl.Settings;
+            }
+            else
+            {
+                throw new DirectoryContentsException($"Unhandled page type: \"{pageControl.GetType().ToString()}\".");
+            }
+
+            return currentPage;
+        }
+
         #endregion
 
         #region Public Methods
@@ -237,6 +262,51 @@ namespace DirectoryContents.ViewModels
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
 
+        }
+
+        /// <summary>
+        /// Shows the previous page with the given transition.
+        /// </summary>
+        /// <param name="transitionType"></param>
+        internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade)
+        {
+            //Enumerations.PageControl previousPage = Enumerations.PageControl.None;
+
+            UserControl newPageControl = null;
+
+            if (m_PageList.Count > 0)
+            {
+                newPageControl = m_PageList.Pop();
+
+                Log($"Removed {newPageControl} from stack.");
+
+                if (m_PageList.Count == 1)
+                {
+                    Log("There is now 1 item in the stack.");
+                }
+                else
+                {
+                    Log($"There are now {m_PageList.Count} items in the stack.");
+                }
+            }
+            else
+            {
+                Log($"The page list stack is empty.");
+            }
+
+            //previousPage = GetPageEnumerationType(newPageControl);
+
+            // Set back button text.
+
+            if (newPageControl is null)
+            {
+                newPageControl = new SettingsView(this);
+            }
+
+            CurrentPage = GetPageEnumerationType(newPageControl);
+
+            m_PageTransition.TransitionType = transitionType;
+            m_PageTransition.ShowPage(newPageControl);
         }
 
         #endregion

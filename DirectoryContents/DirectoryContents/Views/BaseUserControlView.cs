@@ -47,18 +47,7 @@ namespace DirectoryContents.Views
 
         protected virtual void BackCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-        }
-
-        /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if 
-        /// desired) and appending a new line. Calls flush after logging
-        /// the message.
-        /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="prependTimeStamp"></param>
-        protected void Log(string msg, bool prependTimeStamp = true)
-        {
-            MainWindowViewModel.Log(msg, prependTimeStamp);
+            m_ViewModel.ShowPreviousPage();
         }
 
         #endregion

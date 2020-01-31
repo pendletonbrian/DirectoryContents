@@ -14,7 +14,7 @@ using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
-    public class DirectoryViewModel : NotifyObject
+    public class DirectoryViewModel : BaseUserControlViewModel
     {
         #region Public Members
 
@@ -66,7 +66,7 @@ namespace DirectoryContents.ViewModels
 
         #region constructor
 
-        public DirectoryViewModel() 
+        public DirectoryViewModel(MainWindowViewModel viewModel) : base(viewModel)
         {
             DirectoryItems = new ObservableCollection<DirectoryItem>
             {

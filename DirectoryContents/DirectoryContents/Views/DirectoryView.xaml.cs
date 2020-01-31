@@ -35,7 +35,7 @@ namespace DirectoryContents.Views
         {
             InitializeComponent();
 
-            m_ViewModel = new DirectoryViewModel();
+            m_ViewModel = new DirectoryViewModel(viewModel);
 
             DataContext = m_ViewModel;
         }
