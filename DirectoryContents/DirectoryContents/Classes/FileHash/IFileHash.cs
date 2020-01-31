@@ -7,8 +7,10 @@ namespace DirectoryContents.Classes.FileHash
         /// <summary>
         /// Gets the hash of the given data.
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">
+        /// </param>
+        /// <returns>
+        /// </returns>
         UInt64 GetHash(byte[] data);
     }
 }

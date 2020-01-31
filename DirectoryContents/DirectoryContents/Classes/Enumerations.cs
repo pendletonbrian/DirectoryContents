@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DirectoryContents.Classes
+﻿namespace DirectoryContents.Classes
 {
     public static class Enumerations
     {
@@ -14,6 +8,5 @@ namespace DirectoryContents.Classes
             Directory,
             Settings
         }
-
     }
 }

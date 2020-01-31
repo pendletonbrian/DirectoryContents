@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
 using System.Windows.Controls;
-using System.Windows.Input;
 using DirectoryContents.Classes;
-using DirectoryContents.Models;
 using DirectoryContents.Views;
 using WpfPageTransitions;
 
@@ -23,27 +19,11 @@ namespace DirectoryContents.ViewModels
     public class MainWindowViewModel : NotifyObject
     {
         #region Private Members
-        
-        private StringBuilder m_DebugText = new StringBuilder();
-        private string m_StatusText = string.Empty;
-        private bool m_ShowProgressBar = false;
-
-        /// <summary>
-        /// The timer for the status message.
-        /// </summary>
-        private readonly Timer m_StatusMsgTimer = new Timer();
 
         /// <summary>
         /// How long, in seconds, to display the status bar message.
         /// </summary>
         private const int MAX_STATUS_MSG_COUNT = 8;
-
-        /// <summary>
-        /// The current number of seconds for which the timer has been counting.
-        /// </summary>
-        private int m_MessageTimerCount;
-
-        private readonly PageTransition m_PageTransition;
 
         private static readonly Logger m_Logger;
 
@@ -51,6 +31,23 @@ namespace DirectoryContents.ViewModels
         /// The list of the controls that have been used in the current path.
         /// </summary>
         private readonly Stack<UserControl> m_PageList = new Stack<UserControl>();
+
+        private readonly PageTransition m_PageTransition;
+
+        /// <summary>
+        /// The timer for the status message.
+        /// </summary>
+        private readonly Timer m_StatusMsgTimer = new Timer();
+
+        private StringBuilder m_DebugText = new StringBuilder();
+
+        /// <summary>
+        /// The current number of seconds for which the timer has been counting.
+        /// </summary>
+        private int m_MessageTimerCount;
+
+        private bool m_ShowProgressBar = false;
+        private string m_StatusText = string.Empty;
 
         #endregion Private Members
 
@@ -70,6 +67,21 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        public bool ShowProgressBar
+        {
+            get { return m_ShowProgressBar; }
+
+            set
+            {
+                if (m_ShowProgressBar.Equals(value) == false)
+                {
+                    m_ShowProgressBar = value;
+
+                    RaisePropertyChanged(nameof(ShowProgressBar));
+                }
+            }
+        }
+
         public string StatusText
         {
             get { return m_StatusText; }
@@ -86,22 +98,6 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        public bool ShowProgressBar
-        {
-            get { return m_ShowProgressBar; }
-
-            set
-            {
-                if (m_ShowProgressBar.Equals(value) == false)
-                {
-                    m_ShowProgressBar = value;
-
-                    RaisePropertyChanged(nameof(ShowProgressBar));
-                }
-            }
-
-        }
-
         public string TitleText { get; internal set; }
 
         #endregion Public Properties
@@ -116,7 +112,7 @@ namespace DirectoryContents.ViewModels
 
                 m_Logger = new Logger(Path.Combine(startupDirectory, $"log_{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log"));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine($"Exception in static constructor:{Environment.NewLine}{ex.ToString()}");
             }
@@ -131,21 +127,9 @@ namespace DirectoryContents.ViewModels
             m_StatusMsgTimer.Elapsed += StatusMsgTimer_Elapsed;
         }
 
-
-
-        #endregion constructor
+        #endregion constructors
 
         #region Private Methods
-
-        private void StatusMsgTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            if (MAX_STATUS_MSG_COUNT <= (m_MessageTimerCount++))
-            {
-                m_StatusMsgTimer.Stop();
-
-                StatusText = string.Empty;
-            }
-        }
 
         private UserControl GetPageUserControl(Enumerations.PageControl pageControl, object additionalData = null)
         {
@@ -172,11 +156,24 @@ namespace DirectoryContents.ViewModels
             return newPage;
         }
 
+        private void StatusMsgTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            if (MAX_STATUS_MSG_COUNT <= (m_MessageTimerCount++))
+            {
+                m_StatusMsgTimer.Stop();
+
+                StatusText = string.Empty;
+            }
+        }
+
         /// <summary>
-        /// Given a control, attempt to discern the enumerated type that is associated with it.
+        /// Given a control, attempt to discern the enumerated type that is
+        /// associated with it.
         /// </summary>
-        /// <param name="pageControl"></param>
-        /// <returns></returns>
+        /// <param name="pageControl">
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static Enumerations.PageControl GetPageEnumerationType(UserControl pageControl)
         {
             Enumerations.PageControl currentPage = Enumerations.PageControl.None;
@@ -197,38 +194,23 @@ namespace DirectoryContents.ViewModels
             return currentPage;
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Public Methods
 
         /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if 
-        /// desired) and appending a new line. Calls flush after logging
-        /// the message.
+        /// Writes the message to the log file, prepending a timestamp (if
+        /// desired) and appending a new line. Calls flush after logging the message.
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="prependTimeStamp"></param>
+        /// <param name="msg">
+        /// </param>
+        /// <param name="prependTimeStamp">
+        /// </param>
         internal static void Log(string msg, bool prependTimeStamp = true)
         {
             Debug.WriteLine(msg);
 
             m_Logger.Log(msg, prependTimeStamp);
-        }
-
-        internal void ShowStatusMessage(string msg, bool autoRemove = true)
-        {
-            Log(msg);
-
-            StatusText = msg;
-
-            if (autoRemove)
-            {
-                m_MessageTimerCount = 0;
-
-                m_StatusMsgTimer.Stop();
-
-                m_StatusMsgTimer.Start();
-            }
         }
 
         internal void ShowNextPage(Enumerations.PageControl pageControl,
@@ -263,13 +245,13 @@ namespace DirectoryContents.ViewModels
 
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
-
         }
 
         /// <summary>
         /// Shows the previous page with the given transition.
         /// </summary>
-        /// <param name="transitionType"></param>
+        /// <param name="transitionType">
+        /// </param>
         internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade)
         {
             //Enumerations.PageControl previousPage = Enumerations.PageControl.None;
@@ -311,6 +293,22 @@ namespace DirectoryContents.ViewModels
             m_PageTransition.ShowPage(newPageControl);
         }
 
-        #endregion
+        internal void ShowStatusMessage(string msg, bool autoRemove = true)
+        {
+            Log(msg);
+
+            StatusText = msg;
+
+            if (autoRemove)
+            {
+                m_MessageTimerCount = 0;
+
+                m_StatusMsgTimer.Stop();
+
+                m_StatusMsgTimer.Start();
+            }
+        }
+
+        #endregion Public Methods
     }
 }

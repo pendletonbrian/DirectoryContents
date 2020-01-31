@@ -20,8 +20,8 @@ namespace DirectoryContents.Classes
             }
             else
             {
-                // Let's try to parse the parameter as a Visibility value, throwing an exception when
-                // the parsing fails
+                // Let's try to parse the parameter as a Visibility value,
+                // throwing an exception when the parsing fails
                 try
                 {
                     mode = (Visibility)Enum.Parse(typeof(Visibility), parameter.ToString(), true);

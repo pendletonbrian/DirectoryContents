@@ -61,11 +61,15 @@ namespace DirectoryContents.Classes
         /// Writes the message to the log file, prepending a timestamp and
         /// appending a new line.
         /// </summary>
-        /// <param name="msg">The message to be written to the log file.</param>
+        /// <param name="msg">
+        /// The message to be written to the log file.
+        /// </param>
         /// <param name="flush">
         /// Whether or not to flush the stream after writing the message.
         /// </param>
-        /// <param name="prependTimeStamp">Whether or not to prepend a timestamp.</param>
+        /// <param name="prependTimeStamp">
+        /// Whether or not to prepend a timestamp.
+        /// </param>
         private void WriteMessage(string msg, bool flush, bool prependTimeStamp = true)
         {
             if (m_Writer != null)
@@ -128,12 +132,13 @@ namespace DirectoryContents.Classes
         }
 
         /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if 
-        /// desired) and appending a new line. Calls flush after logging
-        /// the message.
+        /// Writes the message to the log file, prepending a timestamp (if
+        /// desired) and appending a new line. Calls flush after logging the message.
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="prependTimeStamp"></param>
+        /// <param name="msg">
+        /// </param>
+        /// <param name="prependTimeStamp">
+        /// </param>
         public void Log(string msg, bool prependTimeStamp = true)
         {
             WriteMessage(msg, true, prependTimeStamp);

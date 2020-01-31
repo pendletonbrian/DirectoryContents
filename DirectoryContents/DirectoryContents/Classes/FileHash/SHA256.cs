@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DirectoryContents.Classes.FileHash
 {
@@ -13,8 +7,10 @@ namespace DirectoryContents.Classes.FileHash
         /// <summary>
         /// Get the hash for the SHA-256 algorithim.
         /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
+        /// <param name="data">
+        /// </param>
+        /// <returns>
+        /// </returns>
         public UInt64 GetHash(byte[] data)
         {
             byte[] hash = null;
@@ -26,6 +22,5 @@ namespace DirectoryContents.Classes.FileHash
 
             return BitConverter.ToUInt64(hash, 0);
         }
-
     }
 }

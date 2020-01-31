@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using DirectoryContents.Classes;
 
 namespace DirectoryContents.ViewModels
@@ -23,7 +18,7 @@ namespace DirectoryContents.ViewModels
 
         private readonly MainWindowViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -32,7 +27,7 @@ namespace DirectoryContents.ViewModels
             m_ViewModel = viewModel;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Public Properties
 
@@ -41,22 +36,18 @@ namespace DirectoryContents.ViewModels
             get { return "Back"; }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
 
-        public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
-        {
-            m_ViewModel.ShowPreviousPage(transitionType);
-        }
-
         /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if 
-        /// desired) and appending a new line. Calls flush after logging
-        /// the message.
+        /// Writes the message to the log file, prepending a timestamp (if
+        /// desired) and appending a new line. Calls flush after logging the message.
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="prependTimeStamp"></param>
+        /// <param name="msg">
+        /// </param>
+        /// <param name="prependTimeStamp">
+        /// </param>
         public void Log(string msg, bool prependTimeStamp = true)
         {
             MainWindowViewModel.Log(msg, prependTimeStamp);
@@ -69,6 +60,11 @@ namespace DirectoryContents.ViewModels
             m_ViewModel.ShowNextPage(pageControl, additionalData, transitionType);
         }
 
-        #endregion
+        public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
+        {
+            m_ViewModel.ShowPreviousPage(transitionType);
+        }
+
+        #endregion Public Methods
     }
 }

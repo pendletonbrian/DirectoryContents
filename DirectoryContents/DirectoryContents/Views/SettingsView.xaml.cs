@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows.Input;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
@@ -25,7 +12,7 @@ namespace DirectoryContents.Views
 
         private readonly SettingsViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -38,7 +25,7 @@ namespace DirectoryContents.Views
             DataContext = m_ViewModel;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Private Methods
 
@@ -47,6 +34,6 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, null, WpfPageTransitions.PageTransitionType.SlideAndFade);
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

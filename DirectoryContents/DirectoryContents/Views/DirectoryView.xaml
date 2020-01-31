@@ -18,19 +18,19 @@
                         CanExecute="ExportCommand_CanExecute"
                         Executed="ExportCommand_Executed" />
     </local:BaseUserControlView.CommandBindings>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            
+
             <!-- Main Menu -->
             <RowDefinition Height="Auto" />
-            
+
             <!-- Groupbox -->
             <RowDefinition Height="Auto" />
-            
+
             <!-- TreeView -->
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -45,7 +45,7 @@
             <MenuItem Header="Export"
                       Command="{x:Static vm:DirectoryViewModel.ExportCommand}" />
         </Menu>
-        
+
         <!-- Directory to parse groupbox -->
         <GroupBox Grid.Column="0"
                   Grid.Row="1"
@@ -133,6 +133,5 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-
     </Grid>
 </local:BaseUserControlView>

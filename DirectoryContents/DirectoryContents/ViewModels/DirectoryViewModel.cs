@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DirectoryContents.Classes;
@@ -39,8 +36,13 @@ namespace DirectoryContents.ViewModels
         public static RoutedCommand ExportCommand = new RoutedCommand();
 
         /// <summary>
-        /// Context menu command to open a file explorer at the selected
-        /// file's location, with the file selected.
+        /// Context menu command to show the generate file hash page.
+        /// </summary>
+        public static RoutedCommand GenerateFileHashCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Context menu command to open a file explorer at the selected file's
+        /// location, with the file selected.
         /// </summary>
         public static RoutedCommand ViewInFileExplorerCommand = new RoutedCommand();
 
@@ -49,20 +51,15 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
 
-        /// <summary>
-        /// Context menu command to show the generate file hash page.
-        /// </summary>
-        public static RoutedCommand GenerateFileHashCommand = new RoutedCommand();
-
         #endregion Public Members
 
         #region Private Members
 
+        private string m_DirectoryToParse = string.Empty;
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
-        private string m_DirectoryToParse = string.Empty;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -73,40 +70,11 @@ namespace DirectoryContents.ViewModels
             };
         }
 
-        #endregion
+        #endregion constructor
 
         #region Public Properties
 
         public ObservableCollection<DirectoryItem> DirectoryItems { get; private set; }
-
-        public DirectoryItem RootNode
-        {
-            get { return m_RootNode; }
-
-            private set
-            {
-                m_RootNode = value;
-
-                RaisePropertyChanged(nameof(RootNode));
-            }
-        }
-
-        public DirectoryItem SelectedItem
-        {
-            get { return m_SelectedItem; }
-            set
-            {
-                if (m_SelectedItem is null ||
-                    m_SelectedItem.Equals(value).Equals(false))
-                {
-                    Log($"Updating {nameof(SelectedItem)} from \"{m_SelectedItem}\" to \"{value}\".");
-
-                    m_SelectedItem = value;
-
-                    RaisePropertyChanged(nameof(SelectedItem));
-                }
-            }
-        }
 
         public string DirectoryToParse
         {
@@ -128,7 +96,37 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        #endregion
+        public DirectoryItem RootNode
+        {
+            get { return m_RootNode; }
+
+            private set
+            {
+                m_RootNode = value;
+
+                RaisePropertyChanged(nameof(RootNode));
+            }
+        }
+
+        public DirectoryItem SelectedItem
+        {
+            get { return m_SelectedItem; }
+
+            set
+            {
+                if (m_SelectedItem is null ||
+                    m_SelectedItem.Equals(value).Equals(false))
+                {
+                    Log($"Updating {nameof(SelectedItem)} from \"{m_SelectedItem}\" to \"{value}\".");
+
+                    m_SelectedItem = value;
+
+                    RaisePropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
+
+        #endregion Public Properties
 
         #region Private Methods
 
@@ -211,6 +209,26 @@ namespace DirectoryContents.ViewModels
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
 
+        internal void CollapseAll()
+        {
+            RootNode.IsExpanded = true;
+
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                SetIsExpanded(node, false);
+            }
+        }
+
+        internal void ExpandAll()
+        {
+            RootNode.IsExpanded = true;
+
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                SetIsExpanded(node, true);
+            }
+        }
+
         internal void Export(TreeView tree, string fullyQualifiedPath)
         {
             if (tree is null)
@@ -255,6 +273,33 @@ namespace DirectoryContents.ViewModels
         internal bool ItemIsSelected()
         {
             return m_SelectedItem != null;
+        }
+
+        internal void Parse()
+        {
+            if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
+            {
+                Debug.WriteLine($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
+
+                return;
+            }
+
+            DirectoryItems.Clear();
+
+            DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
+
+            m_RootNode = new DirectoryItem(dirInfo)
+            {
+                Depth = 0
+            };
+
+            DirectoryItems.Add(m_RootNode);
+
+            ParseDirectory(m_RootNode, dirInfo.FullName);
+
+            RaisePropertyChanged(nameof(DirectoryItems));
+
+            m_RootNode.IsExpanded = true;
         }
 
         internal void ShowSelectedItemInFileExplorer()
@@ -313,55 +358,6 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        internal void CollapseAll()
-        {
-            RootNode.IsExpanded = true;
-
-            foreach (DirectoryItem node in RootNode.Items)
-            {
-                SetIsExpanded(node, false);
-            }
-        }
-
-        internal void ExpandAll()
-        {
-            RootNode.IsExpanded = true;
-
-            foreach (DirectoryItem node in RootNode.Items)
-            {
-                SetIsExpanded(node, true);
-            }
-        }
-
-        internal void Parse()
-        {
-            if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
-            {
-                Debug.WriteLine($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
-
-                return;
-            }
-
-            DirectoryItems.Clear();
-
-            DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
-
-            m_RootNode = new DirectoryItem(dirInfo)
-            {
-                Depth = 0
-            };
-
-            DirectoryItems.Add(m_RootNode);
-
-            ParseDirectory(m_RootNode, dirInfo.FullName);
-
-            RaisePropertyChanged(nameof(DirectoryItems));
-
-            m_RootNode.IsExpanded = true;
-        }
-
-
-        #endregion
-
+        #endregion Public Methods
     }
 }

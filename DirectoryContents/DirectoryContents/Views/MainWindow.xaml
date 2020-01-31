@@ -21,7 +21,7 @@
     <Window.Resources>
         <classes:VisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -42,8 +42,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        
-
         <!-- Main area -->
         <pageTransitions:PageTransition x:Name="pageTransitionControl"
                                         Margin="12"
@@ -53,7 +51,7 @@
 
         <!-- Status bar -->
         <Border Grid.Column="0"
-              Grid.Row="3"
+                Grid.Row="3"
                 Margin="2,1,2,2">
 
             <Grid>
@@ -83,7 +81,6 @@
                              IsIndeterminate="{Binding ShowProgressBar}"
                              Visibility="{Binding ShowProgressBar, Converter={StaticResource VisibilityConverter}}" />
             </Grid>
-            
         </Border>
     </Grid>
 </Window>

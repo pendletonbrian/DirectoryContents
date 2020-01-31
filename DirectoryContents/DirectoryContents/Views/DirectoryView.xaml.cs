@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
 
@@ -27,7 +16,7 @@ namespace DirectoryContents.Views
 
         private readonly DirectoryViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -40,7 +29,7 @@ namespace DirectoryContents.Views
             DataContext = m_ViewModel;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Private Methods
 
@@ -74,55 +63,6 @@ namespace DirectoryContents.Views
             LoadDirectory(directoryPath);
         }
 
-        private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            CheckItemIsSelected(e);
-        }
-
-        private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-
-        }
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            DirectoryItem item = e.NewValue as DirectoryItem;
-
-            if (item is null)
-            {
-                return;
-            }
-
-            m_ViewModel.SelectedItem = item;
-        }
-
-        private void TreeView_DragEnter(object sender, DragEventArgs e)
-        {
-            bool isValidData = e.Data.GetDataPresent(DataFormats.FileDrop);
-
-            if (isValidData == false)
-            {
-                e.Effects = DragDropEffects.None;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.Copy;
-            }
-        }
-
-        private void TreeView_Drop(object sender, DragEventArgs e)
-        {
-            string[] filenameList = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            if (filenameList is null ||
-                filenameList.Length.Equals(0))
-            {
-                return;
-            }
-
-            LoadDirectory(filenameList[0]);
-        }
-
         private void CheckItemIsSelected(CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
@@ -137,34 +77,6 @@ namespace DirectoryContents.Views
             e.Handled = true;
         }
 
-        private void LoadDirectory(string fullyQualifiedDirectoryPath)
-        {
-            m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
-
-            treeView.Items.Clear();
-
-            treeView.Items.Add(m_ViewModel.RootNode);
-
-            treeView.UpdateLayout();
-        }
-
-        private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            CheckItemIsSelected(e);
-        }
-
-        private void ViewInFileExplorerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            try
-            {
-                m_ViewModel.ShowSelectedItemInFileExplorer();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Exception: {ex.Message}", TitleText, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
         private void CollapseAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
@@ -177,6 +89,34 @@ namespace DirectoryContents.Views
             }
 
             e.Handled = true;
+        }
+
+        private void CollapseAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.CollapseAll();
+
+            treeView.UpdateLayout();
+        }
+
+        private void ExpandAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
+
+            e.Handled = true;
+        }
+
+        private void ExpandAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.ExpandAll();
+
+            treeView.UpdateLayout();
         }
 
         private void ExportCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -243,34 +183,82 @@ namespace DirectoryContents.Views
             }
         }
 
-        private void CollapseAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            m_ViewModel.CollapseAll();
+            CheckItemIsSelected(e);
+        }
+
+        private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+        }
+
+        private void LoadDirectory(string fullyQualifiedDirectoryPath)
+        {
+            m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
+
+            treeView.Items.Clear();
+
+            treeView.Items.Add(m_ViewModel.RootNode);
 
             treeView.UpdateLayout();
         }
 
-        private void ExpandAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void TreeView_DragEnter(object sender, DragEventArgs e)
         {
-            if (m_ViewModel is null)
+            bool isValidData = e.Data.GetDataPresent(DataFormats.FileDrop);
+
+            if (isValidData == false)
             {
-                e.CanExecute = false;
+                e.Effects = DragDropEffects.None;
             }
             else
             {
-                e.CanExecute = true;
+                e.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        private void TreeView_Drop(object sender, DragEventArgs e)
+        {
+            string[] filenameList = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (filenameList is null ||
+                filenameList.Length.Equals(0))
+            {
+                return;
             }
 
-            e.Handled = true;
+            LoadDirectory(filenameList[0]);
         }
 
-        private void ExpandAllCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            m_ViewModel.ExpandAll();
+            DirectoryItem item = e.NewValue as DirectoryItem;
 
-            treeView.UpdateLayout();
+            if (item is null)
+            {
+                return;
+            }
+
+            m_ViewModel.SelectedItem = item;
         }
 
-        #endregion
+        private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            CheckItemIsSelected(e);
+        }
+
+        private void ViewInFileExplorerCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            try
+            {
+                m_ViewModel.ShowSelectedItemInFileExplorer();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Exception: {ex.Message}", TitleText, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion Private Methods
     }
 }

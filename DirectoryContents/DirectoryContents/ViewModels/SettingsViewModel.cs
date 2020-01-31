@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace DirectoryContents.ViewModels
 {
@@ -23,7 +18,6 @@ namespace DirectoryContents.ViewModels
         public SettingsViewModel(MainWindowViewModel viewModel) : base(viewModel)
         { }
 
-        #endregion
-
+        #endregion constructor
     }
 }

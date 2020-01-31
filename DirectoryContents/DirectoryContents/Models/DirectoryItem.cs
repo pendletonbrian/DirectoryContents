@@ -105,6 +105,16 @@ namespace DirectoryContents.Models
             return Equals(item);
         }
 
+        public bool Equals(DirectoryItem other)
+        {
+            if (other is null)
+            {
+                return false;
+            }
+
+            return GetHashCode().Equals(other.GetHashCode());
+        }
+
         public override int GetHashCode()
         {
             int hashName = string.IsNullOrWhiteSpace(ItemName) ? 0 : ItemName.GetHashCode();
@@ -123,16 +133,6 @@ namespace DirectoryContents.Models
         public override string ToString()
         {
             return ItemName ?? "Name not set.";
-        }
-
-        public bool Equals(DirectoryItem other)
-        {
-            if (other is null)
-            {
-                return false;
-            }
-
-            return GetHashCode().Equals(other.GetHashCode());
         }
 
         #endregion Public Methods

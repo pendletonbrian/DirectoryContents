@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DirectoryContents.Classes.FileHash
 {
@@ -100,6 +94,6 @@ namespace DirectoryContents.Classes.FileHash
             return (crc ^ 0xffffffffffffffff);
         }
 
-        #endregion
+        #endregion Public Methods
     }
 }

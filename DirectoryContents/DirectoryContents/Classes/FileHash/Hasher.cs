@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DirectoryContents.Classes.FileHash
 {
@@ -14,7 +10,7 @@ namespace DirectoryContents.Classes.FileHash
 
         private readonly IFileHash m_FileHash;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -23,17 +19,22 @@ namespace DirectoryContents.Classes.FileHash
             m_FileHash = fileHash;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Public Methods
 
         /// <summary>
-        /// Attempts to get the hash for the given file.  If the file does not exist,
-        /// null is returned.
+        /// Attempts to get the hash for the given file. If the file does not
+        /// exist, null is returned.
         /// </summary>
-        /// <param name="filename">The fully qualified name to the file.</param>
-        /// <param name="hashValue">Whether or not the file was able to be hashed.</param>
-        /// <returns></returns>
+        /// <param name="filename">
+        /// The fully qualified name to the file.
+        /// </param>
+        /// <param name="hashValue">
+        /// Whether or not the file was able to be hashed.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public bool? TryGetFileHash(string filename, out ulong hashValue)
         {
             try
@@ -73,6 +74,6 @@ namespace DirectoryContents.Classes.FileHash
             }
         }
 
-        #endregion
+        #endregion Public Methods
     }
 }

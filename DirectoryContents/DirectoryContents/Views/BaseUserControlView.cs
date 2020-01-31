@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
@@ -14,7 +9,7 @@ namespace DirectoryContents.Views
 
         private readonly MainWindowViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region Public Properties
 
@@ -24,7 +19,7 @@ namespace DirectoryContents.Views
             get { return m_ViewModel.TitleText; }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region constructor
 
@@ -33,7 +28,7 @@ namespace DirectoryContents.Views
             m_ViewModel = viewModel;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Private Methods
 
@@ -41,7 +36,7 @@ namespace DirectoryContents.Views
         {
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Protected Methods
 
@@ -50,6 +45,6 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowPreviousPage();
         }
 
-        #endregion
+        #endregion Protected Methods
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text;
-using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
-using DirectoryContents.Models;
+﻿using System.Windows;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents
@@ -36,14 +30,11 @@ namespace DirectoryContents
 
         #region Private Methods
 
-        
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Settings);
         }
 
         #endregion Private Methods
-
     }
 }
