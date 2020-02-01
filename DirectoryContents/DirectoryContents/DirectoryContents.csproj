@@ -73,6 +73,8 @@
     <Compile Include="Classes\FileHash\MD5.cs" />
     <Compile Include="Classes\FileHash\SHA1.cs" />
     <Compile Include="Classes\FileHash\SHA256.cs" />
+    <Compile Include="Classes\FileHash\SHA384.cs" />
+    <Compile Include="Classes\FileHash\SHA512.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
