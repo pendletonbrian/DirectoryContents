@@ -127,7 +127,7 @@ namespace DirectoryContents.Views
             }
             else
             {
-                e.CanExecute = m_ViewModel.CanGenerate();
+                e.CanExecute = m_ViewModel.CanExport();
             }
 
             e.Handled = true;

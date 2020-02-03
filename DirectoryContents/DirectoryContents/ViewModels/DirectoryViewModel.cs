@@ -202,9 +202,9 @@ namespace DirectoryContents.ViewModels
 
         #region Public Methods
 
-        internal bool CanGenerate()
+        internal bool CanExport()
         {
-            Log($"{nameof(CanGenerate)}: \"{DirectoryToParse}\".");
+            Log($"{nameof(CanExport)}: \"{DirectoryToParse}\".");
 
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
