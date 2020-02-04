@@ -142,7 +142,15 @@ namespace DirectoryContents.ViewModels
 
                 case Enumerations.PageControl.Directory:
 
-                    newPage = new DirectoryView(this);
+                    if (additionalData is null)
+                    {
+                        throw new ArgumentException($"The {nameof(DirectoryView)} requires the {nameof(Enumerations.ChecksumAlgorithim)} parameter.");
+                    }
+
+                    Enumerations.ChecksumAlgorithim algorithim = (Enumerations.ChecksumAlgorithim)additionalData;
+
+                    newPage = new DirectoryView(this, algorithim);
+
                     break;
 
                 case Enumerations.PageControl.Settings:

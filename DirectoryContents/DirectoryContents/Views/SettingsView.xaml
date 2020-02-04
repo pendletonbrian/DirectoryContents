@@ -65,8 +65,18 @@
 
                 <GroupBox Grid.Column="0"
                           Grid.Row="0"
-                          Header="Compute checksum(s)">
-                    
+                          Header="Compute checksum for all files">
+                    <ListBox ItemsSource="{Binding AlgorithimList}"
+                             SelectedValue="{Binding SelectedAlgorithim}"
+                             SelectedValuePath="Key">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                             Content="{Binding Value}"
+                                             GroupName="AlgorithimsGroup" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </GroupBox>
             </Grid>
         </Border>
@@ -84,5 +94,6 @@
                    Width="26"
                    Height="26" />
         </Button>
+        
     </Grid>
 </local:BaseUserControlView>

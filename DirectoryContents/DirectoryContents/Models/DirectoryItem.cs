@@ -57,6 +57,8 @@ namespace DirectoryContents.Models
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
 
+        public UInt64 Checksum { get; set; }
+
         #endregion Public Properties
 
         #region constructors

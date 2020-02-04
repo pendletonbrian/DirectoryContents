@@ -31,7 +31,7 @@ namespace DirectoryContents.Views
 
         private void NextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, null, WpfPageTransitions.PageTransitionType.SlideAndFade);
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, m_ViewModel.SelectedAlgorithim, WpfPageTransitions.PageTransitionType.SlideAndFade);
         }
 
         #endregion Private Methods

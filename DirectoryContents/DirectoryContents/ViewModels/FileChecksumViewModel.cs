@@ -26,6 +26,8 @@ namespace DirectoryContents.ViewModels
             {
                 if (m_SelectedAlgorithim.Equals(value) == false)
                 {
+                    Log($"{nameof(FileChecksumViewModel)}.{nameof(SelectedAlgorithim)} is changing from {m_SelectedAlgorithim} to {value}.");
+
                     m_SelectedAlgorithim = value;
 
                     RaisePropertyChanged(nameof(SelectedAlgorithim));

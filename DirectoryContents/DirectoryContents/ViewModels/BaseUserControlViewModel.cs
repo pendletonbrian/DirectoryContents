@@ -36,6 +36,12 @@ namespace DirectoryContents.ViewModels
             get { return "Back"; }
         }
 
+        public string StatusText
+        {
+            get { return m_ViewModel.StatusText; }
+            set { m_ViewModel.StatusText = value; }
+        }
+
         #endregion Public Properties
 
         #region Public Methods

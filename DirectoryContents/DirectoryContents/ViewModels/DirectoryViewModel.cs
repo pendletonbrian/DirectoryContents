@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
 using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
@@ -58,16 +59,24 @@ namespace DirectoryContents.ViewModels
         private string m_DirectoryToParse = string.Empty;
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
+        private readonly Enumerations.ChecksumAlgorithim m_GlobalAlgorithim;
+        private readonly Hasher m_Hasher = null;
+        private int m_DirectoryCount;
+        private int m_FileCount;
+        private const string m_FmtInt = "###,###,###,##0";
 
         #endregion Private Members
 
         #region constructor
 
-        public DirectoryViewModel(MainWindowViewModel viewModel) : base(viewModel)
+        public DirectoryViewModel(MainWindowViewModel viewModel, Enumerations.ChecksumAlgorithim globalAlgorithim) : base(viewModel)
         {
             DirectoryItems = new ObservableCollection<DirectoryItem>
             {
             };
+
+            m_GlobalAlgorithim = globalAlgorithim;
+
         }
 
         #endregion constructor
@@ -167,6 +176,8 @@ namespace DirectoryContents.ViewModels
 
             foreach (DirectoryInfo directory in dirInfo.GetDirectories())
             {
+                m_DirectoryCount++;
+
                 DirectoryItem directoryNode = new DirectoryItem(directory)
                 {
                     Depth = node.Depth + 1
@@ -179,10 +190,17 @@ namespace DirectoryContents.ViewModels
 
             foreach (FileInfo file in dirInfo.GetFiles())
             {
+                m_FileCount++;
+
                 fileNode = new DirectoryItem(file)
                 {
                     Depth = node.Depth + 1
                 };
+
+                if (m_GlobalAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false)
+                {
+                    //fileNode.Checksum = Hasher.
+                }
 
                 node.Items.Add(fileNode);
             }
@@ -204,13 +222,15 @@ namespace DirectoryContents.ViewModels
 
         internal bool CanExport()
         {
-            Log($"{nameof(CanExport)}: \"{DirectoryToParse}\".");
+            Log($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: \"{DirectoryToParse}\".");
 
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
 
         internal void CollapseAll()
         {
+            Log($"{nameof(DirectoryViewModel)}.{nameof(CollapseAll)}");
+
             RootNode.IsExpanded = true;
 
             foreach (DirectoryItem node in RootNode.Items)
@@ -221,6 +241,8 @@ namespace DirectoryContents.ViewModels
 
         internal void ExpandAll()
         {
+            Log($"{nameof(DirectoryViewModel)}.{nameof(ExpandAll)}");
+
             RootNode.IsExpanded = true;
 
             foreach (DirectoryItem node in RootNode.Items)
@@ -231,6 +253,8 @@ namespace DirectoryContents.ViewModels
 
         internal void Export(TreeView tree, string fullyQualifiedPath)
         {
+            Log($"{nameof(DirectoryViewModel)}.{nameof(Export)} => Filepath: \"{fullyQualifiedPath}\"");
+
             if (tree is null)
             {
                 throw new ArgumentNullException($"The TreeView is null.", nameof(tree));
@@ -267,19 +291,25 @@ namespace DirectoryContents.ViewModels
                 writer.Flush();
             }
 
-            Debug.WriteLine($"File written to: \"{fullyQualifiedPath}\".");
+            Log($"File written to: \"{fullyQualifiedPath}\".");
         }
 
-        internal bool ItemIsSelected()
+        internal bool IsItemSelected()
         {
-            return m_SelectedItem != null;
+            bool isItemSelected = m_SelectedItem != null;
+
+            Log($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {isItemSelected}");
+
+            return isItemSelected;
         }
 
         internal void Parse()
         {
+            Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}");
+
             if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
             {
-                Debug.WriteLine($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
+                Log($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
 
                 return;
             }
@@ -295,27 +325,38 @@ namespace DirectoryContents.ViewModels
 
             DirectoryItems.Add(m_RootNode);
 
+            m_DirectoryCount = 0;
+            m_FileCount = 0;
+
+            Stopwatch timer = Stopwatch.StartNew();
+
             ParseDirectory(m_RootNode, dirInfo.FullName);
+
+            timer.Stop();
 
             RaisePropertyChanged(nameof(DirectoryItems));
 
             m_RootNode.IsExpanded = true;
+
+            StatusText = $"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}";
         }
 
         internal void ShowSelectedItemInFileExplorer()
         {
             if (SelectedItem is null)
             {
-                Debug.WriteLine($"{nameof(SelectedItem)} is null.");
+                Log($"{nameof(SelectedItem)} is null.");
 
                 return;
             }
+
+            Log($"{nameof(DirectoryViewModel)}.{nameof(ShowSelectedItemInFileExplorer)}: \"{SelectedItem}\"");
 
             string fullyQualifiedPath = SelectedItem.FullyQualifiedFilename;
 
             if (string.IsNullOrWhiteSpace(fullyQualifiedPath))
             {
-                Debug.WriteLine($"{SelectedItem.FullyQualifiedFilename} is empty/null.");
+                Log($"{SelectedItem.FullyQualifiedFilename} is empty/null.");
 
                 return;
             }
@@ -324,7 +365,7 @@ namespace DirectoryContents.ViewModels
             {
                 if (Directory.Exists(fullyQualifiedPath).Equals(false))
                 {
-                    Debug.WriteLine($"The directory \"{fullyQualifiedPath}\" does not exist.");
+                    Log($"The directory \"{fullyQualifiedPath}\" does not exist.");
 
                     return;
                 }
@@ -333,7 +374,7 @@ namespace DirectoryContents.ViewModels
             {
                 if (File.Exists(fullyQualifiedPath).Equals(false))
                 {
-                    Debug.WriteLine($"The file \"{fullyQualifiedPath}\" does not exist.");
+                    Log($"The file \"{fullyQualifiedPath}\" does not exist.");
 
                     return;
                 }
@@ -343,7 +384,7 @@ namespace DirectoryContents.ViewModels
 
             if (intPtr == IntPtr.Zero)
             {
-                Debug.WriteLine($"Couldn't get the pointer to the file.");
+                Log($"Couldn't get the pointer to the file.");
 
                 return;
             }
