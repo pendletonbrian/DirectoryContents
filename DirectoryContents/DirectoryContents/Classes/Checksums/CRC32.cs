@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace DirectoryContents.Classes.FileHash
+namespace DirectoryContents.Classes.Checksums
 {
     /// <summary>
     /// Provides support for CRC32 checksums.
     /// </summary>
-    public class Checksum : IFileHash
+    public class CRC32 : IHashAlgorithim
     {
         #region Private Members
 
@@ -91,6 +91,7 @@ namespace DirectoryContents.Classes.FileHash
                 crc = crc64Table[tableIndex] ^ (crc << 8);
             }
 
+            // Invert the bits.
             return (crc ^ 0xffffffffffffffff);
         }
 

@@ -149,6 +149,10 @@ namespace DirectoryContents.ViewModels
                     newPage = new SettingsView(this);
                     break;
 
+                case Enumerations.PageControl.FileChecksum:
+                    newPage = new FileChecksumView(this);
+                    break;
+
                 default:
                     throw new DirectoryContentsException($"Unhandled PageControl enumeration: {pageControl}");
             }

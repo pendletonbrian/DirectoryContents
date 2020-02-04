@@ -1,0 +1,73 @@
+﻿<local:BaseUserControlView x:Class="DirectoryContents.Views.FileChecksumView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DirectoryContents.Views"
+                           xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+
+            <!-- Header -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Seperator -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Main area -->
+            <RowDefinition Height="*" />
+
+            <!-- Back button -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Style="{StaticResource HeaderTextStyle}"
+                   Text="File checksum" />
+
+        <!-- Separator -->
+        <Separator Grid.Column="0"
+                   Grid.Row="1"
+                   Style="{StaticResource StandardSeparatorStyle}" />
+
+        <!-- Main area -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="2"
+                  Header="Checksum">
+            <ListBox ItemsSource="{Binding AlgorithimList}"
+                     SelectedValue="{Binding SelectedAlgorithim}"
+                     SelectedValuePath="Key">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                     Content="{Binding Value}"
+                                     GroupName="AlgorithimsGroup"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+
+        <!-- Back button -->
+        <Button Grid.Column="0"
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                Margin="4"
+                Command="{x:Static vm:BaseUserControlViewModel.BackCommand}">
+            <Button.ToolTip>
+                <TextBlock Text="Back" />
+            </Button.ToolTip>
+            <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
+                   Width="26"
+                   Height="26" />
+        </Button>
+        
+    </Grid>
+</local:BaseUserControlView>

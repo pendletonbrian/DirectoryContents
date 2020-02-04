@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace DirectoryContents.Classes.FileHash
+namespace DirectoryContents.Classes.Checksums
 {
-    public class MD5 : IFileHash
+    public class SHA1 : IHashAlgorithim
     {
         public UInt64 GetHash(byte[] data)
         {
             byte[] hash = null;
 
-            using (System.Security.Cryptography.MD5 crypto = System.Security.Cryptography.MD5.Create())
+            using (System.Security.Cryptography.SHA1 crypto = System.Security.Cryptography.SHA1.Create())
             {
                 hash = crypto.ComputeHash(data);
             }

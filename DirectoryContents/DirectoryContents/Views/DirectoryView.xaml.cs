@@ -190,6 +190,9 @@ namespace DirectoryContents.Views
 
         private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.FileChecksum, 
+                additionalData: m_ViewModel.SelectedItem, 
+                transitionType: WpfPageTransitions.PageTransitionType.SlideAndFade);
         }
 
         private void LoadDirectory(string fullyQualifiedDirectoryPath)

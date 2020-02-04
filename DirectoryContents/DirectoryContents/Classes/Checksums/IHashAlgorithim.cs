@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DirectoryContents.Classes.FileHash
+namespace DirectoryContents.Classes.Checksums
 {
-    public interface IFileHash
+    public interface IHashAlgorithim
     {
         /// <summary>
         /// Gets the hash of the given data.

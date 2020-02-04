@@ -53,13 +53,23 @@ namespace DirectoryContents.ViewModels
             MainWindowViewModel.Log(msg, prependTimeStamp);
         }
 
+        /// <summary>
+        /// Show a given page.
+        /// </summary>
+        /// <param name="pageControl">The enumerated value for the new page.</param>
+        /// <param name="additionalData">Any additional data that the new page might need.</param>
+        /// <param name="transitionType">Defaults to sliding to the left.</param>
         public void ShowNextPage(Enumerations.PageControl pageControl,
             object additionalData = null,
-            WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
+            WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
             m_ViewModel.ShowNextPage(pageControl, additionalData, transitionType);
         }
 
+        /// <summary>
+        /// Show the previous page.
+        /// </summary>
+        /// <param name="transitionType">Defaults to sliding to the right.</param>
         public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
         {
             m_ViewModel.ShowPreviousPage(transitionType);

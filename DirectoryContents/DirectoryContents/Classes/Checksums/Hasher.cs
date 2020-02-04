@@ -2,21 +2,21 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace DirectoryContents.Classes.FileHash
+namespace DirectoryContents.Classes.Checksums
 {
     public class Hasher
     {
         #region Private Members
 
-        private readonly IFileHash m_FileHash;
+        private readonly IHashAlgorithim m_Algorithim;
 
         #endregion Private Members
 
         #region constructor
 
-        public Hasher(IFileHash fileHash)
+        public Hasher(IHashAlgorithim algorithim)
         {
-            m_FileHash = fileHash;
+            m_Algorithim = algorithim;
         }
 
         #endregion constructor
@@ -30,18 +30,20 @@ namespace DirectoryContents.Classes.FileHash
         /// <param name="filename">
         /// The fully qualified name to the file.
         /// </param>
-        /// <param name="hashValue">
-        /// Whether or not the file was able to be hashed.
+        /// <param name="checksum">
+        /// The checksum value.  If the file doesn't exist, or there is an
+        /// issue, the value is set to UInt64.MinValue.
         /// </param>
         /// <returns>
+        /// Whether or not the file was able to be hashed.
         /// </returns>
-        public bool? TryGetFileHash(string filename, out ulong hashValue)
+        public bool? TryGetFileChecksum(string filename, out ulong checksum)
         {
             try
             {
                 if (File.Exists(filename) == false)
                 {
-                    hashValue = UInt64.MinValue;
+                    checksum = UInt64.MinValue;
 
                     Debug.WriteLine($"File \"{filename}\" does not exist.");
 
@@ -57,18 +59,18 @@ namespace DirectoryContents.Classes.FileHash
 
                 if (inputBytes is null)
                 {
-                    hashValue = m_FileHash.GetHash(inputBytes);
+                    checksum = UInt64.MinValue;
 
                     return false;
                 }
 
-                hashValue = UInt64.MaxValue;
+                checksum = m_Algorithim.GetHash(inputBytes);
 
                 return true;
             }
             catch
             {
-                hashValue = UInt64.MinValue;
+                checksum = UInt64.MinValue;
 
                 return false;
             }

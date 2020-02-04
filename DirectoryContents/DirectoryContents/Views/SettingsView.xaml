@@ -47,6 +47,29 @@
                    Style="{StaticResource StandardSeparatorStyle}" />
 
         <!-- Main area -->
+        <Border Grid.Column="0"
+                Grid.Row="2"
+                Margin="4"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderThickness="1"
+                BorderBrush="{StaticResource SCB_TardisBlue}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Column="0"
+                          Grid.Row="0"
+                          Header="Compute checksum(s)">
+                    
+                </GroupBox>
+            </Grid>
+        </Border>
 
         <!-- Next button -->
         <Button Grid.Column="0"

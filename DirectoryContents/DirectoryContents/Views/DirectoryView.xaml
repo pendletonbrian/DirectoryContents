@@ -7,8 +7,8 @@
                            xmlns:models="clr-namespace:DirectoryContents.Models"
                            xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
                            mc:Ignorable="d"
-                           d:DesignHeight="450"
-                           d:DesignWidth="800">
+                           d:DesignHeight="600"
+                           d:DesignWidth="700">
 
     <local:BaseUserControlView.CommandBindings>
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.BrowseCommand}"
@@ -59,8 +59,8 @@
                   Grid.Row="2"
                   Name="treeView"
                   Margin="4"
-                  Width="770"
-                  Height="560"
+                  Width="700"
+                  Height="500"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectedItemChanged="TreeView_SelectedItemChanged"
@@ -121,8 +121,6 @@
                               IsEnabled="False" />
 
                     <MenuItem Header="Open in File Explorer"
-                              FontStyle="Normal"
-                              FontWeight="Normal"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.ViewInFileExplorerCommand}">
                         <MenuItem.Icon>
@@ -130,6 +128,11 @@
                                    Source="/Images/redo-16.png" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <MenuItem Header="Generate checksum"
+                              Margin="2"
+                              Command="{x:Static vm:DirectoryViewModel.GenerateFileHashCommand}" />
+
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

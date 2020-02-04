@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DirectoryContents.Classes.FileHash
+namespace DirectoryContents.Classes.Checksums
 {
-    public class SHA512 : IFileHash
+    public class SHA512 : IHashAlgorithim
     {
         /// <summary>
         /// Get the hash for the SHA-512 algorithim.
