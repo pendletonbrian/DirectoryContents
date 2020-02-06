@@ -6,6 +6,8 @@ using System.Text;
 using System.Timers;
 using System.Windows.Controls;
 using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
 using DirectoryContents.Views;
 using WpfPageTransitions;
 
@@ -125,6 +127,7 @@ namespace DirectoryContents.ViewModels
             DebugText = $"{nameof(MainWindowViewModel)}: ctor";
 
             m_StatusMsgTimer.Elapsed += StatusMsgTimer_Elapsed;
+            m_StatusMsgTimer.Interval = 1000;
         }
 
         #endregion constructors
@@ -141,16 +144,7 @@ namespace DirectoryContents.ViewModels
                     break;
 
                 case Enumerations.PageControl.Directory:
-
-                    if (additionalData is null)
-                    {
-                        throw new ArgumentException($"The {nameof(DirectoryView)} requires the {nameof(Enumerations.ChecksumAlgorithim)} parameter.");
-                    }
-
-                    Enumerations.ChecksumAlgorithim algorithim = (Enumerations.ChecksumAlgorithim)additionalData;
-
-                    newPage = new DirectoryView(this, algorithim);
-
+                    newPage = new DirectoryView(this);
                     break;
 
                 case Enumerations.PageControl.Settings:
@@ -158,7 +152,21 @@ namespace DirectoryContents.ViewModels
                     break;
 
                 case Enumerations.PageControl.FileChecksum:
-                    newPage = new FileChecksumView(this);
+
+                    if (additionalData is null)
+                    {
+                        throw new ArgumentException($"The {nameof(FileChecksumView)} requires the {nameof(Enumerations.ChecksumAlgorithim)} parameter.");
+                    }
+
+                    DirectoryItem item = additionalData as DirectoryItem;
+
+                    if (item is null)
+                    {
+                        throw new ArgumentException($"The additional data wasn't of type {nameof(DirectoryItem)}.");
+                    }
+
+                    newPage = new FileChecksumView(this, item);
+
                     break;
 
                 default:

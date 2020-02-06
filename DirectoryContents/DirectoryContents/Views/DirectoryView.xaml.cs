@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
 
@@ -21,11 +21,11 @@ namespace DirectoryContents.Views
 
         #region constructor
 
-        public DirectoryView(MainWindowViewModel viewModel, Enumerations.ChecksumAlgorithim globalAlgorithim) : base(viewModel)
+        public DirectoryView(MainWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
 
-            m_ViewModel = new DirectoryViewModel(viewModel, globalAlgorithim);
+            m_ViewModel = new DirectoryViewModel(viewModel);
 
             DataContext = m_ViewModel;
         }

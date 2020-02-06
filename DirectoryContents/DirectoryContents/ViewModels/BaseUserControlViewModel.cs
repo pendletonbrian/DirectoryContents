@@ -36,12 +36,6 @@ namespace DirectoryContents.ViewModels
             get { return "Back"; }
         }
 
-        public string StatusText
-        {
-            get { return m_ViewModel.StatusText; }
-            set { m_ViewModel.StatusText = value; }
-        }
-
         #endregion Public Properties
 
         #region Public Methods
@@ -79,6 +73,11 @@ namespace DirectoryContents.ViewModels
         public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
         {
             m_ViewModel.ShowPreviousPage(transitionType);
+        }
+
+        public void ShowStatusMessage(string msg, bool autoRemove = true)
+        {
+            m_ViewModel.ShowStatusMessage(msg, autoRemove);
         }
 
         #endregion Public Methods

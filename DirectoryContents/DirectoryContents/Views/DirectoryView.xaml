@@ -6,6 +6,7 @@
                            xmlns:local="clr-namespace:DirectoryContents.Views"
                            xmlns:models="clr-namespace:DirectoryContents.Models"
                            xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
+                           xmlns:classes="clr-namespace:DirectoryContents.Classes"
                            mc:Ignorable="d"
                            d:DesignHeight="600"
                            d:DesignWidth="700">
@@ -19,6 +20,10 @@
                         Executed="ExportCommand_Executed" />
     </local:BaseUserControlView.CommandBindings>
 
+    <local:BaseUserControlView.Resources>
+        <classes:VisibilityConverter x:Key="VisibilityConverter" />
+    </local:BaseUserControlView.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

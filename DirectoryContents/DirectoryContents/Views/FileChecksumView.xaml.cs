@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
@@ -29,11 +30,11 @@ namespace DirectoryContents.Views
 
         #region constructor
 
-        public FileChecksumView(MainWindowViewModel viewModel) : base(viewModel)
+        public FileChecksumView(MainWindowViewModel viewModel, DirectoryItem item) : base(viewModel)
         {
             InitializeComponent();
 
-            m_ViewModel = new FileChecksumViewModel(viewModel);
+            m_ViewModel = new FileChecksumViewModel(viewModel, item);
 
             DataContext = m_ViewModel;
         }

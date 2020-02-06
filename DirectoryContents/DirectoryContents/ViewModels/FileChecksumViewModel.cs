@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DirectoryContents.Classes;
+using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
@@ -13,6 +14,7 @@ namespace DirectoryContents.ViewModels
 
         private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
+        private readonly DirectoryItem m_Item = null;
 
         #endregion
 
@@ -42,13 +44,22 @@ namespace DirectoryContents.ViewModels
             private set { }
         }
 
+        public DirectoryItem SelectedItem
+        {
+            get { return m_Item; }
+
+            private set { }
+        }
+
         #endregion
 
         #region constructor
 
-        public FileChecksumViewModel(MainWindowViewModel viewModel) : base(viewModel)
+        public FileChecksumViewModel(MainWindowViewModel viewModel, DirectoryItem item) : base(viewModel)
         {
             m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
+
+            m_Item = item;
         }
 
         #endregion

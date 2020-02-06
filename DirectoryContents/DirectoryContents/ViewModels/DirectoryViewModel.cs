@@ -59,8 +59,6 @@ namespace DirectoryContents.ViewModels
         private string m_DirectoryToParse = string.Empty;
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
-        private readonly Enumerations.ChecksumAlgorithim m_GlobalAlgorithim;
-        private readonly Hasher m_Hasher = null;
         private int m_DirectoryCount;
         private int m_FileCount;
         private const string m_FmtInt = "###,###,###,##0";
@@ -69,14 +67,11 @@ namespace DirectoryContents.ViewModels
 
         #region constructor
 
-        public DirectoryViewModel(MainWindowViewModel viewModel, Enumerations.ChecksumAlgorithim globalAlgorithim) : base(viewModel)
+        public DirectoryViewModel(MainWindowViewModel viewModel) : base(viewModel)
         {
             DirectoryItems = new ObservableCollection<DirectoryItem>
             {
             };
-
-            m_GlobalAlgorithim = globalAlgorithim;
-
         }
 
         #endregion constructor
@@ -196,11 +191,6 @@ namespace DirectoryContents.ViewModels
                 {
                     Depth = node.Depth + 1
                 };
-
-                if (m_GlobalAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false)
-                {
-                    //fileNode.Checksum = Hasher.
-                }
 
                 node.Items.Add(fileNode);
             }
@@ -338,7 +328,7 @@ namespace DirectoryContents.ViewModels
 
             m_RootNode.IsExpanded = true;
 
-            StatusText = $"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}";
+            ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}");
         }
 
         internal void ShowSelectedItemInFileExplorer()

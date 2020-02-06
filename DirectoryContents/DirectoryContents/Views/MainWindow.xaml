@@ -35,7 +35,7 @@
             <RowDefinition Height="Auto" />
 
             <!-- Main area -->
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
 
             <!-- Status bar -->
             <RowDefinition Height="Auto" />
