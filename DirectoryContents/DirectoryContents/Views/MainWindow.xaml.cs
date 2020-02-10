@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using DirectoryContents.ViewModels;
 
-namespace DirectoryContents
+namespace DirectoryContents.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

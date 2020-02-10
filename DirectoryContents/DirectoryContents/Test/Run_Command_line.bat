@@ -1,5 +1,5 @@
 @echo off
 
-../bin/Debug/DirectoryContents.exe "."
+%~dp0/../bin/Debug/DirectoryContents.exe "timmy"
 
 @pause

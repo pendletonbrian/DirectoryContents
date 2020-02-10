@@ -76,6 +76,11 @@ namespace DirectoryContents.ViewModels
             object additionalData = null,
             WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
         {
+            if (m_ViewModel is null)
+            {
+                return;
+            }
+
             m_ViewModel.ShowNextPage(pageControl, additionalData, transitionType);
         }
 
@@ -85,11 +90,21 @@ namespace DirectoryContents.ViewModels
         /// <param name="transitionType">Defaults to sliding to the right.</param>
         public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
         {
+            if (m_ViewModel is null)
+            {
+                return;
+            }
+
             m_ViewModel.ShowPreviousPage(transitionType);
         }
 
         public void ShowStatusMessage(string msg, bool autoRemove = true)
         {
+            if (m_ViewModel is null)
+            {
+                return;
+            }
+
             m_ViewModel.ShowStatusMessage(msg, autoRemove);
         }
 

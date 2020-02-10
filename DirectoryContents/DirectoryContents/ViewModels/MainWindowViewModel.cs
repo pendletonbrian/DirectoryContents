@@ -233,6 +233,11 @@ namespace DirectoryContents.ViewModels
         {
             Debug.WriteLine(msg);
 
+            if (m_Logger is null)
+            {
+                return;
+            }
+
             m_Logger.Log(msg, prependTimeStamp);
         }
 
@@ -246,6 +251,11 @@ namespace DirectoryContents.ViewModels
         internal static void LogError(string msg, bool prependTimeStamp = true)
         {
             Console.Error.WriteLine(msg);
+
+            if (m_Logger is null)
+            {
+                return;
+            }
 
             Log(msg, prependTimeStamp);
         }
