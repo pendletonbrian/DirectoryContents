@@ -165,7 +165,7 @@ namespace DirectoryContents.Views
 
             try
             {
-                m_ViewModel.Export(treeView, filepath);
+                m_ViewModel.Export(filepath);
 
                 MessageBoxResult result = MessageBox.Show(
                     "File exported!  Would you like to view the result?",

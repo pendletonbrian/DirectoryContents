@@ -63,6 +63,8 @@ namespace DirectoryContents.ViewModels
 
             set
             {
+                Debug.WriteLine(value);
+
                 m_DebugText.AppendLine(value);
 
                 RaisePropertyChanged(nameof(DebugText));
@@ -219,8 +221,9 @@ namespace DirectoryContents.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if
-        /// desired) and appending a new line. Calls flush after logging the message.
+        /// Writes the message to the Debug stream, then writes the message to
+        /// the log file, prepending a timestamp (if desired) and appending a
+        /// new line. Calls flush after logging the message.
         /// </summary>
         /// <param name="msg">
         /// </param>
@@ -231,6 +234,20 @@ namespace DirectoryContents.ViewModels
             Debug.WriteLine(msg);
 
             m_Logger.Log(msg, prependTimeStamp);
+        }
+
+        /// <summary>
+        /// Writes the message to the error stream, then calls the Log method.
+        /// </summary>
+        /// <param name="msg">
+        /// </param>
+        /// <param name="prependTimeStamp">
+        /// </param>
+        internal static void LogError(string msg, bool prependTimeStamp = true)
+        {
+            Console.Error.WriteLine(msg);
+
+            Log(msg, prependTimeStamp);
         }
 
         internal void ShowNextPage(Enumerations.PageControl pageControl,

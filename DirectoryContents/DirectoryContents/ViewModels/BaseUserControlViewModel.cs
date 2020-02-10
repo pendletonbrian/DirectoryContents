@@ -41,8 +41,9 @@ namespace DirectoryContents.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Writes the message to the log file, prepending a timestamp (if
-        /// desired) and appending a new line. Calls flush after logging the message.
+        /// Writes the message to the Debug stream, then writes the message to
+        /// the log file, prepending a timestamp (if desired) and appending a
+        /// new line. Calls flush after logging the message.
         /// </summary>
         /// <param name="msg">
         /// </param>
@@ -51,6 +52,18 @@ namespace DirectoryContents.ViewModels
         public void Log(string msg, bool prependTimeStamp = true)
         {
             MainWindowViewModel.Log(msg, prependTimeStamp);
+        }
+
+        /// <summary>
+        /// Writes the message to the error stream, then calls the Log method.
+        /// </summary>
+        /// <param name="msg">
+        /// </param>
+        /// <param name="prependTimeStamp">
+        /// </param>
+        public void LogError(string msg, bool prependTimeStamp = true)
+        {
+            MainWindowViewModel.LogError(msg, prependTimeStamp);
         }
 
         /// <summary>
