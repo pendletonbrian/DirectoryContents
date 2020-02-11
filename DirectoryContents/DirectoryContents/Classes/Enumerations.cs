@@ -23,6 +23,9 @@ namespace DirectoryContents.Classes
             [Description("CRC-32")]
             CRC32,
 
+            [Description("CRC-64")]
+            CRC64,
+
             [Description("MD5")]
             MD5,
 

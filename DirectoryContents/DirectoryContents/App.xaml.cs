@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using DirectoryContents.Classes.Checksums;
-using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents
 {
@@ -28,7 +22,8 @@ namespace DirectoryContents
 
         private const string m_Directory_Path = "directory_path";
         private const string m_Results_File = "results_file";
-        private const string m_Algorithim_Crc = "-CRC32";
+        private const string m_Algorithim_Crc32 = "-CRC32";
+        private const string m_Algorithim_Crc64 = "-CRC64";
         private const string m_Algorithim_Md5 = "-MD5";
         private const string m_Algorithim_Sha_1 = "-SHA1";
         private const string m_Algorithim_Sha_256 = "-SHA256";
@@ -148,7 +143,7 @@ namespace DirectoryContents
 
             sb.AppendLine(string.Empty);
             sb.AppendLine($"{startString} [{m_Directory_Path}] [{m_Results_File}]");
-            sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Crc} | {m_Algorithim_Md5} | {m_Algorithim_Sha_1} |");
+            sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Crc32} | {m_Algorithim_Crc64} | {m_Algorithim_Md5} | {m_Algorithim_Sha_1} |");
             sb.AppendLine($"{spacing.ToString()}  {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
 
             sb.AppendLine(string.Empty);
@@ -158,7 +153,8 @@ namespace DirectoryContents
 
             sb.AppendLine(string.Empty);
             sb.AppendLine("Options (flags are not case-sensitive)");
-            sb.AppendLine($"\t{m_Algorithim_Crc}\t\tUse the CRC-32 (32 bit cyclic redundancy check) checksum.");
+            sb.AppendLine($"\t{m_Algorithim_Crc32}\t\tUse the CRC-32 (32 bit cyclic redundancy check) checksum.");
+            sb.AppendLine($"\t{m_Algorithim_Crc64}\t\tUse the CRC-32 (64 bit cyclic redundancy check) checksum.");
             sb.AppendLine($"\t{m_Algorithim_Md5}\t\tUse the MD5 checksum.");
             sb.AppendLine($"\t{m_Algorithim_Sha_1}\t\tUse the SHA-1 checksum.");
             sb.AppendLine($"\t{m_Algorithim_Sha_256}\t\tUse the SHA-256 checksum.");
@@ -177,9 +173,13 @@ namespace DirectoryContents
 
             IHashAlgorithim algorithim = null;
 
-            if (flag.Equals(m_Algorithim_Crc, StringComparison.OrdinalIgnoreCase))
+            if (flag.Equals(m_Algorithim_Crc32, StringComparison.OrdinalIgnoreCase))
             {
                 algorithim = new CRC32();
+            }
+            else if (flag.Equals(m_Algorithim_Crc64, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new CRC64();
             }
             else if (flag.Equals(m_Algorithim_Md5, StringComparison.OrdinalIgnoreCase))
             {
