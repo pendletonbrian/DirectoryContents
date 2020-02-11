@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
 
 namespace DirectoryContents
@@ -36,7 +38,7 @@ namespace DirectoryContents
         {
             StringBuilder sb = new StringBuilder();
 
-            Console.Out.WriteLine($"Application name: \"{AppDomain.CurrentDomain.FriendlyName}\".");
+            Log($"Application name: \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
             if (e.Args.Length > 0)
             {
@@ -49,7 +51,7 @@ namespace DirectoryContents
                     sb.AppendLine($"  Argument {++count}: \"{arg}\".");
                 }
 
-                Console.Out.WriteLine(sb.ToString());
+                Log(sb.ToString());
 
                 // If the user just wants to see the help, print and exit.
                 if (e.Args[0].Equals(m_Help_1, StringComparison.OrdinalIgnoreCase) ||
@@ -79,7 +81,7 @@ namespace DirectoryContents
 
                 if (Directory.Exists(directoryToParse) == false)
                 {
-                    Console.Error.WriteLine($"The directory \"{directoryToParse}\" does not exist.");
+                    LogError($"The directory \"{directoryToParse}\" does not exist.");
 
                     ShowUsage();
 
@@ -101,8 +103,8 @@ namespace DirectoryContents
                 }
                 catch(Exception ex)
                 {
-                    Console.Error.WriteLine($"The checksum algorithim could not be determined from the argument \"{e.Args[2]}\"..");
-                    Console.Error.WriteLine(ex.Message);
+                    LogError($"The checksum algorithim could not be determined from the argument \"{e.Args[2]}\"..");
+                    LogError(ex.Message);
 
                     ShowUsage();
 
@@ -161,7 +163,7 @@ namespace DirectoryContents
             sb.AppendLine($"\t{m_Algorithim_Sha_384}\t\tUse the SHA-384 checksum.");
             sb.AppendLine($"\t{m_Algorithim_Sha_512}\t\tUse the SHA-512 checksum.");
 
-            Console.Error.WriteLine(sb.ToString());
+            LogError(sb.ToString());
         }
 
         private static IHashAlgorithim GetAlgorithim(string flag)
@@ -175,30 +177,44 @@ namespace DirectoryContents
 
             if (flag.Equals(m_Algorithim_Crc32, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is CRC-32.");
+
                 algorithim = new CRC32();
             }
             else if (flag.Equals(m_Algorithim_Crc64, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is CRC-64.");
+
                 algorithim = new CRC64();
             }
             else if (flag.Equals(m_Algorithim_Md5, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is MD5.");
+
                 algorithim = new MD5();
             }
             else if (flag.Equals(m_Algorithim_Sha_1, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is SHA-1.");
+
                 algorithim = new SHA1();
             }
             else if (flag.Equals(m_Algorithim_Sha_256, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is SHA-256.");
+
                 algorithim = new SHA256();
             }
             else if (flag.Equals(m_Algorithim_Sha_384, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is SHA384.");
+
                 algorithim = new SHA384();
             }
             else if (flag.Equals(m_Algorithim_Sha_512, StringComparison.OrdinalIgnoreCase))
             {
+                Log("Algorithim is SHA-512.");
+
                 algorithim = new SHA512();
             }
             else
@@ -209,5 +225,14 @@ namespace DirectoryContents
             return algorithim;
         }
 
+        private static void Log(string msg)
+        {
+            Console.Out.WriteLine($"{DateTime.Now.ToString(Logger.TimeFormatString, CultureInfo.InvariantCulture)} {msg}");
+        }
+
+        private static void LogError(string msg)
+        {
+            Console.Error.WriteLine($"{DateTime.Now.ToString(Logger.TimeFormatString, CultureInfo.InvariantCulture)} {msg}");
+        }
     }
 }

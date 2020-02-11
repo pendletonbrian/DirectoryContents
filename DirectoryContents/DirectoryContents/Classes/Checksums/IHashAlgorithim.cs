@@ -11,6 +11,6 @@ namespace DirectoryContents.Classes.Checksums
         /// </param>
         /// <returns>
         /// </returns>
-        UInt64 GetHash(byte[] data);
+        byte[] GetHash(byte[] data);
     }
 }

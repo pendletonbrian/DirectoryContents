@@ -36,7 +36,7 @@ namespace DirectoryContents.Classes
         /// The 29th of December, 2013 at 10:25 and 35 seconds in the morning
         /// would be "2013.29.12 10:25:35.715"
         /// </example>
-        public string TimeFormatString { get; set; }
+        public static string TimeFormatString { get; set; }
 
         #endregion Public Properties
 
@@ -82,11 +82,11 @@ namespace DirectoryContents.Classes
                 {
                     if (prependTimeStamp)
                     {
-                        m_Writer.Write(DateTime.Now.ToString(TimeFormatString, CultureInfo.InvariantCulture) + " " + msg + Environment.NewLine);
+                        m_Writer.Write($"{DateTime.Now.ToString(TimeFormatString, CultureInfo.InvariantCulture)} {msg}{Environment.NewLine}");
                     }
                     else
                     {
-                        m_Writer.Write(msg + Environment.NewLine);
+                        m_Writer.Write($"{msg}{Environment.NewLine}");
                     }
                 }
 

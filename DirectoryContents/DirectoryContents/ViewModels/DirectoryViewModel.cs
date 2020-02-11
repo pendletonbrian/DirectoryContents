@@ -102,8 +102,6 @@ namespace DirectoryContents.ViewModels
                     m_DirectoryToParse = value;
 
                     RaisePropertyChanged(nameof(DirectoryToParse));
-
-                    Parse();
                 }
             }
         }
@@ -159,14 +157,13 @@ namespace DirectoryContents.ViewModels
 
             foreach (DirectoryItem childNode in node.Items)
             {
-                if (childNode.Checksum.HasValue)
+                if (string.IsNullOrWhiteSpace(childNode.Checksum))
                 {
-                    // Format into two digit hex.
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}  : {childNode.Checksum.Value.ToString("X2")}");
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");                    
                 }
                 else
                 {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}  : {childNode.Checksum}");
                 }
 
                 if (childNode.HasChildren)
@@ -209,12 +206,12 @@ namespace DirectoryContents.ViewModels
 
                 if (m_Hasher != null)
                 {
-                    bool? result = m_Hasher.TryGetFileChecksum(file.FullName, out UInt64 checksum);
+                    bool? result = m_Hasher.TryGetFileChecksum(file.FullName, out string checksum);
 
                     if (result.HasValue &&
                         result.Value)
                     {
-                        fileNode.Checksum = checksum;
+                        fileNode.Checksum = checksum.Replace("-", string.Empty);
                     }
                     else
                     {
@@ -285,10 +282,10 @@ namespace DirectoryContents.ViewModels
 
             foreach (DirectoryItem node in m_RootNode.Items)
             {
-                if (node.Checksum.HasValue)
+                if (string.IsNullOrWhiteSpace(node.Checksum))
                 {
                     // Format into two digit hex.
-                    sb.AppendLine($"|\t{node.ItemName}  : {node.Checksum.Value.ToString("X2")}");
+                    sb.AppendLine($"|\t{node.ItemName}  : {node.Checksum}");
                 }
                 else
                 {
@@ -321,40 +318,51 @@ namespace DirectoryContents.ViewModels
 
         internal void Parse()
         {
-            Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}");
+            Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}: Start");
 
-            if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
+            try
             {
-                LogError($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
+                if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
+                {
+                    LogError($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
 
-                return;
+                    return;
+                }
+
+                DirectoryItems.Clear();
+
+                DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
+
+                m_RootNode = new DirectoryItem(dirInfo)
+                {
+                    Depth = 0
+                };
+
+                DirectoryItems.Add(m_RootNode);
+
+                m_DirectoryCount = 0;
+                m_FileCount = 0;
+
+                Stopwatch timer = Stopwatch.StartNew();
+
+                ParseDirectory(m_RootNode, dirInfo.FullName);
+
+                timer.Stop();
+
+                RaisePropertyChanged(nameof(DirectoryItems));
+
+                m_RootNode.IsExpanded = true;
+
+                ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}");
             }
-
-            DirectoryItems.Clear();
-
-            DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
-
-            m_RootNode = new DirectoryItem(dirInfo)
+            catch (Exception ex)
             {
-                Depth = 0
-            };
-
-            DirectoryItems.Add(m_RootNode);
-
-            m_DirectoryCount = 0;
-            m_FileCount = 0;
-
-            Stopwatch timer = Stopwatch.StartNew();
-
-            ParseDirectory(m_RootNode, dirInfo.FullName);
-
-            timer.Stop();
-
-            RaisePropertyChanged(nameof(DirectoryItems));
-
-            m_RootNode.IsExpanded = true;
-
-            ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}");
+                LogError($"  Exception: {ex.ToString()}");
+            }
+            finally
+            {
+                Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}: End");
+            }
         }
 
         internal void ShowSelectedItemInFileExplorer()

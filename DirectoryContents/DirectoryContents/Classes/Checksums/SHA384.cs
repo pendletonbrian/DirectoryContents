@@ -11,7 +11,7 @@ namespace DirectoryContents.Classes.Checksums
         /// </param>
         /// <returns>
         /// </returns>
-        public ulong GetHash(byte[] data)
+        public byte[] GetHash(byte[] data)
         {
             byte[] hash = null;
 
@@ -20,7 +20,7 @@ namespace DirectoryContents.Classes.Checksums
                 hash = crypto.ComputeHash(data);
             }
 
-            return BitConverter.ToUInt64(hash, 0);
+            return hash;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace DirectoryContents.Classes.Checksums
 {
     public class MD5 : IHashAlgorithim
     {
-        public UInt64 GetHash(byte[] data)
+        public byte[] GetHash(byte[] data)
         {
             byte[] hash = null;
 
@@ -13,7 +13,7 @@ namespace DirectoryContents.Classes.Checksums
                 hash = crypto.ComputeHash(data);
             }
 
-            return BitConverter.ToUInt64(hash, 0);
+            return hash;
         }
     }
 }

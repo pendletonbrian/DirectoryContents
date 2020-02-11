@@ -81,7 +81,7 @@ namespace DirectoryContents.Classes.Checksums
 
         #region Public Methods
 
-        public UInt64 GetHash(byte[] data)
+        public byte[] GetHash(byte[] data)
         {
             UInt64 crc = 0xffffffffffffffff;
 
@@ -92,7 +92,7 @@ namespace DirectoryContents.Classes.Checksums
             }
 
             // Invert the bits.
-            return (crc ^ 0xffffffffffffffff);
+            return BitConverter.GetBytes(crc ^ 0xffffffffffffffff);
         }
 
         #endregion Public Methods

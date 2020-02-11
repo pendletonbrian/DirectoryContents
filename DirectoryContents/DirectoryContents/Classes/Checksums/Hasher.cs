@@ -37,13 +37,13 @@ namespace DirectoryContents.Classes.Checksums
         /// <returns>
         /// Whether or not the file was able to be hashed.
         /// </returns>
-        public bool? TryGetFileChecksum(string filename, out ulong checksum)
+        public bool? TryGetFileChecksum(string filename, out string checksum)
         {
             try
             {
                 if (File.Exists(filename) == false)
                 {
-                    checksum = UInt64.MinValue;
+                    checksum = string.Empty;
 
                     Debug.WriteLine($"File \"{filename}\" does not exist.");
 
@@ -59,18 +59,18 @@ namespace DirectoryContents.Classes.Checksums
 
                 if (inputBytes is null)
                 {
-                    checksum = UInt64.MinValue;
+                    checksum = string.Empty;
 
                     return false;
                 }
 
-                checksum = m_Algorithim.GetHash(inputBytes);
+                checksum = BitConverter.ToString(m_Algorithim.GetHash(inputBytes));
 
                 return true;
             }
             catch
             {
-                checksum = UInt64.MinValue;
+                checksum = string.Empty;
 
                 return false;
             }

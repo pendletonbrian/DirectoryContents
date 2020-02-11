@@ -9,9 +9,9 @@
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public ulong GetHash(byte[] data)
+        public byte[] GetHash(byte[] data)
         {
-            return 0UL;
+            return new byte[0];
         }
     }
 }

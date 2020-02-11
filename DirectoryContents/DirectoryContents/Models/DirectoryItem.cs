@@ -11,7 +11,7 @@ namespace DirectoryContents.Models
 
         private bool m_IsExpanded;
         private bool m_IsSelected;
-        private UInt64? m_Checksum = null;
+        private string m_Checksum;
 
         #endregion Private Members
 
@@ -58,14 +58,14 @@ namespace DirectoryContents.Models
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
 
-        public UInt64? Checksum 
+        public string Checksum 
         {
             get { return m_Checksum; }
 
             set
             {
-                if (m_Checksum is null ||
-                    m_Checksum.Equals(value) == false)
+                if (string.IsNullOrWhiteSpace(m_Checksum) ||
+                    m_Checksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
                 {
                     m_Checksum = value;
 
