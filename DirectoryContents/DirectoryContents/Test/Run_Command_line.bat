@@ -1,5 +1,5 @@
-@echo off
+REM @echo off
 
-%~dp0/../bin/Debug/DirectoryContents.exe "timmy"
+%~dp0/../bin/Debug/DirectoryContents.exe "timmy.txt" -crc
 
 @pause

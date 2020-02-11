@@ -146,7 +146,7 @@ namespace DirectoryContents.ViewModels
                     break;
 
                 case Enumerations.PageControl.Directory:
-                    newPage = new DirectoryView(this);
+                    newPage = new DirectoryView(this, null);
                     break;
 
                 case Enumerations.PageControl.Settings:

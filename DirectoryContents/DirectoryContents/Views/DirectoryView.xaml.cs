@@ -21,11 +21,11 @@ namespace DirectoryContents.Views
 
         #region constructor
 
-        public DirectoryView(MainWindowViewModel viewModel) : base(viewModel)
+        public DirectoryView(MainWindowViewModel viewModel, IHashAlgorithim hashAlgorithim) : base(viewModel)
         {
             InitializeComponent();
 
-            m_ViewModel = new DirectoryViewModel(viewModel);
+            m_ViewModel = new DirectoryViewModel(viewModel, hashAlgorithim);
 
             DataContext = m_ViewModel;
         }

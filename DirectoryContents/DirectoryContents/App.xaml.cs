@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DirectoryContents.Classes.Checksums;
+using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents
 {
@@ -17,12 +19,16 @@ namespace DirectoryContents
     {
         #region Private Members
 
+        private const int SUCCESS = 0;
+        private const int FAILURE = -1;
+
         private const string m_Help_1 = "/?";
         private const string m_Help_2 = "--help";
         private const string m_Help_3 = "-help";
 
-        private const string m_DIRECTORY_PATH = "directory_path";
-        private const string m_Algorithim_Crc = "-CRC";
+        private const string m_Directory_Path = "directory_path";
+        private const string m_Results_File = "results_file";
+        private const string m_Algorithim_Crc = "-CRC32";
         private const string m_Algorithim_Md5 = "-MD5";
         private const string m_Algorithim_Sha_1 = "-SHA1";
         private const string m_Algorithim_Sha_256 = "-SHA256";
@@ -34,12 +40,13 @@ namespace DirectoryContents
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Application name: \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
-            Console.WriteLine(sb.ToString());
+            Console.Out.WriteLine($"Application name: \"{AppDomain.CurrentDomain.FriendlyName}\".");
 
             if (e.Args.Length > 0)
             {
+                // To start off, let's print all given arguments,
+                // for debugging's sake.
                 int count = 0;
 
                 foreach (string arg in e.Args)
@@ -47,36 +54,80 @@ namespace DirectoryContents
                     sb.AppendLine($"  Argument {++count}: \"{arg}\".");
                 }
 
-                Console.WriteLine(sb.ToString());
+                Console.Out.WriteLine(sb.ToString());
 
+                // If the user just wants to see the help, print and exit.
                 if (e.Args[0].Equals(m_Help_1, StringComparison.OrdinalIgnoreCase) ||
                     e.Args[0].Equals(m_Help_2, StringComparison.OrdinalIgnoreCase) ||
                     e.Args[0].Equals(m_Help_3, StringComparison.OrdinalIgnoreCase))
                 {
                     ShowUsage();
 
-                    Shutdown(0);
+                    Shutdown(SUCCESS);
+
+                    return;
                 }
 
-                string directoryPath = e.Args[0];
-
-                if (Directory.Exists(directoryPath) == false)
+                // The correct number of arguments were not supplied.
+                // Print help and exit.
+                if (e.Args.Length != 3)
                 {
-                    Console.Error.WriteLine($"The directory \"{directoryPath}\" does not exist.");
+                    ShowUsage();
 
-                    Shutdown(-1);
+                    Shutdown(FAILURE);
+
+                    return;
                 }
 
-                ViewModels.DirectoryViewModel vm = new ViewModels.DirectoryViewModel(null)
+                // First agrument should be the source directory.
+                string directoryToParse = e.Args[0];
+
+                if (Directory.Exists(directoryToParse) == false)
                 {
-                    DirectoryToParse = directoryPath
+                    Console.Error.WriteLine($"The directory \"{directoryToParse}\" does not exist.");
+
+                    ShowUsage();
+
+                    Shutdown(FAILURE);
+
+                    return;
+                }
+
+                // Second argument should be the results file.
+                string resultsFile = e.Args[1];
+
+                // Third argument should be which algorithim 
+                //  to use for the checksum.
+                IHashAlgorithim hashAlgorithim = null;
+
+                try
+                {
+                    hashAlgorithim = GetAlgorithim(e.Args[2]);
+                }
+                catch(Exception ex)
+                {
+                    Console.Error.WriteLine($"The checksum algorithim could not be determined from the argument \"{e.Args[2]}\"..");
+                    Console.Error.WriteLine(ex.Message);
+
+                    ShowUsage();
+
+                    Shutdown(FAILURE);
+
+                    return;
+                }
+
+                ViewModels.DirectoryViewModel vm = new ViewModels.DirectoryViewModel(null, hashAlgorithim)
+                {
+                    DirectoryToParse = directoryToParse
                 };
 
                 vm.Parse();
 
-                ShowUsage();
+                vm.Export(resultsFile);
 
-                Shutdown(0);
+                Shutdown(SUCCESS);
+
+                return;
             }
             else
             {
@@ -88,13 +139,22 @@ namespace DirectoryContents
 
         private static void ShowUsage()
         {
+            string startString = $"Usage: { AppDomain.CurrentDomain.FriendlyName}";
+
+            // 32 is the ASCII code for a space.
+            string spacing = new string(Convert.ToChar(32), startString.Length);
+
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine(string.Empty);
-            sb.AppendLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} [{m_DIRECTORY_PATH}] {m_Algorithim_Crc}");
+            sb.AppendLine($"{startString} [{m_Directory_Path}] [{m_Results_File}]");
+            sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Crc} | {m_Algorithim_Md5} | {m_Algorithim_Sha_1} |");
+            sb.AppendLine($"{spacing.ToString()}  {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
+
             sb.AppendLine(string.Empty);
             sb.AppendLine("Where");
-            sb.AppendLine($"\t{m_DIRECTORY_PATH}\tThe fully qualified path of the directory to parse.");
+            sb.AppendLine($"\t{m_Directory_Path}\tThe fully qualified path of the directory to parse.");
+            sb.AppendLine($"\t{m_Results_File}\tThe fully qualified path of the file in which to save the results.");
 
             sb.AppendLine(string.Empty);
             sb.AppendLine("Options (flags are not case-sensitive)");
@@ -106,6 +166,47 @@ namespace DirectoryContents
             sb.AppendLine($"\t{m_Algorithim_Sha_512}\t\tUse the SHA-512 checksum.");
 
             Console.Error.WriteLine(sb.ToString());
+        }
+
+        private static IHashAlgorithim GetAlgorithim(string flag)
+        {
+            if (string.IsNullOrWhiteSpace(flag))
+            {
+                throw new ArgumentException($"The checksum algorithim flag is empty/null.");
+            }
+
+            IHashAlgorithim algorithim = null;
+
+            if (flag.Equals(m_Algorithim_Crc, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new CRC32();
+            }
+            else if (flag.Equals(m_Algorithim_Md5, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new MD5();
+            }
+            else if (flag.Equals(m_Algorithim_Sha_1, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new SHA1();
+            }
+            else if (flag.Equals(m_Algorithim_Sha_256, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new SHA256();
+            }
+            else if (flag.Equals(m_Algorithim_Sha_384, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new SHA384();
+            }
+            else if (flag.Equals(m_Algorithim_Sha_512, StringComparison.OrdinalIgnoreCase))
+            {
+                algorithim = new SHA512();
+            }
+            else
+            {
+                throw new ArgumentException($"The checksum algorithim flag is unhandled: \"{flag}\".");
+            }
+
+            return algorithim;
         }
 
     }

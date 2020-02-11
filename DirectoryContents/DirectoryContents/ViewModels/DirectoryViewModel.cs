@@ -62,16 +62,24 @@ namespace DirectoryContents.ViewModels
         private int m_DirectoryCount;
         private int m_FileCount;
         private const string m_FmtInt = "###,###,###,##0";
+        private readonly Hasher m_Hasher = null;
 
         #endregion Private Members
 
         #region constructor
 
-        public DirectoryViewModel(MainWindowViewModel viewModel) : base(viewModel)
+        public DirectoryViewModel(MainWindowViewModel viewModel, IHashAlgorithim hashAlgorithim) : base(viewModel)
         {
             DirectoryItems = new ObservableCollection<DirectoryItem>
             {
             };
+
+            if (hashAlgorithim is null)
+            {
+                return;
+            }
+
+            m_Hasher = new Hasher(hashAlgorithim);
         }
 
         #endregion constructor
@@ -198,6 +206,21 @@ namespace DirectoryContents.ViewModels
                 {
                     Depth = node.Depth + 1
                 };
+
+                if (m_Hasher != null)
+                {
+                    bool? result = m_Hasher.TryGetFileChecksum(file.FullName, out UInt64 checksum);
+
+                    if (result.HasValue &&
+                        result.Value)
+                    {
+                        fileNode.Checksum = checksum;
+                    }
+                    else
+                    {
+                        LogError($"Could not determine the checksum for \"{file.FullName}\".");
+                    }
+                }
 
                 node.Items.Add(fileNode);
             }
