@@ -108,10 +108,10 @@ namespace DirectoryContents.ViewModels
 
         public void ShowStatusMessage(string msg, bool autoRemove = true)
         {
-            Log(msg);
-
             if (m_ViewModel is null)
             {
+                Log(msg);
+
                 return;
             }
 

@@ -233,7 +233,7 @@ namespace DirectoryContents.ViewModels
 
         internal bool CanExport()
         {
-            Log($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: \"{DirectoryToParse}\".");
+            Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: DirectoryToParse is \"{DirectoryToParse}\".");
 
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
@@ -305,7 +305,7 @@ namespace DirectoryContents.ViewModels
         {
             bool isItemSelected = m_SelectedItem != null;
 
-            Log($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {isItemSelected}");
+            Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {isItemSelected}");
 
             return isItemSelected;
         }

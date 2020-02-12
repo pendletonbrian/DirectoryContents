@@ -200,6 +200,8 @@ namespace DirectoryContents.Views
         {
             m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
 
+            m_ViewModel.Parse();
+
             treeView.Items.Clear();
 
             treeView.Items.Add(m_ViewModel.RootNode);

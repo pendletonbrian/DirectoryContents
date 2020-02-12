@@ -111,9 +111,11 @@ namespace DirectoryContents.ViewModels
         {
             try
             {
-                string startupDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+                string startupDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
                 m_Logger = new Logger(Path.Combine(startupDirectory, $"log_{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log"));
+
+                Log($"{nameof(MainWindowViewModel)} static constructor.");
             }
             catch (Exception ex)
             {
@@ -123,9 +125,10 @@ namespace DirectoryContents.ViewModels
 
         public MainWindowViewModel(PageTransition pageTransition)
         {
-            m_PageTransition = pageTransition;
+            Log($"{nameof(MainWindowViewModel)} public constructor.");
+            DebugText = $"{nameof(MainWindowViewModel)} public constructor.";
 
-            DebugText = $"{nameof(MainWindowViewModel)}: ctor";
+            m_PageTransition = pageTransition;
 
             m_StatusMsgTimer.Elapsed += StatusMsgTimer_Elapsed;
             m_StatusMsgTimer.Interval = 1000;
@@ -263,21 +266,23 @@ namespace DirectoryContents.ViewModels
             object additionalData = null,
             PageTransitionType transitionType = PageTransitionType.SlideAndFade)
         {
+            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: Start");
+
             if (pageControl.Equals(Enumerations.PageControl.None))
             {
-                Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The page control type \"{pageControl}\" is unhandled.", true);
+                Log($"  The page control type \"{pageControl}\" is unhandled.");
             }
 
             UserControl newPageControl = GetPageUserControl(pageControl, additionalData);
 
             if (newPageControl is null)
             {
-                Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The user control came back null for page type: {pageControl}", true);
+                Log($"  The user control came back null for page type: {pageControl}");
 
                 return;
             }
 
-            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: The page type is: {pageControl}", true);
+            Log($"  The page type is \"{pageControl}\".");
 
             if (CurrentPage.Equals(pageControl) == true)
             {
@@ -291,6 +296,9 @@ namespace DirectoryContents.ViewModels
 
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
+
+            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: End");
+
         }
 
         /// <summary>
@@ -300,7 +308,7 @@ namespace DirectoryContents.ViewModels
         /// </param>
         internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade)
         {
-            //Enumerations.PageControl previousPage = Enumerations.PageControl.None;
+            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: Start");
 
             UserControl newPageControl = null;
 
@@ -308,20 +316,20 @@ namespace DirectoryContents.ViewModels
             {
                 newPageControl = m_PageList.Pop();
 
-                Log($"Removed {newPageControl} from stack.");
+                Log($"  Removed {newPageControl} from stack.");
 
                 if (m_PageList.Count == 1)
                 {
-                    Log("There is now 1 item in the stack.");
+                    Log("  There is now 1 item in the stack.");
                 }
                 else
                 {
-                    Log($"There are now {m_PageList.Count} items in the stack.");
+                    Log($"  There are now {m_PageList.Count} items in the stack.");
                 }
             }
             else
             {
-                Log($"The page list stack is empty.");
+                Log($"  The page list stack is empty.");
             }
 
             //previousPage = GetPageEnumerationType(newPageControl);
@@ -337,6 +345,9 @@ namespace DirectoryContents.ViewModels
 
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
+
+            Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: End");
+
         }
 
         internal void ShowStatusMessage(string msg, bool autoRemove = true)
