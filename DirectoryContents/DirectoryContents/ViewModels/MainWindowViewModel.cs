@@ -210,6 +210,10 @@ namespace DirectoryContents.ViewModels
             {
                 currentPage = Enumerations.PageControl.Settings;
             }
+            else if (pageControl is FileChecksumView)
+            {
+                currentPage = Enumerations.PageControl.FileChecksum;
+            }
             else
             {
                 throw new DirectoryContentsException($"Unhandled page type: \"{pageControl.GetType().ToString()}\".");
@@ -326,19 +330,25 @@ namespace DirectoryContents.ViewModels
                 {
                     Log($"  There are now {m_PageList.Count} items in the stack.");
                 }
+
             }
             else
             {
                 Log($"  The page list stack is empty.");
             }
 
-            //previousPage = GetPageEnumerationType(newPageControl);
+            if (m_PageList.Count > 0)
+            {
+                newPageControl = m_PageList.Peek();
+
+                Log($"  New page is {newPageControl}.");
+            }
 
             // Set back button text.
 
             if (newPageControl is null)
             {
-                newPageControl = new SettingsView(this);
+                newPageControl = new DirectoryView(this, null);
             }
 
             CurrentPage = GetPageEnumerationType(newPageControl);

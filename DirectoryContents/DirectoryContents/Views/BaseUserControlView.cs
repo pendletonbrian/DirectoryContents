@@ -45,6 +45,21 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowPreviousPage();
         }
 
+        internal void ShowStatusMessage(string msg, bool autoRemove = true)
+        {
+            m_ViewModel?.ShowStatusMessage(msg, autoRemove);
+        }
+
+        internal void ShowProgressBar(bool isVisible)
+        {
+            if (m_ViewModel is null)
+            {
+                return;
+            }
+
+            m_ViewModel.ShowProgressBar = isVisible;
+        }
+
         #endregion Protected Methods
     }
 }

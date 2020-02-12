@@ -14,7 +14,7 @@
     <local:BaseUserControlView.CommandBindings>
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.BrowseCommand}"
                         CanExecute="BrowseCommand_CanExecute"
-                        Executed="BrowseCommand_Executed" />
+                        Executed="BrowseCommand_ExecutedAsync" />
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExportCommand}"
                         CanExecute="ExportCommand_CanExecute"
                         Executed="ExportCommand_Executed" />
@@ -70,7 +70,7 @@
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectedItemChanged="TreeView_SelectedItemChanged"
                   DragEnter="TreeView_DragEnter"
-                  Drop="TreeView_Drop"
+                  Drop="TreeView_DropAsync"
                   ItemContainerStyle="{StaticResource LibraryTreeViewItemStyle}">
 
             <TreeView.ItemTemplate>

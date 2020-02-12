@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using DirectoryContents.Classes.Checksums;
@@ -41,7 +43,7 @@ namespace DirectoryContents.Views
             e.Handled = true;
         }
 
-        private void BrowseCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void BrowseCommand_ExecutedAsync(object sender, ExecutedRoutedEventArgs e)
         {
             string directoryPath = null;
 
@@ -61,21 +63,7 @@ namespace DirectoryContents.Views
                 return;
             }
 
-            LoadDirectory(directoryPath);
-        }
-
-        private void CheckItemIsSelected(CanExecuteRoutedEventArgs e)
-        {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = false;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.IsItemSelected();
-            }
-
-            e.Handled = true;
+            await LoadDirectory(directoryPath);
         }
 
         private void CollapseAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -186,7 +174,33 @@ namespace DirectoryContents.Views
 
         private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            CheckItemIsSelected(e);
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = false;
+
+                bool? result = m_ViewModel.IsSelectedItemFile();
+
+                if (result.HasValue)
+                {
+                    if (result.Value)
+                    {
+                        e.CanExecute = true;
+
+                        ShowStatusMessage(string.Empty, false);
+                    }
+                    else
+                    {
+                        ShowStatusMessage($"Cannot generate checksum: \"{m_ViewModel.SelectedItem.ItemName}\" is a directory.");
+                    }
+
+                }
+            }
+
+            e.Handled = true;
         }
 
         private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -196,17 +210,40 @@ namespace DirectoryContents.Views
                 transitionType: WpfPageTransitions.PageTransitionType.SlideAndFade);
         }
 
-        private void LoadDirectory(string fullyQualifiedDirectoryPath)
+        private async Task LoadDirectory(string fullyQualifiedDirectoryPath)
         {
-            m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
+            try
+            {
+                ShowProgressBar(true);
 
-            m_ViewModel.Parse();
+                Mouse.OverrideCursor = Cursors.Wait;
 
-            treeView.Items.Clear();
+                treeView.Items.Clear();
 
-            treeView.Items.Add(m_ViewModel.RootNode);
+                treeView.UpdateLayout();
 
-            treeView.UpdateLayout();
+                m_ViewModel.DirectoryToParse = fullyQualifiedDirectoryPath;
+
+                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+                CancellationToken token = cancellationTokenSource.Token;
+
+                await Task.Run(() => m_ViewModel.Parse(),
+                    token);
+
+                treeView.Items.Add(m_ViewModel.RootNode);
+
+                treeView.UpdateLayout();
+
+                Mouse.OverrideCursor = null;
+            }
+            catch
+            {
+            }
+            finally
+            {
+                ShowProgressBar(false);
+            }
         }
 
         private void TreeView_DragEnter(object sender, DragEventArgs e)
@@ -223,7 +260,7 @@ namespace DirectoryContents.Views
             }
         }
 
-        private void TreeView_Drop(object sender, DragEventArgs e)
+        private async void TreeView_DropAsync(object sender, DragEventArgs e)
         {
             string[] filenameList = (string[])e.Data.GetData(DataFormats.FileDrop);
 
@@ -233,7 +270,7 @@ namespace DirectoryContents.Views
                 return;
             }
 
-            LoadDirectory(filenameList[0]);
+            await LoadDirectory(filenameList[0]);
 
             // This is a bit of a hack. Setting the focus makes the application
             // reevaluate the XXX_CanExecute methods. Otherwise, the "Export"
@@ -257,7 +294,16 @@ namespace DirectoryContents.Views
 
         private void ViewInFileExplorerCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            CheckItemIsSelected(e);
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsItemSelected();
+            }
+
+            e.Handled = true;
         }
 
         private void ViewInFileExplorerCommand_Executed(object sender, ExecutedRoutedEventArgs e)

@@ -1,16 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
+    /// <summary>
+    /// Handle the settings for hashing a single file.
+    /// </summary>
     public class FileChecksumViewModel : BaseUserControlViewModel
     {
+        #region Public Members
+
+        public static RoutedCommand GenerateCommand = new RoutedCommand();
+
+        #endregion
+
         #region Private Members
 
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
         private readonly DirectoryItem m_Item = null;
         private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
+        private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
 
         #endregion Private Members
 
@@ -47,6 +59,11 @@ namespace DirectoryContents.ViewModels
             private set { }
         }
 
+        public ObservableCollection<string> ComputedChecksumList
+        {
+            get { return m_ComputedChecksumList; }
+        }
+
         #endregion Public Properties
 
         #region constructor
@@ -59,5 +76,19 @@ namespace DirectoryContents.ViewModels
         }
 
         #endregion constructor
+
+        #region Public Methods
+
+        internal bool IsAlgorithimSelected()
+        {
+            return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
+        }
+
+        internal void ComputeChecksum()
+        {
+        }
+
+        #endregion
+
     }
 }

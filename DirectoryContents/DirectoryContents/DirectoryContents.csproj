@@ -65,6 +65,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\AttachedProperties.cs" />
     <Compile Include="Classes\Checksums\Empty.cs" />
+    <Compile Include="Classes\Checksums\HashAlgorithimFactory.cs" />
     <Compile Include="Classes\ConverterMethods.cs" />
     <Compile Include="Classes\DirectoryContentsException.cs" />
     <Compile Include="Classes\Enumerations.cs" />

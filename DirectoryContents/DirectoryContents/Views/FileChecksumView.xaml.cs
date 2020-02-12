@@ -26,5 +26,34 @@ namespace DirectoryContents.Views
         }
 
         #endregion constructor
+
+        #region Private Methods
+
+        private void GenerateCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsAlgorithimSelected();
+            }
+
+            e.Handled = true;
+        }
+
+        private void GenerateCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void BackCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        #endregion
+
     }
 }

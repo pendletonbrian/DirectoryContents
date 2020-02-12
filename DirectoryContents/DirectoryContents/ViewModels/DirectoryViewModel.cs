@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
@@ -167,6 +168,8 @@ namespace DirectoryContents.ViewModels
 
         private void ParseDirectory(DirectoryItem node, string directoryPath)
         {
+            ShowStatusMessage($"Parsing \"{directoryPath}\".");
+
             DirectoryInfo dirInfo = new DirectoryInfo(directoryPath);
 
             DirectoryItem fileNode;
@@ -209,7 +212,7 @@ namespace DirectoryContents.ViewModels
                     }
                     else
                     {
-                        LogError($"Could not determine the checksum for \"{file.FullName}\".");
+                        LogError($"    Could not compute the checksum.");
                     }
                 }
 
@@ -225,6 +228,24 @@ namespace DirectoryContents.ViewModels
             {
                 SetIsExpanded(childNode, isExpanded);
             }
+        }
+
+        /// <summary>
+        /// Checks the Directory FileAttribute to see if the given
+        /// filepath is a file and not a directory.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private static bool IsItemFile(string fullyQualifiedFilePath)
+        {
+            FileAttributes attr = File.GetAttributes(fullyQualifiedFilePath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion Private Methods
@@ -301,15 +322,36 @@ namespace DirectoryContents.ViewModels
             Log($"File written to: \"{fullyQualifiedPath}\".");
         }
 
+        /// <summary>
+        /// Check to see if anything is selected.
+        /// </summary>
+        /// <returns></returns>
         internal bool IsItemSelected()
         {
-            bool isItemSelected = m_SelectedItem != null;
+            bool isItemSelected = SelectedItem != null;
 
             Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {isItemSelected}");
 
             return isItemSelected;
         }
 
+        /// <summary>
+        /// Check to see if the selected item is a file.
+        /// </summary>
+        /// <returns>Null, if nothing is selected.</returns>
+        internal bool? IsSelectedItemFile()
+        {
+            if (SelectedItem is null)
+            {
+                return null;
+            }
+
+            return IsItemFile(SelectedItem.FullyQualifiedFilename);
+        }
+
+        /// <summary>
+        /// Parse the directory.
+        /// </summary>
         internal void Parse()
         {
             Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}: Start");
@@ -323,31 +365,50 @@ namespace DirectoryContents.ViewModels
                     return;
                 }
 
-                DirectoryItems.Clear();
-
-                DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
-
-                m_RootNode = new DirectoryItem(dirInfo)
-                {
-                    Depth = 0
-                };
-
-                DirectoryItems.Add(m_RootNode);
-
                 m_DirectoryCount = 0;
                 m_FileCount = 0;
 
-                Stopwatch timer = Stopwatch.StartNew();
+                DirectoryItems.Clear();
 
-                ParseDirectory(m_RootNode, dirInfo.FullName);
+                if (IsItemFile(m_DirectoryToParse))
+                {
+                    FileInfo fi = new FileInfo(m_DirectoryToParse);
 
-                timer.Stop();
+                    m_RootNode = new DirectoryItem(fi)
+                    {
+                        Depth = 0
+                    };
 
-                RaisePropertyChanged(nameof(DirectoryItems));
+                    m_FileCount = 1;
+                }
+                else
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
 
-                m_RootNode.IsExpanded = true;
+                    m_RootNode = new DirectoryItem(dirInfo)
+                    {
+                        Depth = 0
+                    };
 
-                ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.ToString()}");
+                    DirectoryItems.Add(m_RootNode);
+
+                    m_DirectoryCount = 0;
+                    m_FileCount = 0;
+
+                    Stopwatch timer = Stopwatch.StartNew();
+
+                    ParseDirectory(m_RootNode, dirInfo.FullName);
+
+                    timer.Stop();
+
+                    RaisePropertyChanged(nameof(DirectoryItems));
+
+                    m_RootNode.IsExpanded = true;
+
+                    ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
+
+                }
+
             }
             catch (Exception ex)
             {

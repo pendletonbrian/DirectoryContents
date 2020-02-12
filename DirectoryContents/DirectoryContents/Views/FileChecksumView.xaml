@@ -8,6 +8,15 @@
                            mc:Ignorable="d"
                            d:DesignHeight="450"
                            d:DesignWidth="800">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static vm:BaseUserControlViewModel.BackCommand}"
+                        CanExecute="BackCommand_CanExecute"
+                        Executed="BackCommand_Executed"/>
+        <CommandBinding Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}"
+                        CanExecute="GenerateCommand_CanExecute"
+                        Executed="GenerateCommand_Executed"/>
+    </UserControl.CommandBindings>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -21,10 +30,16 @@
             <!-- Seperator -->
             <RowDefinition Height="Auto" />
 
-            <!-- Main area -->
-            <RowDefinition Height="*" />
+            <!-- Algorithim selection -->
+            <RowDefinition Height="Auto" />
 
-            <!-- Back button -->
+            <!-- Results -->
+            <RowDefinition Height="Auto" />
+            
+            <!-- Spacer -->
+            <RowDefinition Height="*" />
+            
+            <!-- Buttons -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -39,10 +54,11 @@
                    Grid.Row="1"
                    Style="{StaticResource StandardSeparatorStyle}" />
 
-        <!-- Main area -->
+        <!-- Algorithim selection -->
         <GroupBox Grid.Column="0"
                   Grid.Row="2"
-                  Header="Checksum">
+                  Header="Checksum Algorithim"
+                  Margin="4">
             <ListBox ItemsSource="{Binding AlgorithimList}"
                      SelectedValue="{Binding SelectedAlgorithim}"
                      SelectedValuePath="Key">
@@ -56,18 +72,57 @@
             </ListBox>
         </GroupBox>
 
-        <!-- Back button -->
-        <Button Grid.Column="0"
-                Grid.Row="3"
-                HorizontalAlignment="Left"
-                Margin="4"
-                Command="{x:Static vm:BaseUserControlViewModel.BackCommand}">
-            <Button.ToolTip>
-                <TextBlock Text="Back" />
-            </Button.ToolTip>
-            <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
-                   Width="26"
-                   Height="26" />
-        </Button>
+        <!-- Results -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="3"
+                  Header="Results"
+                  Margin="4">
+            
+        </GroupBox>
+
+        <!-- Spacer -->
+        <Grid Grid.Column="0"
+              Grid.Row="4"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch" />
+        
+        <!-- Buttons -->
+        <Grid Grid.Column="0"
+              Grid.Row="5"
+              Margin="4"
+              VerticalAlignment="Bottom">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <Button HorizontalAlignment="Left"
+                    Margin="4"
+                    Command="{x:Static vm:BaseUserControlViewModel.BackCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Back to directory view" />
+                </Button.ToolTip>
+                <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
+                       Width="26"
+                       Height="26" />
+            </Button>
+
+            <Button HorizontalAlignment="Right"
+                    Margin="4"
+                    Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Generate" />
+                </Button.ToolTip>
+                <Image Source="/DirectoryContents;component/Images/right-arrow-26.png"
+                       Width="26"
+                       Height="26" />
+            </Button>
+            
+        </Grid>
+        
+        
     </Grid>
 </local:BaseUserControlView>
