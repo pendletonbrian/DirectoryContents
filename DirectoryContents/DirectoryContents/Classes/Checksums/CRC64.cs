@@ -91,6 +91,8 @@ namespace DirectoryContents.Classes.Checksums
                 crc = m_Crc64Table[tableIndex] ^ (crc << 8);
             }
 
+            Console.WriteLine(BitConverter.ToString(BitConverter.GetBytes(crc)).Replace("-", string.Empty));
+
             // Invert the bits.
             return BitConverter.GetBytes(crc ^ 0xffffffffffffffff);
         }

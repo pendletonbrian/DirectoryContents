@@ -206,6 +206,8 @@ namespace DirectoryContents.ViewModels
 
                 if (m_Hasher != null)
                 {
+                    Log($"  Hashing \"{file.Name}\".");
+
                     bool? result = m_Hasher.TryGetFileChecksum(file.FullName, out string checksum);
 
                     if (result.HasValue &&
