@@ -32,7 +32,7 @@ namespace DirectoryContents.Classes
         public static PropertyChangedEventArgs
             GetPropertyChangedEventArgs(string propertyName)
         {
-            if (String.IsNullOrEmpty(propertyName))
+            if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentException(
                     "propertyName cannot be null or empty.");
 

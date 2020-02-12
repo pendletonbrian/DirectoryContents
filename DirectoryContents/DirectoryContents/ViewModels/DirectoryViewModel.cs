@@ -214,6 +214,8 @@ namespace DirectoryContents.ViewModels
                         result.Value)
                     {
                         fileNode.Checksum = checksum.Replace("-", string.Empty);
+
+                        Log($"    {fileNode.Checksum}");
                     }
                     else
                     {

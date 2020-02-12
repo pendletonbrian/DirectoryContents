@@ -9,7 +9,7 @@ namespace DirectoryContents.Classes.Checksums
     {
         #region Private Members
 
-        private static readonly UInt64[] m_Crc64Table = new UInt64[256]
+        private static readonly ulong[] m_Crc64Table = new ulong[256]
         {
              0x0000000000000000, 0x42F0E1EBA9EA3693, 0x85E1C3D753D46D26, 0xC711223CFA3E5BB5,
              0x493366450E42ECDF, 0x0BC387AEA7A8DA4C, 0xCCD2A5925D9681F9, 0x8E224479F47CB76A,
@@ -83,18 +83,23 @@ namespace DirectoryContents.Classes.Checksums
 
         public byte[] GetHash(byte[] data)
         {
-            UInt64 crc = 0xffffffffffffffff;
+            //ulong crc = ulong.MaxValue;
+            ulong crc = ulong.MinValue;
 
             for (int i = 0; i < data.Length; i++)
             {
-                uint tableIndex = (((uint)(crc >> 56)) ^ data[i]) & 0xff;
-                crc = m_Crc64Table[tableIndex] ^ (crc << 8);
+                crc = m_Crc64Table[((uint)(crc >> 56) ^ data[i]) & 0xff] ^ (crc << 8);
             }
 
-            Console.WriteLine(BitConverter.ToString(BitConverter.GetBytes(crc)).Replace("-", string.Empty));
+            // Same as (crc ^ 0xffffffffffffffff) (bitwise compliment).  
+            // Lol... had to look this up.
+            crc = ~crc;
 
-            // Invert the bits.
-            return BitConverter.GetBytes(crc ^ 0xffffffffffffffff);
+            byte[] hash = BitConverter.GetBytes(crc);
+
+            Console.WriteLine(BitConverter.ToString(hash).Replace("-", string.Empty));
+
+            return hash;
         }
 
         #endregion Public Methods
