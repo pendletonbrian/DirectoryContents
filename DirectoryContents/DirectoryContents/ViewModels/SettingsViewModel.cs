@@ -17,12 +17,19 @@ namespace DirectoryContents.ViewModels
 
         #region Private Members
 
-        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
+        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
 
-        #endregion
+        #endregion Private Members
 
         #region Public Properties
+
+        public List<KeyValuePair<string, string>> AlgorithimList
+        {
+            get { return m_AlgorithimList; }
+
+            private set { }
+        }
 
         public Enumerations.ChecksumAlgorithim SelectedAlgorithim
         {
@@ -41,19 +48,12 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        public List<KeyValuePair<string, string>> AlgorithimList
-        {
-            get { return m_AlgorithimList; }
-
-            private set { }
-        }
-
-        #endregion
+        #endregion Public Properties
 
         #region constructor
 
         public SettingsViewModel(MainWindowViewModel viewModel) : base(viewModel)
-        { 
+        {
             m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
         }
 

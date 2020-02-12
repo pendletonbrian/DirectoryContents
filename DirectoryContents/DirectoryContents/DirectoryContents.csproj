@@ -64,13 +64,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\AttachedProperties.cs" />
-    <Compile Include="Classes\Checksums\CRC32.cs" />
     <Compile Include="Classes\Checksums\Empty.cs" />
     <Compile Include="Classes\ConverterMethods.cs" />
     <Compile Include="Classes\DirectoryContentsException.cs" />
     <Compile Include="Classes\Enumerations.cs" />
     <Compile Include="Classes\Checksums\Hasher.cs" />
-    <Compile Include="Classes\Checksums\CRC64.cs" />
     <Compile Include="Classes\Checksums\IHashAlgorithim.cs" />
     <Compile Include="Classes\Checksums\MD5.cs" />
     <Compile Include="Classes\Checksums\SHA1.cs" />

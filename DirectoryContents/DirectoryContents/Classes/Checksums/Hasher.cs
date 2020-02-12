@@ -31,8 +31,8 @@ namespace DirectoryContents.Classes.Checksums
         /// The fully qualified name to the file.
         /// </param>
         /// <param name="checksum">
-        /// The checksum value.  If the file doesn't exist, or there is an
-        /// issue, the value is set to UInt64.MinValue.
+        /// The checksum value. If the file doesn't exist, or there is an issue,
+        /// the value is set to UInt64.MinValue.
         /// </param>
         /// <returns>
         /// Whether or not the file was able to be hashed.

@@ -6,7 +6,6 @@ using System.Text;
 using System.Timers;
 using System.Windows.Controls;
 using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 using DirectoryContents.Views;
 using WpfPageTransitions;

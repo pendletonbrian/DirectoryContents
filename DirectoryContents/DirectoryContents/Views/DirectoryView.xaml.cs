@@ -191,8 +191,8 @@ namespace DirectoryContents.Views
 
         private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.FileChecksum, 
-                additionalData: m_ViewModel.SelectedItem, 
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.FileChecksum,
+                additionalData: m_ViewModel.SelectedItem,
                 transitionType: WpfPageTransitions.PageTransitionType.SlideAndFade);
         }
 
@@ -233,12 +233,11 @@ namespace DirectoryContents.Views
 
             LoadDirectory(filenameList[0]);
 
-            // This is a bit of a hack.  Setting the focus makes the
-            //   application reevaluate the XXX_CanExecute methods.
-            // Otherwise, the "Export" menu option is not enabled
-            //   after parsing the directory.  This only occurs with
-            //   the drag and drop.  Using the browse command every-
-            //   thing works as expected.
+            // This is a bit of a hack. Setting the focus makes the application
+            // reevaluate the XXX_CanExecute methods. Otherwise, the "Export"
+            // menu option is not enabled after parsing the directory. This only
+            // occurs with the drag and drop. Using the browse command every-
+            // thing works as expected.
             treeView.Focus();
         }
 

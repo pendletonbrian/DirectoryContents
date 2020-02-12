@@ -9,15 +9,31 @@ namespace DirectoryContents.Models
     {
         #region Private Members
 
+        private string m_Checksum;
         private bool m_IsExpanded;
         private bool m_IsSelected;
-        private string m_Checksum;
 
         #endregion Private Members
 
         #region Public Properties
 
         internal int Depth { get; set; }
+
+        public string Checksum
+        {
+            get { return m_Checksum; }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(m_Checksum) ||
+                    m_Checksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    m_Checksum = value;
+
+                    RaisePropertyChanged(nameof(Checksum));
+                }
+            }
+        }
 
         public string FullyQualifiedFilename { get; private set; }
 
@@ -57,22 +73,6 @@ namespace DirectoryContents.Models
         public string ItemName { get; private set; }
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
-
-        public string Checksum 
-        {
-            get { return m_Checksum; }
-
-            set
-            {
-                if (string.IsNullOrWhiteSpace(m_Checksum) ||
-                    m_Checksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    m_Checksum = value;
-
-                    RaisePropertyChanged(nameof(Checksum));
-                }
-            }
-        }
 
         #endregion Public Properties
 

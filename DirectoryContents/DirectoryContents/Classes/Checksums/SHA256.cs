@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DirectoryContents.Classes.Checksums
+﻿namespace DirectoryContents.Classes.Checksums
 {
     public class SHA256 : IHashAlgorithim
     {

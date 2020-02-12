@@ -20,6 +20,15 @@ namespace DirectoryContents.Classes
         #region Public Properties
 
         /// <summary>
+        /// Gets/sets the format used for the timestamp.
+        /// </summary>
+        /// <example>
+        /// The 29th of December, 2013 at 10:25 and 35 seconds in the morning
+        /// would be "2013.29.12 10:25:35.715"
+        /// </example>
+        public static string TimeFormatString { get; set; }
+
+        /// <summary>
         /// Gets the filepath to where the log is written.
         /// </summary>
         public string Filepath
@@ -28,15 +37,6 @@ namespace DirectoryContents.Classes
 
             private set { }
         }
-
-        /// <summary>
-        /// Gets/sets the format used for the timestamp.
-        /// </summary>
-        /// <example>
-        /// The 29th of December, 2013 at 10:25 and 35 seconds in the morning
-        /// would be "2013.29.12 10:25:35.715"
-        /// </example>
-        public static string TimeFormatString { get; set; }
 
         #endregion Public Properties
 

@@ -7,24 +7,10 @@ namespace DirectoryContents.Classes
 {
     public static class Enumerations
     {
-        public enum PageControl
-        {
-            None = 0,
-            Directory,
-            Settings,
-            FileChecksum
-        }
-
         public enum ChecksumAlgorithim
         {
             [Description("None")]
             None = 0,
-
-            [Description("CRC-32")]
-            CRC32,
-
-            [Description("CRC-64")]
-            CRC64,
 
             [Description("MD5")]
             MD5,
@@ -42,6 +28,14 @@ namespace DirectoryContents.Classes
             SHA512
         }
 
+        public enum PageControl
+        {
+            None = 0,
+            Directory,
+            Settings,
+            FileChecksum
+        }
+
         public static List<KeyValuePair<string, string>> GetEnumValueDescriptionPairs(Type enumType)
         {
             return Enum.GetValues(enumType)
@@ -49,6 +43,5 @@ namespace DirectoryContents.Classes
                 .Select(e => new KeyValuePair<string, string>(e.ToString(), e.GetDescription()))
                 .ToList();
         }
-
     }
 }

@@ -23,7 +23,7 @@
     <local:BaseUserControlView.Resources>
         <classes:VisibilityConverter x:Key="VisibilityConverter" />
     </local:BaseUserControlView.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -137,7 +137,6 @@
                     <MenuItem Header="Generate checksum"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.GenerateFileHashCommand}" />
-
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

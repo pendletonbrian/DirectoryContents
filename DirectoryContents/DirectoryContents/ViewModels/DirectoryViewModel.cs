@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Controls;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
@@ -56,13 +55,13 @@ namespace DirectoryContents.ViewModels
 
         #region Private Members
 
-        private string m_DirectoryToParse = string.Empty;
-        private DirectoryItem m_RootNode;
-        private DirectoryItem m_SelectedItem;
-        private int m_DirectoryCount;
-        private int m_FileCount;
         private const string m_FmtInt = "###,###,###,##0";
         private readonly Hasher m_Hasher = null;
+        private int m_DirectoryCount;
+        private string m_DirectoryToParse = string.Empty;
+        private int m_FileCount;
+        private DirectoryItem m_RootNode;
+        private DirectoryItem m_SelectedItem;
 
         #endregion Private Members
 
@@ -144,26 +143,17 @@ namespace DirectoryContents.ViewModels
         {
             // Depth first
 
-            /*
-                // get the file attributes for file or directory
-                FileAttributes attr = File.GetAttributes(@"c:\Temp");
-
-                //detect whether its a directory or file
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                {}
-            */
-
             string tabs = new string('\t', node.Depth);
 
             foreach (DirectoryItem childNode in node.Items)
             {
                 if (string.IsNullOrWhiteSpace(childNode.Checksum))
                 {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");                    
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
                 }
                 else
                 {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}  : {childNode.Checksum}");
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName} ({childNode.Checksum})");
                 }
 
                 if (childNode.HasChildren)

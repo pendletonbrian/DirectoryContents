@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using DirectoryContents.Classes;
 using DirectoryContents.Models;
 
@@ -12,13 +8,20 @@ namespace DirectoryContents.ViewModels
     {
         #region Private Members
 
-        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
         private readonly DirectoryItem m_Item = null;
+        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
 
-        #endregion
+        #endregion Private Members
 
         #region Public Properties
+
+        public List<KeyValuePair<string, string>> AlgorithimList
+        {
+            get { return m_AlgorithimList; }
+
+            private set { }
+        }
 
         public Enumerations.ChecksumAlgorithim SelectedAlgorithim
         {
@@ -37,13 +40,6 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        public List<KeyValuePair<string, string>> AlgorithimList
-        {
-            get { return m_AlgorithimList; }
-
-            private set { }
-        }
-
         public DirectoryItem SelectedItem
         {
             get { return m_Item; }
@@ -51,7 +47,7 @@ namespace DirectoryContents.ViewModels
             private set { }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region constructor
 
@@ -62,6 +58,6 @@ namespace DirectoryContents.ViewModels
             m_Item = item;
         }
 
-        #endregion
+        #endregion constructor
     }
 }
