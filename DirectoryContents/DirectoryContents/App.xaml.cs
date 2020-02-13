@@ -37,44 +37,44 @@ namespace DirectoryContents
                 throw new ArgumentException($"The checksum algorithim flag is empty/null.");
             }
 
-            IHashAlgorithim algorithim = null;
+            Enumerations.ChecksumAlgorithim algorithim = Enumerations.ChecksumAlgorithim.None;
 
             if (flag.Equals(m_Algorithim_Md5, StringComparison.OrdinalIgnoreCase))
             {
                 Log("Algorithim is MD5.");
 
-                algorithim = new MD5();
+                algorithim = Enumerations.ChecksumAlgorithim.MD5;
             }
             else if (flag.Equals(m_Algorithim_Sha_1, StringComparison.OrdinalIgnoreCase))
             {
                 Log("Algorithim is SHA-1.");
 
-                algorithim = new SHA1();
+                algorithim = Enumerations.ChecksumAlgorithim.SHA1;
             }
             else if (flag.Equals(m_Algorithim_Sha_256, StringComparison.OrdinalIgnoreCase))
             {
                 Log("Algorithim is SHA-256.");
 
-                algorithim = new SHA256();
+                algorithim = Enumerations.ChecksumAlgorithim.SHA256;
             }
             else if (flag.Equals(m_Algorithim_Sha_384, StringComparison.OrdinalIgnoreCase))
             {
                 Log("Algorithim is SHA384.");
 
-                algorithim = new SHA384();
+                algorithim = Enumerations.ChecksumAlgorithim.SHA384;
             }
             else if (flag.Equals(m_Algorithim_Sha_512, StringComparison.OrdinalIgnoreCase))
             {
                 Log("Algorithim is SHA-512.");
 
-                algorithim = new SHA512();
+                algorithim = Enumerations.ChecksumAlgorithim.SHA512;
             }
             else
             {
                 throw new ArgumentException($"The checksum algorithim flag is unhandled: \"{flag}\".");
             }
 
-            return algorithim;
+            return HashAlgorithimFactory.Get(algorithim);
         }
 
         private static void Log(string msg)

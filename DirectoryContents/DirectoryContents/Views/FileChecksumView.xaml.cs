@@ -45,7 +45,7 @@ namespace DirectoryContents.Views
 
         private void GenerateCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-
+            m_ViewModel.ComputeChecksum();
         }
 
         private void BackCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)

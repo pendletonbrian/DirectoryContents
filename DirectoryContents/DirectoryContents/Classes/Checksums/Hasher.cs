@@ -24,18 +24,18 @@ namespace DirectoryContents.Classes.Checksums
         #region Public Methods
 
         /// <summary>
-        /// Attempts to get the hash for the given file. If the file does not
-        /// exist, null is returned.
+        /// Attempts to get the hash for the given file.
         /// </summary>
         /// <param name="filename">
         /// The fully qualified name to the file.
         /// </param>
         /// <param name="checksum">
         /// The checksum value. If the file doesn't exist, or there is an issue,
-        /// the value is set to UInt64.MinValue.
+        /// the value is set to string.Empty.
         /// </param>
         /// <returns>
-        /// Whether or not the file was able to be hashed.
+        /// Whether or not the file was able to be hashed.   If the file does not
+        /// exist, null is returned.
         /// </returns>
         public bool? TryGetFileChecksum(string filename, out string checksum)
         {
@@ -65,6 +65,11 @@ namespace DirectoryContents.Classes.Checksums
                 }
 
                 checksum = BitConverter.ToString(m_Algorithim.GetHash(inputBytes));
+
+                if (string.IsNullOrWhiteSpace(checksum) == false)
+                {
+                    checksum = checksum.Replace("-", string.Empty);
+                }
 
                 return true;
             }

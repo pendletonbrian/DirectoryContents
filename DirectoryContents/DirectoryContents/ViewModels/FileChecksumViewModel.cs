@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
@@ -23,6 +25,7 @@ namespace DirectoryContents.ViewModels
         private readonly DirectoryItem m_Item = null;
         private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
+        private string m_ComputedChecksum = string.Empty;
 
         #endregion Private Members
 
@@ -64,6 +67,24 @@ namespace DirectoryContents.ViewModels
             get { return m_ComputedChecksumList; }
         }
 
+        public string ComputedChecksum
+        {
+            get { return m_ComputedChecksum; }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(m_ComputedChecksum) ||
+                    m_ComputedChecksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    m_ComputedChecksum = value;
+
+                    RaisePropertyChanged(nameof(ComputedChecksum));
+                }
+
+            }
+
+        }
+
         #endregion Public Properties
 
         #region constructor
@@ -86,6 +107,16 @@ namespace DirectoryContents.ViewModels
 
         internal void ComputeChecksum()
         {
+            IHashAlgorithim algorithim = HashAlgorithimFactory.Get(SelectedAlgorithim);
+            Hasher hasher = new Hasher(algorithim);
+
+            bool? result = hasher.TryGetFileChecksum(SelectedItem.FullyQualifiedFilename, out string checksum);
+
+            if (result.HasValue &&
+                result.Value)
+            {
+                ComputedChecksum = checksum;
+            }
         }
 
         #endregion

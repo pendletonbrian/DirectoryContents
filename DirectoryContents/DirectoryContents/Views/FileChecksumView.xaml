@@ -77,7 +77,8 @@
                   Grid.Row="3"
                   Header="Results"
                   Margin="4">
-            
+            <TextBlock HorizontalAlignment="Stretch"
+                       Text="{Binding ComputedChecksum}" />
         </GroupBox>
 
         <!-- Spacer -->
