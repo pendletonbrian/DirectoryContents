@@ -62,7 +62,7 @@
                   Grid.Row="2"
                   Header="Filename"
                   Margin="4">
-            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch"/>
         </GroupBox>
         
         <!-- Algorithim selection -->
@@ -72,7 +72,8 @@
                   Margin="4">
             <ListBox ItemsSource="{Binding AlgorithimList}"
                      SelectedValue="{Binding SelectedAlgorithim}"
-                     SelectedValuePath="Key">
+                     SelectedValuePath="Key"
+                     Margin="4">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <RadioButton IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
@@ -90,6 +91,7 @@
                   Margin="4">
             <TextBox IsReadOnly="True" 
                      HorizontalAlignment="Stretch"
+                     Margin="4"
                        Text="{Binding ComputedChecksum}" />
         </GroupBox>
 
