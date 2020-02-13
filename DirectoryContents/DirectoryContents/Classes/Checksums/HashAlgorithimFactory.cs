@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DirectoryContents.Classes.Checksums
 {
@@ -15,6 +11,8 @@ namespace DirectoryContents.Classes.Checksums
             switch (algorithim)
             {
                 case Enumerations.ChecksumAlgorithim.None:
+                    // Do nothing.  Keep the case so that we know it's being 
+                    //   handled, and it's not a mistake.
                     break;
 
                 case Enumerations.ChecksumAlgorithim.MD5:

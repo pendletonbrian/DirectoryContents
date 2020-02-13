@@ -29,6 +29,9 @@
 
             <!-- Seperator -->
             <RowDefinition Height="Auto" />
+            
+            <!-- Filename -->
+            <RowDefinition Height="Auto" />
 
             <!-- Algorithim selection -->
             <RowDefinition Height="Auto" />
@@ -54,9 +57,17 @@
                    Grid.Row="1"
                    Style="{StaticResource StandardSeparatorStyle}" />
 
-        <!-- Algorithim selection -->
+        <!-- Filename -->
         <GroupBox Grid.Column="0"
                   Grid.Row="2"
+                  Header="Filename"
+                  Margin="4">
+            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" HorizontalAlignment="Stretch"/>
+        </GroupBox>
+        
+        <!-- Algorithim selection -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="3"
                   Header="Checksum Algorithim"
                   Margin="4">
             <ListBox ItemsSource="{Binding AlgorithimList}"
@@ -74,22 +85,23 @@
 
         <!-- Results -->
         <GroupBox Grid.Column="0"
-                  Grid.Row="3"
+                  Grid.Row="4"
                   Header="Results"
                   Margin="4">
-            <TextBlock HorizontalAlignment="Stretch"
+            <TextBox IsReadOnly="True" 
+                     HorizontalAlignment="Stretch"
                        Text="{Binding ComputedChecksum}" />
         </GroupBox>
 
         <!-- Spacer -->
         <Grid Grid.Column="0"
-              Grid.Row="4"
+              Grid.Row="5"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch" />
         
         <!-- Buttons -->
         <Grid Grid.Column="0"
-              Grid.Row="5"
+              Grid.Row="6"
               Margin="4"
               VerticalAlignment="Bottom">
 
