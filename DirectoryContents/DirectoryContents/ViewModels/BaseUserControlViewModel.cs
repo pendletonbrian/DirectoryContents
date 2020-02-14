@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using DirectoryContents.Classes;
+using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.ViewModels
 {
@@ -80,7 +81,7 @@ namespace DirectoryContents.ViewModels
         /// </param>
         public void ShowNextPage(Enumerations.PageControl pageControl,
             object additionalData = null,
-            WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideAndFade)
+            PageTransitionType transitionType = PageTransitionType.SlideAndFade)
         {
             if (m_ViewModel is null)
             {
@@ -96,7 +97,7 @@ namespace DirectoryContents.ViewModels
         /// <param name="transitionType">
         /// Defaults to sliding to the right.
         /// </param>
-        public void ShowPreviousPage(WpfPageTransitions.PageTransitionType transitionType = WpfPageTransitions.PageTransitionType.SlideBackAndFade)
+        public void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade)
         {
             if (m_ViewModel is null)
             {

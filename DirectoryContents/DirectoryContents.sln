@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectoryContents", "DirectoryContents\DirectoryContents.csproj", "{40D5540A-8E91-4978-9BA3-9629E73C6035}"
-	ProjectSection(ProjectDependencies) = postProject
-		{22A46D61-1D40-43A9-802C-B9D43DADD9EC} = {22A46D61-1D40-43A9-802C-B9D43DADD9EC}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfPageTransitions", "..\..\Transitionals\Wpf Page Transitions\WpfPageTransitions\WpfPageTransitions.csproj", "{22A46D61-1D40-43A9-802C-B9D43DADD9EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +15,6 @@ Global
 		{40D5540A-8E91-4978-9BA3-9629E73C6035}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40D5540A-8E91-4978-9BA3-9629E73C6035}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40D5540A-8E91-4978-9BA3-9629E73C6035}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22A46D61-1D40-43A9-802C-B9D43DADD9EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22A46D61-1D40-43A9-802C-B9D43DADD9EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22A46D61-1D40-43A9-802C-B9D43DADD9EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22A46D61-1D40-43A9-802C-B9D43DADD9EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

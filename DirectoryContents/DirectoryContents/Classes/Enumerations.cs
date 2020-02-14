@@ -7,6 +7,47 @@ namespace DirectoryContents.Classes
 {
     public static class Enumerations
     {
+        public enum PageTransitionType
+        {
+            None = 0,
+
+            Fade,
+
+            /// <summary>
+            /// Slide to the left.
+            /// </summary>
+            Slide,
+
+            /// <summary>
+            /// Slide to the left.
+            /// </summary>
+            SlideAndFade,
+            Grow,
+            GrowAndFade,
+            Flip,
+            FlipAndFade,
+            Spin,
+            SpinAndFade,
+
+            /// <summary>
+            /// Slide to the right.
+            /// </summary>
+            SlideBack,
+
+            /// <summary>
+            /// Slide to the right.
+            /// </summary>
+            SlideBackAndFade,
+
+            Up,
+
+            UpAndFade,
+
+            Down,
+
+            DownAndFade
+        }
+
         public enum ChecksumAlgorithim
         {
             [Description("None")]

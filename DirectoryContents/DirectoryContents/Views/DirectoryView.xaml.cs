@@ -7,6 +7,7 @@ using System.Windows.Input;
 using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
+using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.Views
 {
@@ -207,7 +208,7 @@ namespace DirectoryContents.Views
         {
             m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.FileChecksum,
                 additionalData: m_ViewModel.SelectedItem,
-                transitionType: WpfPageTransitions.PageTransitionType.SlideAndFade);
+                transitionType: PageTransitionType.SlideAndFade);
         }
 
         private async Task LoadDirectory(string fullyQualifiedDirectoryPath)

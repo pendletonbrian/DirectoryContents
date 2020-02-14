@@ -81,6 +81,13 @@
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
     <Compile Include="Classes\VisibilityConverter.cs" />
+    <Compile Include="Classes\WpfPageTransitions\CenterConverter.cs" />
+    <Compile Include="Classes\WpfPageTransitions\HeightConverter.cs" />
+    <Compile Include="Classes\WpfPageTransitions\InvertConverter.cs" />
+    <Compile Include="Classes\WpfPageTransitions\PageTransition.xaml.cs">
+      <DependentUpon>PageTransition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\WpfPageTransitions\WidthConverter.cs" />
     <Compile Include="Models\DirectoryItem.cs" />
     <Compile Include="ViewModels\BaseUserControlViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
@@ -97,6 +104,10 @@
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Classes\WpfPageTransitions\PageTransition.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Brushes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -201,12 +212,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\redo-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Transitionals\Wpf Page Transitions\WpfPageTransitions\WpfPageTransitions.csproj">
-      <Project>{22a46d61-1d40-43a9-802c-b9d43dadd9ec}</Project>
-      <Name>WpfPageTransitions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\right-arrow-26.png" />

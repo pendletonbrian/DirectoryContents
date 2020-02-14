@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:classes="clr-namespace:DirectoryContents.Classes"
-        xmlns:pageTransitions="clr-namespace:WpfPageTransitions;assembly=WpfPageTransitions"
+        xmlns:pageTransitions="clr-namespace:DirectoryContents.Classes.WpfPageTransitions"
         mc:Ignorable="d"
         Title="Directory Contents"
         Loaded="Window_Loaded"

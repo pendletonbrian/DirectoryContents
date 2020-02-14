@@ -6,9 +6,10 @@ using System.Text;
 using System.Timers;
 using System.Windows.Controls;
 using DirectoryContents.Classes;
+using DirectoryContents.Classes.WpfPageTransitions;
 using DirectoryContents.Models;
 using DirectoryContents.Views;
-using WpfPageTransitions;
+using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.ViewModels
 {

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using DirectoryContents.ViewModels;
+using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.Views
 {
@@ -31,7 +32,7 @@ namespace DirectoryContents.Views
 
         private void NextCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, m_ViewModel.SelectedAlgorithim, WpfPageTransitions.PageTransitionType.SlideAndFade);
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, m_ViewModel.SelectedAlgorithim, PageTransitionType.SlideAndFade);
         }
 
         #endregion Private Methods
