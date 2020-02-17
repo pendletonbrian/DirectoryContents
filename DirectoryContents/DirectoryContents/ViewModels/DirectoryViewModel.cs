@@ -300,9 +300,20 @@ namespace DirectoryContents.ViewModels
                 throw new ArgumentException("Root node is null.", nameof(fullyQualifiedPath));
             }
 
+            StringBuilder sb = new StringBuilder();
+
+            if (m_Hasher is null)
+            {
+                sb.AppendLine("No hashing selected.");
+            }
+            else
+            {
+                sb.AppendLine($"Hashing algorithm: {m_Hasher.AlgorithimName}");
+            }
+
             IFileExport exporter = FileExporterFactory.Get(SelectedExportStructure);
 
-            exporter.Export(m_RootNode, fullyQualifiedPath);
+            exporter.Export(m_RootNode, fullyQualifiedPath, sb);
 
             Log($"File written to: \"{fullyQualifiedPath}\".");
         }

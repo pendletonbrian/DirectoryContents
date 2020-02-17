@@ -2,6 +2,8 @@
 {
     public class SHA1 : IHashAlgorithim
     {
+        public string AlgorithimName { get { return "SHA-1"; } }
+
         public byte[] GetHash(byte[] data)
         {
             byte[] hash = null;

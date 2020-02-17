@@ -2,6 +2,8 @@
 {
     public class MD5 : IHashAlgorithim
     {
+        public string AlgorithimName { get { return "MD5"; } }
+
         public byte[] GetHash(byte[] data)
         {
             byte[] hash = null;

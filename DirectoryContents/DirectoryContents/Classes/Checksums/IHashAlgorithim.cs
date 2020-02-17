@@ -10,5 +10,7 @@
         /// <returns>
         /// </returns>
         byte[] GetHash(byte[] data);
+
+        string AlgorithimName { get; }
     }
 }

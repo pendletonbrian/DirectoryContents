@@ -21,6 +21,12 @@ namespace DirectoryContents.Classes.Checksums
 
         #endregion constructor
 
+        #region Public Properties
+
+        internal string AlgorithimName { get { return m_Algorithim.AlgorithimName; } }
+
+        #endregion
+
         #region Public Methods
 
         /// <summary>

@@ -6,9 +6,8 @@ namespace DirectoryContents.Classes.ExportFiles
 {
     internal class TextFile : IFileExport
     {
-        public void Export(DirectoryItem rootNode, string fullyQualifiedFilepath)
+        public void Export(DirectoryItem rootNode, string fullyQualifiedFilepath, StringBuilder sb)
         {
-            StringBuilder sb = new StringBuilder();
             sb.AppendLine(rootNode.ItemName);
 
             foreach (DirectoryItem node in rootNode.Items)

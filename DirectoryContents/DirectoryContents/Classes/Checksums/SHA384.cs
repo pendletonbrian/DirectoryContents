@@ -2,6 +2,8 @@
 {
     public class SHA384 : IHashAlgorithim
     {
+        public string AlgorithimName { get { return "SHA-384"; } }
+
         /// <summary>
         /// Get the hash for the SHA-384 algorithim.
         /// </summary>

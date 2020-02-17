@@ -6,6 +6,8 @@
         {
         }
 
+        public string AlgorithimName { get { return "Empty"; } }
+
         /// <summary>
         /// Returns zero.
         /// </summary>
