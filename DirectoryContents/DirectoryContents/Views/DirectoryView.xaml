@@ -49,6 +49,16 @@
                       Command="{x:Static vm:DirectoryViewModel.BrowseCommand}" />
             <MenuItem Header="Export"
                       Command="{x:Static vm:DirectoryViewModel.ExportCommand}" />
+            <MenuItem >
+                <MenuItem.Header>
+                    <ComboBox Width="200"
+                        ItemsSource="{Binding ExportFileStructureList}" 
+                          DisplayMemberPath="Value"
+                          SelectedValue="{Binding SelectedExportStructure, Mode=TwoWay}" 
+                          SelectedValuePath="Key"/>
+                </MenuItem.Header>
+                
+            </MenuItem>
         </Menu>
 
         <!-- Directory to parse groupbox -->

@@ -2,7 +2,7 @@
 
 namespace DirectoryContents.Classes.Checksums
 {
-    public class HashAlgorithimFactory
+    public static class HashAlgorithimFactory
     {
         public static IHashAlgorithim Get(Enumerations.ChecksumAlgorithim algorithim)
         {
@@ -12,7 +12,7 @@ namespace DirectoryContents.Classes.Checksums
             {
                 case Enumerations.ChecksumAlgorithim.None:
                     // Do nothing.  Keep the case so that we know it's being 
-                    //   handled, and it's not a mistake.
+                    //   handled and it's not a mistake.
                     break;
 
                 case Enumerations.ChecksumAlgorithim.MD5:

@@ -13,6 +13,8 @@ namespace DirectoryContents.Models
         private bool m_IsExpanded;
         private bool m_IsSelected;
 
+        private static readonly string DirectorySeparator;
+
         #endregion Private Members
 
         #region Public Properties
@@ -78,14 +80,26 @@ namespace DirectoryContents.Models
 
         #region constructors
 
+        static DirectoryItem()
+        {
+            DirectorySeparator = Path.DirectorySeparatorChar.ToString();
+        }
+
         public DirectoryItem()
         {
             Items = new ObservableCollection<DirectoryItem>();
+            Checksum = string.Empty;
         }
 
         public DirectoryItem(DirectoryInfo directoryInfo) : this()
         {
             FullyQualifiedFilename = directoryInfo.FullName;
+
+            if (FullyQualifiedFilename.EndsWith(DirectorySeparator) == false)
+            {
+                FullyQualifiedFilename += Path.DirectorySeparatorChar;
+            }
+
             ItemName = directoryInfo.Name;
             IsDirectory = true;
 

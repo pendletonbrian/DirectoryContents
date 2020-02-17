@@ -91,9 +91,10 @@ namespace DirectoryContents.ViewModels
 
         public FileChecksumViewModel(MainWindowViewModel viewModel, DirectoryItem item) : base(viewModel)
         {
-            m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
+            AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
+            RaisePropertyChanged(nameof(AlgorithimList));
 
-            m_Item = item;
+            SelectedItem = item;
         }
 
         #endregion constructor

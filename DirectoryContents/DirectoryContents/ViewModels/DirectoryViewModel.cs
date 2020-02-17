@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Classes.ExportFiles;
 using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
@@ -63,6 +65,7 @@ namespace DirectoryContents.ViewModels
         private int m_FileCount;
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
+        private Enumerations.ExportFileStructure m_SelectedExportStructure = Enumerations.ExportFileStructure.None;
 
         #endregion Private Members
 
@@ -70,9 +73,21 @@ namespace DirectoryContents.ViewModels
 
         public DirectoryViewModel(MainWindowViewModel viewModel, IHashAlgorithim hashAlgorithim) : base(viewModel)
         {
-            DirectoryItems = new ObservableCollection<DirectoryItem>
+            DirectoryItems = new ObservableCollection<DirectoryItem>();
+
+            ExportFileStructureList = new SortedDictionary<Enumerations.ExportFileStructure, string>();
+
+            foreach (Enumerations.ExportFileStructure val in Enum.GetValues(typeof(Enumerations.ExportFileStructure)))
             {
-            };
+                if (val.Equals(Enumerations.ExportFileStructure.None) == false)
+                {
+                    ExportFileStructureList.Add(val, val.GetDescription());
+                }
+            }
+
+            RaisePropertyChanged(nameof(ExportFileStructureList));
+
+            SelectedExportStructure = Enumerations.ExportFileStructure.TextFile;
 
             if (hashAlgorithim is null)
             {
@@ -136,35 +151,28 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        #endregion Public Properties
-
-        #region Private Methods
-
-        private void ExportNode(StringBuilder sb, DirectoryItem node)
+        public Enumerations.ExportFileStructure SelectedExportStructure
         {
-            // Depth first
+            get { return m_SelectedExportStructure; }
 
-            string tabs = new string('\t', node.Depth);
-
-            foreach (DirectoryItem childNode in node.Items)
+            set
             {
-                if (string.IsNullOrWhiteSpace(childNode.Checksum))
+                if (m_SelectedExportStructure.Equals(value) == false)
                 {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
-                }
-                else
-                {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName} ({childNode.Checksum})");
-                }
+                    Log($"{nameof(SelectedExportStructure)} is changing from \"{m_SelectedExportStructure}\" to \"{value}\".");
 
-                if (childNode.HasChildren)
-                {
-                    ExportNode(sb, childNode);
+                    m_SelectedExportStructure = value;
 
-                    continue;
+                    RaisePropertyChanged(nameof(SelectedExportStructure));
                 }
             }
         }
+
+        public SortedDictionary<Enumerations.ExportFileStructure, string> ExportFileStructureList { get; private set; }
+
+        #endregion Public Properties
+
+        #region Private Methods
 
         private void ParseDirectory(DirectoryItem node, string directoryPath)
         {
@@ -292,32 +300,9 @@ namespace DirectoryContents.ViewModels
                 throw new ArgumentException("Root node is null.", nameof(fullyQualifiedPath));
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(m_RootNode.ItemName);
+            IFileExport exporter = FileExporterFactory.Get(SelectedExportStructure);
 
-            foreach (DirectoryItem node in m_RootNode.Items)
-            {
-                if (string.IsNullOrWhiteSpace(node.Checksum))
-                {
-                    // Format into two digit hex.
-                    sb.AppendLine($"|\t{node.ItemName}  : {node.Checksum}");
-                }
-                else
-                {
-                    sb.AppendLine($"|\t{node.ItemName}");
-                }
-
-                if (node.HasChildren)
-                {
-                    ExportNode(sb, node);
-                }
-            }
-
-            using (StreamWriter writer = new StreamWriter(fullyQualifiedPath))
-            {
-                writer.Write(sb.ToString());
-                writer.Flush();
-            }
+            exporter.Export(m_RootNode, fullyQualifiedPath);
 
             Log($"File written to: \"{fullyQualifiedPath}\".");
         }

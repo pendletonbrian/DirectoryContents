@@ -76,6 +76,11 @@
     <Compile Include="Classes\Checksums\SHA256.cs" />
     <Compile Include="Classes\Checksums\SHA384.cs" />
     <Compile Include="Classes\Checksums\SHA512.cs" />
+    <Compile Include="Classes\ExportFiles\Empty.cs" />
+    <Compile Include="Classes\ExportFiles\FileExporterFactory.cs" />
+    <Compile Include="Classes\ExportFiles\IFileExport.cs" />
+    <Compile Include="Classes\ExportFiles\TextFile.cs" />
+    <Compile Include="Classes\ExportFiles\TextFlat.cs" />
     <Compile Include="Classes\Extensions.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
