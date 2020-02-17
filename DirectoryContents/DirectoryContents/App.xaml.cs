@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Classes.ExportFiles;
 
 namespace DirectoryContents
 {
@@ -27,6 +27,9 @@ namespace DirectoryContents
         private const string m_Help_3 = "-help";
         private const string m_Results_File = "results_file";
         private const int SUCCESS = 0;
+        private const string m_Export_TextFlat = "-TFlat";
+        private const string m_Export_TextFile = "-TFile";
+        private const int NumberOfRequiredArguments = 4;
 
         #endregion Private Members
 
@@ -77,6 +80,30 @@ namespace DirectoryContents
             return HashAlgorithimFactory.Get(algorithim);
         }
 
+        private static IFileExport GetExport(string flag)
+        {
+            Enumerations.ExportFileStructure export = Enumerations.ExportFileStructure.None;
+
+            if (flag.Equals(m_Export_TextFile, StringComparison.OrdinalIgnoreCase))
+            {
+                export = Enumerations.ExportFileStructure.TextFile;
+
+                Log($"Export is {export}");
+            }
+            else if (flag.Equals(m_Export_TextFlat, StringComparison.OrdinalIgnoreCase))
+            {
+                export = Enumerations.ExportFileStructure.TextFlat;
+
+                Log($"Export is {export}");
+            }
+            else
+            {
+                throw new ArgumentException($"The export flag is unhandled: \"{flag}\".");
+            }
+
+            return FileExporterFactory.Get(export);
+        }
+
         private static void Log(string msg)
         {
             Console.Out.WriteLine($"{msg}");
@@ -100,6 +127,7 @@ namespace DirectoryContents
             sb.AppendLine($"{startString} [{m_Directory_Path}]");
             sb.AppendLine($"{spacing.ToString()} [{m_Results_File}]");
             sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Md5} | {m_Algorithim_Sha_1} | {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
+            sb.AppendLine($"{spacing.ToString()} [{m_Export_TextFile} | {m_Export_TextFlat}]");
 
             sb.AppendLine(string.Empty);
             sb.AppendLine("Where");
@@ -125,6 +153,10 @@ namespace DirectoryContents
             sb.AppendLine($"\t{m_Algorithim_Sha_512}\t\tCalculate the 512-bit/64 byte SHA-512 message digest, as defined in FIPS-180-2.");
 
             sb.AppendLine(string.Empty);
+            sb.AppendLine($"\t{ m_Export_TextFile}\t\tExport into a text file, keeping the directory structure.");
+            sb.AppendLine($"\t{ m_Export_TextFlat}\t\tExport into a text file, listing every file and folder with the fully qualified path.");
+
+            sb.AppendLine(string.Empty);
             sb.AppendLine($"NOTE: All algorithims generate the same value for a given file as their Linux counterparts (md5sum, sha512sum, etc).");
 
             LogError(sb.ToString());
@@ -138,7 +170,7 @@ namespace DirectoryContents
 
             if (e.Args.Length > 0)
             {
-                // To start off, let's print all given arguments, for
+                // To start off, let's print all given arguments for
                 // debugging's sake.
                 int count = 0;
 
@@ -163,7 +195,7 @@ namespace DirectoryContents
 
                 // The correct number of arguments were not supplied. Print help
                 // and exit.
-                if (e.Args.Length != 3)
+                if (e.Args.Length != NumberOfRequiredArguments)
                 {
                     ShowUsage();
 
@@ -199,6 +231,24 @@ namespace DirectoryContents
                 catch (Exception ex)
                 {
                     LogError($"The checksum algorithim could not be determined from the argument \"{e.Args[2]}\"..");
+                    LogError(ex.Message);
+
+                    ShowUsage();
+
+                    Shutdown(FAILURE);
+
+                    return;
+                }
+
+                // Fourth argument is the export format.
+                IFileExport fileExport = null;
+                try
+                {
+                    fileExport = GetExport(e.Args[3]);
+                }
+                catch(Exception ex)
+                {
+                    LogError($"The export format could not be determined from the argument \"{e.Args[3]}\"..");
                     LogError(ex.Message);
 
                     ShowUsage();
