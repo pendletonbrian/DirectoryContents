@@ -120,6 +120,7 @@
                     <TextBlock Text="Generate" />
                 </Button.ToolTip>
                 <Image Source="/DirectoryContents;component/Images/automation-26.png"
+                       Style="{StaticResource EnableDisableImageStyle}"
                        Width="26"
                        Height="26" />
             </Button>
@@ -152,6 +153,7 @@
                     <TextBlock Text="Back to directory view" />
                 </Button.ToolTip>
                 <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
+                       Style="{StaticResource EnableDisableImageStyle}"
                        Width="26"
                        Height="26" />
             </Button>
