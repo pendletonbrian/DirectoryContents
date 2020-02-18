@@ -17,7 +17,7 @@
                         Executed="BrowseCommand_ExecutedAsync" />
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExportCommand}"
                         CanExecute="ExportCommand_CanExecute"
-                        Executed="ExportCommand_Executed" />
+                        Executed="ExportCommand_ExecutedAsync" />
     </local:BaseUserControlView.CommandBindings>
 
     <local:BaseUserControlView.Resources>

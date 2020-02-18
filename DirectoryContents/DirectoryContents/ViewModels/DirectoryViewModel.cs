@@ -306,9 +306,9 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        internal void Export(string fullyQualifiedPath)
+        internal async Task ExportAsync(string fullyQualifiedPath)
         {
-            Log($"{nameof(DirectoryViewModel)}.{nameof(Export)} => Filepath: \"{fullyQualifiedPath}\"");
+            Log($"{nameof(DirectoryViewModel)}.{nameof(ExportAsync)} => Filepath: \"{fullyQualifiedPath}\"");
 
             if (m_RootNode is null)
             {
@@ -328,7 +328,7 @@ namespace DirectoryContents.ViewModels
 
             IFileExport exporter = FileExporterFactory.Get(SelectedExportStructure);
 
-            exporter.Export(m_RootNode, fullyQualifiedPath, sb);
+            await Task.Run(() => exporter.Export(m_RootNode, fullyQualifiedPath, sb));
 
             Log($"File written to: \"{fullyQualifiedPath}\".");
         }
@@ -367,15 +367,15 @@ namespace DirectoryContents.ViewModels
         /// <summary>
         /// Parse the directory.
         /// </summary>
-        internal void Parse()
+        internal async Task ParseAsync()
         {
-            Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}: Start");
+            Log($"{nameof(DirectoryViewModel)}.{nameof(ParseAsync)}: Start");
 
             try
             {
                 if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
                 {
-                    LogError($"{nameof(Parse)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
+                    LogError($"{nameof(ParseAsync)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
 
                     return;
                 }
@@ -412,7 +412,7 @@ namespace DirectoryContents.ViewModels
 
                     Stopwatch timer = Stopwatch.StartNew();
 
-                    ParseDirectory(m_RootNode, dirInfo.FullName);
+                    await Task.Run(() => ParseDirectory(m_RootNode, dirInfo.FullName));
 
                     timer.Stop();
 
@@ -431,7 +431,7 @@ namespace DirectoryContents.ViewModels
             }
             finally
             {
-                Log($"{nameof(DirectoryViewModel)}.{nameof(Parse)}: End");
+                Log($"{nameof(DirectoryViewModel)}.{nameof(ParseAsync)}: End");
             }
         }
 

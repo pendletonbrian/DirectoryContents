@@ -64,7 +64,7 @@ namespace DirectoryContents.Views
                 return;
             }
 
-            await LoadDirectory(directoryPath);
+            await LoadDirectoryAsync(directoryPath);
         }
 
         private void CollapseAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -123,7 +123,7 @@ namespace DirectoryContents.Views
             e.Handled = true;
         }
 
-        private void ExportCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void ExportCommand_ExecutedAsync(object sender, ExecutedRoutedEventArgs e)
         {
             string filepath;
 
@@ -132,10 +132,23 @@ namespace DirectoryContents.Views
                 diag.Title = "Export file as:";
                 diag.OverwritePrompt = true;
                 diag.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                diag.Filter = "Text Files | *.txt";
-                diag.FilterIndex = 0;
-                diag.DefaultExt = "txt";
                 diag.AddExtension = true;
+
+                switch (m_ViewModel.SelectedExportStructure)
+                {
+                    case ExportFileStructure.TextFile:
+                    case ExportFileStructure.TextFlat:
+
+                        diag.Filter = "Text Files | *.txt";
+                        diag.DefaultExt = "txt";
+
+                        break;
+
+                    default:
+                        throw new ArgumentException("There is no export type selected.");
+                }
+
+                diag.FilterIndex = 0;
 
                 if (diag.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 {
@@ -150,11 +163,9 @@ namespace DirectoryContents.Views
                 return;
             }
 
-            //filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "results.txt");
-
             try
             {
-                m_ViewModel.Export(filepath);
+                await m_ViewModel.ExportAsync(filepath);
 
                 MessageBoxResult result = MessageBox.Show(
                     "File exported!  Would you like to view the result?",
@@ -206,12 +217,12 @@ namespace DirectoryContents.Views
 
         private void GenerateFileHashCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.FileChecksum,
+            m_ViewModel.ShowNextPage(PageControl.FileChecksum,
                 additionalData: m_ViewModel.SelectedItem,
                 transitionType: PageTransitionType.SlideAndFade);
         }
 
-        private async Task LoadDirectory(string fullyQualifiedDirectoryPath)
+        private async Task LoadDirectoryAsync(string fullyQualifiedDirectoryPath)
         {
             try
             {
@@ -229,7 +240,7 @@ namespace DirectoryContents.Views
 
                 CancellationToken token = cancellationTokenSource.Token;
 
-                await Task.Run(() => m_ViewModel.Parse(),
+                await Task.Run(() => m_ViewModel.ParseAsync(),
                     token);
 
                 treeView.Items.Add(m_ViewModel.RootNode);
@@ -271,7 +282,7 @@ namespace DirectoryContents.Views
                 return;
             }
 
-            await LoadDirectory(filenameList[0]);
+            await LoadDirectoryAsync(filenameList[0]);
 
             // This is a bit of a hack. Setting the focus makes the application
             // reevaluate the XXX_CanExecute methods. Otherwise, the "Export"

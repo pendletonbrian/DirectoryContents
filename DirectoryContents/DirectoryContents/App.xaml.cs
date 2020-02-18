@@ -162,7 +162,7 @@ namespace DirectoryContents
             LogError(sb.ToString());
         }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -263,9 +263,9 @@ namespace DirectoryContents
                     DirectoryToParse = directoryToParse
                 };
 
-                vm.Parse();
+                await vm.ParseAsync();
 
-                vm.Export(resultsFile);
+                await vm.ExportAsync(resultsFile);
 
                 Shutdown(SUCCESS);
 
