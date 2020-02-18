@@ -260,9 +260,24 @@ namespace DirectoryContents.ViewModels
 
         #region Public Methods
 
+        #region debug vaiables
+
+        private bool m_CanExport = true;
+        private bool m_PrevCanExport = false;
+        private bool m_PrevIsItemSelected = false;
+        private bool m_IsItemSelected = true;
+
+        #endregion
+
         internal bool CanExport()
         {
-            Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: DirectoryToParse is \"{DirectoryToParse}\".");
+            m_PrevCanExport = m_CanExport;
+            m_CanExport = string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
+
+            if (m_PrevCanExport != m_CanExport)
+            {
+                Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: DirectoryToParse is \"{DirectoryToParse}\".");
+            }
 
             return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
         }
@@ -324,11 +339,15 @@ namespace DirectoryContents.ViewModels
         /// <returns></returns>
         internal bool IsItemSelected()
         {
-            bool isItemSelected = SelectedItem != null;
+            m_PrevIsItemSelected = m_IsItemSelected;
+            m_IsItemSelected = SelectedItem != null;
 
-            Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {isItemSelected}");
+            if (m_PrevIsItemSelected != m_IsItemSelected)
+            {
+                Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(IsItemSelected)}: {m_IsItemSelected}");
+            }
 
-            return isItemSelected;
+            return m_IsItemSelected;
         }
 
         /// <summary>

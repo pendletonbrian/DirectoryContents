@@ -49,9 +49,9 @@
                       Command="{x:Static vm:DirectoryViewModel.BrowseCommand}" />
             <MenuItem Header="Export"
                       Command="{x:Static vm:DirectoryViewModel.ExportCommand}" />
-            <MenuItem >
+            <MenuItem>
                 <MenuItem.Header>
-                    <ComboBox Width="200"
+                    <ComboBox HorizontalAlignment="Stretch"
                         ItemsSource="{Binding ExportFileStructureList}" 
                           DisplayMemberPath="Value"
                           SelectedValue="{Binding SelectedExportStructure, Mode=TwoWay}" 
