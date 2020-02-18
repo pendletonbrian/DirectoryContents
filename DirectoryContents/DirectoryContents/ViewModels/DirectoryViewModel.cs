@@ -238,24 +238,6 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        /// <summary>
-        /// Checks the Directory FileAttribute to see if the given
-        /// filepath is a file and not a directory.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private static bool IsItemFile(string fullyQualifiedFilePath)
-        {
-            FileAttributes attr = File.GetAttributes(fullyQualifiedFilePath);
-
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         #endregion Private Methods
 
         #region Public Methods
@@ -268,6 +250,24 @@ namespace DirectoryContents.ViewModels
         private bool m_IsItemSelected = true;
 
         #endregion
+
+        /// <summary>
+        /// Checks the Directory FileAttribute to see if the given
+        /// filepath is a file and not a directory.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        internal static bool IsItemFile(string fullyQualifiedFilePath)
+        {
+            FileAttributes attr = File.GetAttributes(fullyQualifiedFilePath);
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         internal bool CanExport()
         {

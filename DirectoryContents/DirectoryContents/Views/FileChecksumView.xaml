@@ -14,7 +14,7 @@
                         Executed="BackCommand_Executed"/>
         <CommandBinding Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}"
                         CanExecute="GenerateCommand_CanExecute"
-                        Executed="GenerateCommand_Executed"/>
+                        Executed="GenerateCommand_ExecutedAsync"/>
     </UserControl.CommandBindings>
     
     <Grid>
@@ -38,7 +38,10 @@
 
             <!-- Results -->
             <RowDefinition Height="Auto" />
-            
+
+            <!-- Generate button -->
+            <RowDefinition Height="Auto"/>
+
             <!-- Spacer -->
             <RowDefinition Height="*" />
             
@@ -91,19 +94,47 @@
                   Margin="4">
             <TextBox IsReadOnly="True" 
                      HorizontalAlignment="Stretch"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible"
                      Margin="4"
+                     Padding="4"
                        Text="{Binding ComputedChecksum}" />
         </GroupBox>
 
-        <!-- Spacer -->
+        <!-- Generate button -->
         <Grid Grid.Column="0"
               Grid.Row="5"
+              Margin="4"
+              VerticalAlignment="Top">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Button HorizontalAlignment="Center"
+                    Margin="4"
+                    Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Generate" />
+                </Button.ToolTip>
+                <Image Source="/DirectoryContents;component/Images/automation-26.png"
+                       Width="26"
+                       Height="26" />
+            </Button>
+
+        </Grid>
+
+        <!-- Spacer -->
+        <Grid Grid.Column="0"
+              Grid.Row="6"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch" />
         
-        <!-- Buttons -->
+        <!-- Back button -->
         <Grid Grid.Column="0"
-              Grid.Row="6"
+              Grid.Row="7"
               Margin="4"
               VerticalAlignment="Bottom">
 
@@ -121,17 +152,6 @@
                     <TextBlock Text="Back to directory view" />
                 </Button.ToolTip>
                 <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
-                       Width="26"
-                       Height="26" />
-            </Button>
-
-            <Button HorizontalAlignment="Right"
-                    Margin="4"
-                    Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}">
-                <Button.ToolTip>
-                    <TextBlock Text="Generate" />
-                </Button.ToolTip>
-                <Image Source="/DirectoryContents;component/Images/right-arrow-26.png"
                        Width="26"
                        Height="26" />
             </Button>

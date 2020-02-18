@@ -10,6 +10,7 @@
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow"
+        ResizeMode="NoResize"
         AllowDrop="True"
         Height="700"
         Width="800"

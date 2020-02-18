@@ -1,5 +1,8 @@
-﻿using DirectoryContents.Models;
+﻿using DirectoryContents.Classes;
+using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace DirectoryContents.Views
 {
@@ -43,9 +46,30 @@ namespace DirectoryContents.Views
             e.Handled = true;
         }
 
-        private void GenerateCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        private async void GenerateCommand_ExecutedAsync(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ComputeChecksum();
+            try
+            {
+                ShowProgressBar(true);
+
+                Mouse.OverrideCursor = Cursors.Wait;
+
+                ShowStatusMessage($"Generating {m_ViewModel.SelectedAlgorithim.GetDescription()} hash.");
+
+                Stopwatch timer = Stopwatch.StartNew();
+
+                await m_ViewModel.ComputeChecksumAsync();
+
+                timer.Stop();
+
+                ShowStatusMessage($"Time to generate hash: {timer.Elapsed.GetTimeFromTimeSpan()}");
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+
+                ShowProgressBar(false);
+            }
         }
 
         private void BackCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -247,13 +248,14 @@ namespace DirectoryContents.Views
 
                 treeView.UpdateLayout();
 
-                Mouse.OverrideCursor = null;
             }
             catch
             {
             }
             finally
             {
+                Mouse.OverrideCursor = null;
+
                 ShowProgressBar(false);
             }
         }
@@ -279,6 +281,19 @@ namespace DirectoryContents.Views
             if (filenameList is null ||
                 filenameList.Length.Equals(0))
             {
+                return;
+            }
+
+            // If the luser is dragging a file, in direct opposition of the name
+            //   of the app, then do directly to the File Checksum page.
+            if (DirectoryViewModel.IsItemFile(filenameList[0]))
+            {
+                FileInfo fileInfo = new FileInfo(filenameList[0]);
+
+                m_ViewModel.ShowNextPage(PageControl.FileChecksum,
+                    additionalData: new DirectoryItem(fileInfo),
+                    transitionType: PageTransitionType.SlideAndFade);
+
                 return;
             }
 

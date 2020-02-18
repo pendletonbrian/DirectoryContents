@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
@@ -22,7 +23,7 @@ namespace DirectoryContents.ViewModels
         #region Private Members
 
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
-        private readonly DirectoryItem m_Item = null;
+        private DirectoryItem m_SelectedItem = null;
         private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
         private string m_ComputedChecksum = string.Empty;
@@ -57,9 +58,18 @@ namespace DirectoryContents.ViewModels
 
         public DirectoryItem SelectedItem
         {
-            get { return m_Item; }
+            get { return m_SelectedItem; }
 
-            private set { }
+            private set 
+            {
+                if (m_SelectedItem is null ||
+                    m_SelectedItem.Equals(value) == false)
+                {
+                    m_SelectedItem = value;
+
+                    RaisePropertyChanged(nameof(SelectedItem));
+                }
+            }
         }
 
         public ObservableCollection<string> ComputedChecksumList
@@ -91,7 +101,7 @@ namespace DirectoryContents.ViewModels
 
         public FileChecksumViewModel(MainWindowViewModel viewModel, DirectoryItem item) : base(viewModel)
         {
-            AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
+            m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
             RaisePropertyChanged(nameof(AlgorithimList));
 
             SelectedItem = item;
@@ -106,12 +116,14 @@ namespace DirectoryContents.ViewModels
             return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
         }
 
-        internal void ComputeChecksum()
+        internal async Task ComputeChecksumAsync()
         {
             IHashAlgorithim algorithim = HashAlgorithimFactory.Get(SelectedAlgorithim);
             Hasher hasher = new Hasher(algorithim);
 
-            bool? result = hasher.TryGetFileChecksum(SelectedItem.FullyQualifiedFilename, out string checksum);
+            string checksum = string.Empty;
+
+            bool? result =  await Task.Run(() => hasher.TryGetFileChecksum(SelectedItem.FullyQualifiedFilename, out checksum));
 
             if (result.HasValue &&
                 result.Value)
