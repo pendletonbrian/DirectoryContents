@@ -38,6 +38,25 @@ namespace DirectoryContents.Views
 
         #region Private Methods
 
+        private void SearchCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsLoaded();
+            }
+
+            e.Handled = true;
+        }
+
+        private void SearchCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -118,7 +137,7 @@ namespace DirectoryContents.Views
             }
             else
             {
-                e.CanExecute = m_ViewModel.CanExport();
+                e.CanExecute = m_ViewModel.IsLoaded();
             }
 
             e.Handled = true;
@@ -346,5 +365,6 @@ namespace DirectoryContents.Views
         }
 
         #endregion Private Methods
+
     }
 }

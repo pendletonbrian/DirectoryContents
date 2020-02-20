@@ -18,10 +18,20 @@
         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExportCommand}"
                         CanExecute="ExportCommand_CanExecute"
                         Executed="ExportCommand_ExecutedAsync" />
+        <CommandBinding Command="{x:Static vm:DirectoryViewModel.SearchCommand}"
+                        CanExecute="SearchCommand_CanExecute"
+                        Executed="SearchCommand_Executed"/>
     </local:BaseUserControlView.CommandBindings>
 
     <local:BaseUserControlView.Resources>
         <classes:VisibilityConverter x:Key="VisibilityConverter" />
+
+        <Style x:Key="MenuItemGroupHeader" TargetType="MenuItem">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="IsEnabled" Value="False"/>
+        </Style>
+        
     </local:BaseUserControlView.Resources>
 
     <Grid>
@@ -46,8 +56,10 @@
               Margin="0,4,0,4"
               Padding="2">
             <MenuItem Header="Browse..."
+                      ToolTip="Browse for the directory"
                       Command="{x:Static vm:DirectoryViewModel.BrowseCommand}" />
             <MenuItem Header="Export"
+                      ToolTip="Export the results to a file"
                       Command="{x:Static vm:DirectoryViewModel.ExportCommand}" />
             <MenuItem>
                 <MenuItem.Header>
@@ -58,6 +70,14 @@
                           SelectedValuePath="Key"/>
                 </MenuItem.Header>
                 
+            </MenuItem>
+
+            <MenuItem ToolTip="Search..."
+                      Command="{x:Static vm:DirectoryViewModel.SearchCommand}">
+                <MenuItem.Icon>
+                    <Image Height="14" Width="14" Style="{StaticResource EnableDisableImageStyle}"
+                                   Source="/Images/search-14.png" />
+                </MenuItem.Icon>
             </MenuItem>
         </Menu>
 
@@ -111,6 +131,8 @@
                                         Executed="GenerateFileHashCommand_Executed" />
                     </ContextMenu.CommandBindings>
 
+                    <MenuItem Header="Entire Tree" Style="{StaticResource MenuItemGroupHeader}"/>
+                    
                     <MenuItem Header="Expand All"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.ExpandAllCommand}">
@@ -131,9 +153,7 @@
                     <Separator />
 
                     <MenuItem Header="Selected Item"
-                              FontStyle="Italic"
-                              FontWeight="Bold"
-                              IsEnabled="False" />
+                              Style="{StaticResource MenuItemGroupHeader}" />
 
                     <MenuItem Header="Open in File Explorer"
                               Margin="2"

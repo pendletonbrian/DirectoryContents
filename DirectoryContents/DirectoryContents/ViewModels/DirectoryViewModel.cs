@@ -54,6 +54,11 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
 
+        /// <summary>
+        /// Main menu command to show the search bar.
+        /// </summary>
+        public static RoutedCommand SearchCommand = new RoutedCommand();
+
         #endregion Public Members
 
         #region Private Members
@@ -242,10 +247,8 @@ namespace DirectoryContents.ViewModels
 
         #region Public Methods
 
-        #region debug vaiables
+        #region debug variables
 
-        private bool m_CanExport = true;
-        private bool m_PrevCanExport = false;
         private bool m_PrevIsItemSelected = false;
         private bool m_IsItemSelected = true;
 
@@ -269,17 +272,9 @@ namespace DirectoryContents.ViewModels
             return true;
         }
 
-        internal bool CanExport()
+        internal bool IsLoaded()
         {
-            m_PrevCanExport = m_CanExport;
-            m_CanExport = string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
-
-            if (m_PrevCanExport != m_CanExport)
-            {
-                Debug.WriteLine($"{nameof(DirectoryViewModel)}.{nameof(CanExport)}: DirectoryToParse is \"{DirectoryToParse}\".");
-            }
-
-            return string.IsNullOrWhiteSpace(DirectoryToParse).Equals(false);
+            return m_RootNode != null;
         }
 
         internal void CollapseAll()
