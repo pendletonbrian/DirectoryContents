@@ -174,6 +174,11 @@ namespace DirectoryContents.ViewModels
 
                     break;
 
+                case PageControl.TreeChecksum:
+
+
+                    break;
+
                 default:
                     throw new DirectoryContentsException($"Unhandled PageControl enumeration: {pageControl}");
             }

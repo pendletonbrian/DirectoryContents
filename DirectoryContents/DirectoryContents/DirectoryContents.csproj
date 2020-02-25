@@ -99,6 +99,7 @@
     <Compile Include="ViewModels\FileChecksumViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\TreeChecksumViewModel.cs" />
     <Compile Include="Views\BaseUserControlView.cs" />
     <Compile Include="Views\DirectoryView.xaml.cs">
       <DependentUpon>DirectoryView.xaml</DependentUpon>
@@ -108,6 +109,9 @@
     </Compile>
     <Compile Include="Views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TreeChecksumView.xaml.cs">
+      <DependentUpon>TreeChecksumView.xaml</DependentUpon>
     </Compile>
     <Page Include="Classes\WpfPageTransitions\PageTransition.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -162,6 +166,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TreeChecksumView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

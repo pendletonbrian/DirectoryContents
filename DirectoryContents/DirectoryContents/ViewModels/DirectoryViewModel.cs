@@ -60,6 +60,8 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand SearchCommand = new RoutedCommand();
 
+        public static RoutedCommand GenerateAllChecksumsCommand = new RoutedCommand();
+
         #endregion Public Members
 
         #region Private Members

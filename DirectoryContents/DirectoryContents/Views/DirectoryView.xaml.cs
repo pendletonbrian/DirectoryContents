@@ -38,6 +38,27 @@ namespace DirectoryContents.Views
 
         #region Private Methods
 
+        private void GenerateAllChecksumsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsLoaded();
+            }
+
+            e.Handled = true;
+        }
+
+        private void GenerateAllChecksumsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.ShowNextPage(PageControl.FileChecksum,
+                additionalData: null,
+                transitionType: PageTransitionType.SlideAndFade);
+        }
+
         private void SearchCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
@@ -364,8 +385,8 @@ namespace DirectoryContents.Views
             }
         }
 
-        #endregion Private Methods
 
+        #endregion Private Methods
 
     }
 }

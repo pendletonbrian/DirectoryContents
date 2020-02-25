@@ -32,7 +32,7 @@ namespace DirectoryContents.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory);
+            m_ViewModel.ShowNextPage(Classes.Enumerations.PageControl.Directory, transitionType: Classes.Enumerations.PageTransitionType.GrowAndFade);
         }
 
         #endregion Private Methods

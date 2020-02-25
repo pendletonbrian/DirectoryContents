@@ -140,6 +140,7 @@
                         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExpandAllCommand}"
                                         CanExecute="ExpandAllCommand_CanExecute"
                                         Executed="ExpandAllCommand_Executed" />
+                        <CommandBinding Command="{x:Static vm:DirectoryViewModel.GenerateAllChecksumsCommand}" CanExecute="GenerateAllChecksumsCommand_CanExecute" Executed="GenerateAllChecksumsCommand_Executed"/>
                         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ViewInFileExplorerCommand}"
                                         CanExecute="ViewInFileExplorerCommand_CanExecute"
                                         Executed="ViewInFileExplorerCommand_Executed" />
@@ -158,6 +159,7 @@
                                    Source="/Images/double-down-16.png" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    
                     <MenuItem Header="Collapse All"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.CollapseAllCommand}">
@@ -166,6 +168,9 @@
                                    Source="/Images/double-up-16.png" />
                         </MenuItem.Icon>
                     </MenuItem>
+
+                    <MenuItem Header="Generate all checksums" Margin="2"
+                              Command="{x:Static vm:DirectoryViewModel.GenerateAllChecksumsCommand}"/>
 
                     <Separator />
 

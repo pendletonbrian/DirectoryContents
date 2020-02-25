@@ -103,7 +103,8 @@ namespace DirectoryContents.Classes
             None = 0,
             Directory,
             Settings,
-            FileChecksum
+            FileChecksum,
+            TreeChecksum
         }
 
         /// <summary>
