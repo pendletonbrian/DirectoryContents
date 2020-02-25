@@ -54,7 +54,7 @@ namespace DirectoryContents.Views
 
         private void SearchCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            m_ViewModel.Search();
         }
 
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -365,6 +365,7 @@ namespace DirectoryContents.Views
         }
 
         #endregion Private Methods
+
 
     }
 }

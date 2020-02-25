@@ -74,10 +74,25 @@
 
             <MenuItem ToolTip="Search..."
                       Command="{x:Static vm:DirectoryViewModel.SearchCommand}">
-                <MenuItem.Icon>
-                    <Image Height="14" Width="14" Style="{StaticResource EnableDisableImageStyle}"
+                <MenuItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" 
+                                Command="{x:Static vm:DirectoryViewModel.SearchCommand}">
+                            <Image Height="14" Width="14" Style="{StaticResource EnableDisableImageStyle}"
                                    Source="/Images/search-14.png" />
-                </MenuItem.Icon>
+                        </Button>
+                    </Grid>
+                </MenuItem.Header>
             </MenuItem>
         </Menu>
 
@@ -109,7 +124,9 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding IconUri}"
                                Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding ItemName}" />
+                        <TextBlock Text="{Binding ItemName}" 
+                                   FontStyle="{Binding FontStyle}"
+                                   FontWeight="{Binding FontWeight}"/>
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
@@ -71,6 +72,7 @@ namespace DirectoryContents.ViewModels
         private DirectoryItem m_RootNode;
         private DirectoryItem m_SelectedItem;
         private Enumerations.ExportFileStructure m_SelectedExportStructure = Enumerations.ExportFileStructure.None;
+        private string m_SearchString = string.Empty;
 
         #endregion Private Members
 
@@ -175,6 +177,28 @@ namespace DirectoryContents.ViewModels
 
         public SortedDictionary<Enumerations.ExportFileStructure, string> ExportFileStructureList { get; private set; }
 
+        public string SearchString
+        {
+            get { return m_SearchString; }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(m_SearchString) ||
+                    m_SearchString.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    m_SearchString = value;
+
+                    RaisePropertyChanged(nameof(SearchString));
+
+                    if (string.IsNullOrWhiteSpace(m_SearchString))
+                    {
+                        ResetSearch();
+                    }
+                }
+
+            }
+        }
+
         #endregion Public Properties
 
         #region Private Methods
@@ -240,6 +264,65 @@ namespace DirectoryContents.ViewModels
             foreach (DirectoryItem childNode in node.Items)
             {
                 SetIsExpanded(childNode, isExpanded);
+            }
+        }
+
+        private bool Search(DirectoryItem node, string term)
+        {
+            /*
+             * If the term is found in a directory, we'll need to know so that
+             * the parent directory can be expanded.
+            */
+            bool found = false;
+
+            if (node.ItemName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                node.FullyQualifiedFilename.Contains(term, StringComparison.OrdinalIgnoreCase))
+            {
+                Log($"Search found term in: {node.FullyQualifiedFilename}.");
+
+                node.IsExpanded = true;
+
+                SetFont(node, true);
+
+                found = true;
+            }
+
+            foreach (DirectoryItem childNode in node.Items)
+            {
+                if (Search(childNode, term) &&
+                    found.Equals(false))
+                {
+                    found = true;
+
+                    node.IsExpanded = true;
+
+                }
+            }
+
+            return found;
+        }
+
+        private static void SetFont(DirectoryItem node, bool isFound)
+        {
+            if (isFound)
+            {
+                node.FontStyle = FontStyles.Italic;
+                node.FontWeight = FontWeights.Bold;
+            }
+            else
+            {
+                node.FontStyle = FontStyles.Normal;
+                node.FontWeight = FontWeights.Normal;
+            }
+        }
+
+        private static void ResetSearch(DirectoryItem node)
+        {
+            SetFont(node, false);
+
+            foreach (DirectoryItem childNode in node.Items)
+            {
+                ResetSearch(childNode);
             }
         }
 
@@ -485,6 +568,30 @@ namespace DirectoryContents.ViewModels
             finally
             {
                 NativeMethods.ILFree(intPtr);
+            }
+        }
+
+        internal void Search()
+        {
+            Log($"Search for: \"{SearchString}\".");
+
+            Stopwatch timer = Stopwatch.StartNew();
+
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                Search(node, SearchString);
+            }
+
+            timer.Stop();
+
+            ShowStatusMessage($"Time to search {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
+        }
+
+        internal void ResetSearch()
+        {
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                ResetSearch(node);
             }
         }
 

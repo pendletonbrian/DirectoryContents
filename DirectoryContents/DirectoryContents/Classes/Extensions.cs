@@ -130,5 +130,10 @@ namespace DirectoryContents.Classes
 
             return s.ToString();
         }
+
+        internal static bool Contains(this string sourceString, string term, StringComparison comparison)
+        {
+            return sourceString?.IndexOf(term, comparison) >= 0;
+        }
     }
 }
