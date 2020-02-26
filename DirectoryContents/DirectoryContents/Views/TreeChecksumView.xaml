@@ -7,7 +7,162 @@
                 xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static vm:BaseUserControlViewModel.BackCommand}"
+                        Executed="BackCommand_Executed"/>
+        <CommandBinding Command="{x:Static vm:TreeChecksumViewModel.GenerateCommand}"
+                        CanExecute="GenerateCommand_CanExecute"
+                        Executed="GenerateCommand_ExecutedAsync"/>
+        <CommandBinding Command="{x:Static vm:TreeChecksumViewModel.CancelCommand}"
+                        CanExecute="CancelCommand_CanExecute"
+                        Executed="CancelCommand_Executed"/>
+    </UserControl.CommandBindings>
+    
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+
+            <!-- Header -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Seperator -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Directory -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Algorithim selection -->
+            <RowDefinition Height="Auto" />
+
+            <!-- Generate and Cancel buttons -->
+            <RowDefinition Height="Auto"/>
+
+            <!-- Spacer -->
+            <RowDefinition Height="*" />
+
+            <!-- Back button -->
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Style="{StaticResource HeaderTextStyle}"
+                   Text="Generate checksums for an entire directory" />
+
+        <!-- Separator -->
+        <Separator Grid.Column="0"
+                   Grid.Row="1"
+                   Style="{StaticResource StandardSeparatorStyle}" />
+
+        <!-- Directory -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="2"
+                  Header="Directory"
+                  Margin="4">
+            <TextBlock Text="{Binding RootNode.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch"/>
+        </GroupBox>
+
+        <!-- Algorithim selection -->
+        <GroupBox Grid.Column="0"
+                  Grid.Row="3"
+                  Header="Checksum Algorithim"
+                  Margin="4">
+            <ListBox ItemsSource="{Binding AlgorithimList}"
+                     SelectedValue="{Binding SelectedAlgorithim}"
+                     SelectedValuePath="Key"
+                     Margin="4">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <RadioButton IsChecked="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                     Content="{Binding Value}"
+                                     GroupName="AlgorithimsGroup" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </GroupBox>
+
+        <!-- Generate and Cancel buttons -->
+        <Grid Grid.Column="0"
+              Grid.Row="4"
+              Margin="4"
+              VerticalAlignment="Top">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                HorizontalAlignment="Center"
+                    Margin="4"
+                    Command="{x:Static vm:TreeChecksumViewModel.GenerateCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Generate" />
+                </Button.ToolTip>
+                <Image Source="/DirectoryContents;component/Images/automation-26.png"
+                       Style="{StaticResource EnableDisableImageStyle}"
+                       Width="26"
+                       Height="26" />
+            </Button>
+
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                HorizontalAlignment="Center"
+                    Margin="4"
+                    Command="{x:Static vm:TreeChecksumViewModel.CancelCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Cancel" />
+                </Button.ToolTip>
+                <Button.Content>Cancel</Button.Content>
+                <!--<Image Source="/DirectoryContents;component/Images/automation-26.png"
+                       Style="{StaticResource EnableDisableImageStyle}"
+                       Width="26"
+                       Height="26" />-->
+            </Button>
+
+        </Grid>
+
+        <!-- Spacer -->
+        <Grid Grid.Column="0"
+              Grid.Row="5"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch" />
+
+        <!-- Back button -->
+        <Grid Grid.Column="0"
+              Grid.Row="6"
+              Margin="4"
+              VerticalAlignment="Bottom">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Button HorizontalAlignment="Left"
+                    Margin="4"
+                    Command="{x:Static vm:BaseUserControlViewModel.BackCommand}">
+                <Button.ToolTip>
+                    <TextBlock Text="Back to directory view" />
+                </Button.ToolTip>
+                <Image Source="/DirectoryContents;component/Images/left-arrow-26.png"
+                       Style="{StaticResource EnableDisableImageStyle}"
+                       Width="26"
+                       Height="26" />
+            </Button>
+
+        </Grid>
+        
     </Grid>
 </local:BaseUserControlView>

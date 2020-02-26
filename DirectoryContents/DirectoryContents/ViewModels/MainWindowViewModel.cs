@@ -160,7 +160,7 @@ namespace DirectoryContents.ViewModels
 
                     if (additionalData is null)
                     {
-                        throw new ArgumentException($"The {nameof(FileChecksumView)} requires the {nameof(Enumerations.ChecksumAlgorithim)} parameter.");
+                        throw new ArgumentException($"The {nameof(FileChecksumView)} requires the {nameof(DirectoryItem)} parameter.");
                     }
 
                     DirectoryItem item = additionalData as DirectoryItem;
@@ -176,6 +176,19 @@ namespace DirectoryContents.ViewModels
 
                 case PageControl.TreeChecksum:
 
+                    if (additionalData is null)
+                    {
+                        throw new ArgumentException($"The {nameof(TreeChecksumView)} requires the {nameof(DirectoryItem)} parameter.");
+                    }
+
+                    DirectoryItem rootNode = additionalData as DirectoryItem;
+
+                    if (rootNode is null)
+                    {
+                        throw new ArgumentException($"The additional data wasn't of type {nameof(DirectoryItem)}.");
+                    }
+
+                    newPage = new TreeChecksumView(this, rootNode);
 
                     break;
 
@@ -307,6 +320,8 @@ namespace DirectoryContents.ViewModels
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
 
+            ShowStatusMessage(string.Empty, false);
+
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: End");
 
         }
@@ -362,6 +377,8 @@ namespace DirectoryContents.ViewModels
             m_PageTransition.TransitionType = transitionType;
             m_PageTransition.ShowPage(newPageControl);
 
+            ShowStatusMessage(string.Empty, false);
+
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: End");
 
         }
@@ -372,11 +389,11 @@ namespace DirectoryContents.ViewModels
 
             StatusText = msg;
 
+            m_StatusMsgTimer.Stop();
+
             if (autoRemove)
             {
                 m_MessageTimerCount = 0;
-
-                m_StatusMsgTimer.Stop();
 
                 m_StatusMsgTimer.Start();
             }

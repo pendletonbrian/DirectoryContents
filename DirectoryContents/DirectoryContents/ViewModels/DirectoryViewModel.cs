@@ -597,6 +597,11 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        internal void RefreshTree()
+        {
+            RaisePropertyChanged(nameof(DirectoryItems));
+        }
+
         #endregion Public Methods
     }
 }

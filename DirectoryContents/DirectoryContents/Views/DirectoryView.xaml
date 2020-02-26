@@ -7,6 +7,7 @@
                            xmlns:models="clr-namespace:DirectoryContents.Models"
                            xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
                            xmlns:classes="clr-namespace:DirectoryContents.Classes"
+                           Loaded="DirectoryView_Loaded"
                            mc:Ignorable="d"
                            d:DesignHeight="600"
                            d:DesignWidth="700">

@@ -60,6 +60,11 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowProgressBar = isVisible;
         }
 
+        internal void ShowPreviousPage()
+        {
+            m_ViewModel.ShowPreviousPage();
+        }
+
         #endregion Protected Methods
     }
 }

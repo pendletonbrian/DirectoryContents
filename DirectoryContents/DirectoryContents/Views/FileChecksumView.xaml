@@ -10,7 +10,6 @@
                            d:DesignWidth="800">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static vm:BaseUserControlViewModel.BackCommand}"
-                        CanExecute="BackCommand_CanExecute"
                         Executed="BackCommand_Executed"/>
         <CommandBinding Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}"
                         CanExecute="GenerateCommand_CanExecute"

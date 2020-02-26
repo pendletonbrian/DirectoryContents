@@ -100,10 +100,29 @@ namespace DirectoryContents.Classes
         /// </summary>
         public enum PageControl
         {
+            /// <summary>
+            /// User for initialization.
+            /// </summary>
             None = 0,
+
+            /// <summary>
+            /// The directory tree view.
+            /// </summary>
             Directory,
+
+            /// <summary>
+            /// Settings that can be saved.
+            /// </summary>
             Settings,
+
+            /// <summary>
+            /// Generate the checksum for a single file.
+            /// </summary>
             FileChecksum,
+
+            /// <summary>
+            /// Generate the checksum for an entire tree.  (Files only, obvs)
+            /// </summary>
             TreeChecksum
         }
 

@@ -72,11 +72,6 @@ namespace DirectoryContents.Views
             }
         }
 
-        private void BackCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
         #endregion
 
     }

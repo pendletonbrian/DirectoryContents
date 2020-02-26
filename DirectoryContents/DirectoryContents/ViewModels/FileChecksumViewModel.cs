@@ -36,6 +36,8 @@ namespace DirectoryContents.ViewModels
         {
             get { return m_AlgorithimList; }
 
+            // Set in the constructor, and not editable after that,
+            // as it's just a lookup.
             private set { }
         }
 
@@ -118,6 +120,8 @@ namespace DirectoryContents.ViewModels
 
         internal async Task ComputeChecksumAsync()
         {
+            Log($"{nameof(FileChecksumViewModel)}.{nameof(ComputeChecksumAsync)}: Start");
+
             IHashAlgorithim algorithim = HashAlgorithimFactory.Get(SelectedAlgorithim);
             Hasher hasher = new Hasher(algorithim);
 
@@ -130,6 +134,13 @@ namespace DirectoryContents.ViewModels
             {
                 ComputedChecksum = checksum;
             }
+            else
+            {
+                Log($"    There was no result from the hashing.");
+            }
+
+            Log($"{nameof(FileChecksumViewModel)}.{nameof(ComputeChecksumAsync)}: End");
+
         }
 
         #endregion

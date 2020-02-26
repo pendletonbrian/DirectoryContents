@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
@@ -54,8 +55,8 @@ namespace DirectoryContents.Views
 
         private void GenerateAllChecksumsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            m_ViewModel.ShowNextPage(PageControl.FileChecksum,
-                additionalData: null,
+            m_ViewModel.ShowNextPage(PageControl.TreeChecksum,
+                additionalData: m_ViewModel.RootNode,
                 transitionType: PageTransitionType.SlideAndFade);
         }
 
@@ -388,5 +389,15 @@ namespace DirectoryContents.Views
 
         #endregion Private Methods
 
+        private void DirectoryView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("DirectoryView_Loaded");
+
+            if (m_ViewModel.IsLoaded())
+            {
+                m_ViewModel.RefreshTree();
+            }
+
+        }
     }
 }
