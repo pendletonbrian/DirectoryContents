@@ -25,7 +25,7 @@ namespace DirectoryContents.Models
 
         public string Checksum
         {
-            get { return m_Checksum; }
+            get => m_Checksum;
 
             set
             {
@@ -42,7 +42,7 @@ namespace DirectoryContents.Models
 
         public FontStyle FontStyle
         {
-            get { return m_FontStyle; }
+            get => m_FontStyle;
 
             set
             {
@@ -57,7 +57,7 @@ namespace DirectoryContents.Models
 
         public FontWeight FontWeight
         {
-            get { return m_FontWeight; }
+            get => m_FontWeight;
 
             set
             {
@@ -87,10 +87,7 @@ namespace DirectoryContents.Models
 
         public string FullyQualifiedFilename { get; private set; }
 
-        public bool HasChildren
-        {
-            get { return Items.Count > 0; }
-        }
+        public bool HasChildren => Items.Count > 0;
 
         public string IconUri { get; private set; }
 
