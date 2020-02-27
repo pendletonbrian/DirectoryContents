@@ -89,6 +89,30 @@ namespace DirectoryContents.Views
             treeView.UpdateLayout();
         }
 
+        private void CopyChecksumCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                // I want there to be an item selected that is a file.
+
+                e.CanExecute = m_ViewModel.IsItemSelected() &&
+                               m_ViewModel.SelectedItem.IsDirectory.Equals(false);
+            }
+
+            e.Handled = true;
+        }
+
+        private void CopyChecksumCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Clipboard.SetDataObject(m_ViewModel.SelectedItem.Checksum, false);
+
+            ShowStatusMessage($"Copied {m_ViewModel.SelectedItem.Checksum} to the clipboard");
+        }
+
         private void ExpandAllCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)

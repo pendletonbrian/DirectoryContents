@@ -26,6 +26,10 @@
     <local:BaseUserControlView.Resources>
         <classes:NullStringVisibilityConverter x:Key="NullStringVisibilityConverter" />
 
+        <!--
+             This is the menu item that is not intended to be clicked on,
+               but rather to indicate a section header.
+        -->
         <Style x:Key="MenuItemGroupHeader"
                TargetType="MenuItem">
             <Setter Property="FontWeight"
@@ -136,6 +140,8 @@
                         <TextBlock Text="{Binding ItemName}"
                                    FontStyle="{Binding FontStyle}"
                                    FontWeight="{Binding FontWeight}" />
+
+                        <!-- -->
                         <TextBlock Visibility="{Binding FormattedChecksum, Converter={StaticResource NullStringVisibilityConverter}}"
                                    Text="{Binding FormattedChecksum, Mode=OneWay}"
                                    FontStyle="{Binding FontStyle}"
@@ -162,6 +168,9 @@
                         <CommandBinding Command="{x:Static vm:DirectoryViewModel.GenerateFileHashCommand}"
                                         CanExecute="GenerateFileHashCommand_CanExecute"
                                         Executed="GenerateFileHashCommand_Executed" />
+                        <CommandBinding Command="{x:Static vm:DirectoryViewModel.CopyChecksumCommand}"
+                                        CanExecute="CopyChecksumCommand_CanExecute"
+                                        Executed="CopyChecksumCommand_Executed" />
                     </ContextMenu.CommandBindings>
 
                     <MenuItem Header="Entire Tree"
@@ -206,6 +215,10 @@
                     <MenuItem Header="Generate checksum"
                               Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.GenerateFileHashCommand}" />
+
+                    <MenuItem Header="Copy checksum to clipboard"
+                              Margin="2"
+                              Command="{x:Static vm:DirectoryViewModel.CopyChecksumCommand}" />
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>

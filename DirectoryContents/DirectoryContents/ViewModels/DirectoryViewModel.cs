@@ -62,6 +62,11 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
 
+        /// <summary>
+        /// Context menu command to copy the checksum to the clipboard.
+        /// </summary>
+        public static RoutedCommand CopyChecksumCommand = new RoutedCommand();
+
         #endregion Public Members
 
         #region Private Members
