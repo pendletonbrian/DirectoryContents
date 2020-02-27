@@ -1,8 +1,8 @@
-﻿using System;
+﻿using DirectoryContents.Classes;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-using DirectoryContents.Classes;
 
 namespace DirectoryContents.Models
 {
@@ -10,14 +10,12 @@ namespace DirectoryContents.Models
     {
         #region Private Members
 
+        private static readonly string DirectorySeparator;
         private string m_Checksum;
-        private bool m_IsExpanded;
-        private bool m_IsSelected;
-
         private FontStyle m_FontStyle = FontStyles.Normal;
         private FontWeight m_FontWeight = FontWeights.Normal;
-
-        private static readonly string DirectorySeparator;
+        private bool m_IsExpanded;
+        private bool m_IsSelected;
 
         #endregion Private Members
 
@@ -41,6 +39,36 @@ namespace DirectoryContents.Models
             }
         }
 
+        public FontStyle FontStyle
+        {
+            get { return m_FontStyle; }
+
+            set
+            {
+                if (m_FontStyle.Equals(value) == false)
+                {
+                    m_FontStyle = value;
+
+                    RaisePropertyChanged(nameof(FontStyle));
+                }
+            }
+        }
+
+        public FontWeight FontWeight
+        {
+            get { return m_FontWeight; }
+
+            set
+            {
+                if (m_FontWeight.Equals(value) == false)
+                {
+                    m_FontWeight = value;
+
+                    RaisePropertyChanged(nameof(FontWeight));
+                }
+            }
+        }
+
         public string FormattedChecksum
         {
             get
@@ -54,7 +82,7 @@ namespace DirectoryContents.Models
                     return $" : {Checksum}";
                 }
             }
-        } 
+        }
 
         public string FullyQualifiedFilename { get; private set; }
 
@@ -94,37 +122,6 @@ namespace DirectoryContents.Models
         public string ItemName { get; private set; }
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
-
-        public FontStyle FontStyle
-        {
-            get { return m_FontStyle; }
-
-            set
-            {
-                if (m_FontStyle.Equals(value) == false)
-                {
-                    m_FontStyle = value;
-
-                    RaisePropertyChanged(nameof(FontStyle));
-                }
-            }
-
-        }
-
-        public FontWeight FontWeight
-        {
-            get { return m_FontWeight; }
-
-            set
-            {
-                if (m_FontWeight.Equals(value) == false)
-                {
-                    m_FontWeight = value;
-
-                    RaisePropertyChanged(nameof(FontWeight));
-                }
-            }
-        }
 
         #endregion Public Properties
 

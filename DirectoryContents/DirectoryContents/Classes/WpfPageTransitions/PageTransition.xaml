@@ -312,7 +312,7 @@
                                 To="0,-500,0,500"
                                 AccelerationRatio=".9" />
         </Storyboard>
-        
+
         <!-- Up and fade -->
         <Storyboard x:Key="UpAndFadeIn">
             <ThicknessAnimation Duration="0:0:.75"
@@ -350,7 +350,7 @@
                                 To="0,500,0,-500"
                                 AccelerationRatio=".9" />
         </Storyboard>
-        
+
         <!-- Down and fade -->
         <Storyboard x:Key="DownAndFadeIn">
             <ThicknessAnimation Duration="0:0:.75"
@@ -373,7 +373,6 @@
                              Storyboard.TargetProperty="Opacity"
                              To="0" />
         </Storyboard>
-        
     </UserControl.Resources>
 
     <Grid Name="page">
@@ -397,7 +396,5 @@
                 </TransformGroup>
             </ContentControl.RenderTransform>
         </ContentControl>
-
     </Grid>
-
 </UserControl>

@@ -11,8 +11,9 @@ namespace DirectoryContents.Classes.Checksums
             switch (algorithim)
             {
                 case Enumerations.ChecksumAlgorithim.None:
-                    // Do nothing.  Keep the case so that we know it's being 
-                    //   handled and it's not a mistake.
+
+                    // Do nothing. Keep the case so that we know it's being
+                    // handled and it's not a mistake.
                     break;
 
                 case Enumerations.ChecksumAlgorithim.MD5:

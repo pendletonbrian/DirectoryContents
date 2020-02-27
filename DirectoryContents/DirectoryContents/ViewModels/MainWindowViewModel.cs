@@ -1,14 +1,14 @@
-﻿using System;
+﻿using DirectoryContents.Classes;
+using DirectoryContents.Classes.WpfPageTransitions;
+using DirectoryContents.Models;
+using DirectoryContents.Views;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Timers;
 using System.Windows.Controls;
-using DirectoryContents.Classes;
-using DirectoryContents.Classes.WpfPageTransitions;
-using DirectoryContents.Models;
-using DirectoryContents.Views;
 using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.ViewModels
@@ -323,7 +323,6 @@ namespace DirectoryContents.ViewModels
             ShowStatusMessage(string.Empty, false);
 
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: End");
-
         }
 
         /// <summary>
@@ -351,7 +350,6 @@ namespace DirectoryContents.ViewModels
                 {
                     Log($"  There are now {m_PageList.Count} items in the stack.");
                 }
-
             }
             else
             {
@@ -380,7 +378,6 @@ namespace DirectoryContents.ViewModels
             ShowStatusMessage(string.Empty, false);
 
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: End");
-
         }
 
         internal void ShowStatusMessage(string msg, bool autoRemove = true)

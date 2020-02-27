@@ -12,68 +12,8 @@ namespace DirectoryContents.Classes.WpfPageTransitions
     /// </summary>
     public partial class PageTransition : UserControl
     {
-        public static readonly DependencyProperty TransitionTypeProperty = DependencyProperty.Register("TransitionType",
-            typeof(PageTransitionType),
-            typeof(PageTransition), 
-            new PropertyMetadata(PageTransitionType.SlideAndFade));
-
         private Stack<UserControl> pages = new Stack<UserControl>();
 
-        public PageTransition()
-        {
-            InitializeComponent();
-        }
-
-        public UserControl CurrentPage { get; set; }
-
-        public PageTransitionType TransitionType
-        {
-            get
-            {
-                return (PageTransitionType)GetValue(TransitionTypeProperty);
-            }
-            set 
-            {
-                SetValue(TransitionTypeProperty, value);
-            }
-        }
-
-        public void ShowPage(UserControl newPage)
-        {
-            pages.Push(newPage);
-
-            if (contentPresenter.Content != null)
-            {
-                if (contentPresenter.Content is UserControl oldPage)
-                {
-                    oldPage.Loaded -= NewPage_Loaded;
-                    UnloadPage(oldPage);
-                }
-            }
-            else
-            {
-                ShowNextPage();
-            }
-
-        }
-
-        public void ClearPage()
-        {
-            Dispatcher.Invoke((Action)delegate 
-                {
-                    if (contentPresenter.Content != null)
-                    {
-
-                        if (contentPresenter.Content is UserControl oldPage)
-                        {
-                            oldPage.Loaded -= NewPage_Loaded;
-
-                            UnloadPage(oldPage);
-                        }
-                    }
-            });
-                    }
-                    
         private void HidePage_Completed(object sender, EventArgs e)
         {
             Storyboard hidePage = (Resources[string.Format("{0}Out", TransitionType.ToString())] as Storyboard).Clone();
@@ -100,7 +40,6 @@ namespace DirectoryContents.Classes.WpfPageTransitions
                 {
                     if (contentPresenter.Content != null)
                     {
-
                         if (contentPresenter.Content is UserControl oldPage)
                         {
                             oldPage.Loaded -= NewPage_Loaded;
@@ -127,7 +66,7 @@ namespace DirectoryContents.Classes.WpfPageTransitions
             newPage.Loaded += NewPage_Loaded;
 
             contentPresenter.Content = newPage;
-        }		
+        }
 
         private void UnloadPage(UserControl page)
         {
@@ -136,6 +75,65 @@ namespace DirectoryContents.Classes.WpfPageTransitions
             hidePage.Completed += HidePage_Completed;
 
             hidePage.Begin(contentPresenter);
-        }		
+        }
+
+        public static readonly DependencyProperty TransitionTypeProperty = DependencyProperty.Register("TransitionType",
+                                                            typeof(PageTransitionType),
+            typeof(PageTransition),
+            new PropertyMetadata(PageTransitionType.SlideAndFade));
+
+        public PageTransition()
+        {
+            InitializeComponent();
+        }
+
+        public UserControl CurrentPage { get; set; }
+
+        public PageTransitionType TransitionType
+        {
+            get
+            {
+                return (PageTransitionType)GetValue(TransitionTypeProperty);
+            }
+
+            set
+            {
+                SetValue(TransitionTypeProperty, value);
+            }
+        }
+
+        public void ClearPage()
+        {
+            Dispatcher.Invoke((Action)delegate
+                {
+                    if (contentPresenter.Content != null)
+                    {
+                        if (contentPresenter.Content is UserControl oldPage)
+                        {
+                            oldPage.Loaded -= NewPage_Loaded;
+
+                            UnloadPage(oldPage);
+                        }
+                    }
+                });
+        }
+
+        public void ShowPage(UserControl newPage)
+        {
+            pages.Push(newPage);
+
+            if (contentPresenter.Content != null)
+            {
+                if (contentPresenter.Content is UserControl oldPage)
+                {
+                    oldPage.Loaded -= NewPage_Loaded;
+                    UnloadPage(oldPage);
+                }
+            }
+            else
+            {
+                ShowNextPage();
+            }
+        }
     }
 }

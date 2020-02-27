@@ -12,22 +12,31 @@ namespace DirectoryContents.ViewModels
     {
         #region Public Members
 
-        public static RoutedCommand GenerateCommand = new RoutedCommand();
         public static RoutedCommand CancelCommand = new RoutedCommand();
+        public static RoutedCommand GenerateCommand = new RoutedCommand();
 
-        #endregion
+        #endregion Public Members
 
         #region Private Members
 
-        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
-        private DirectoryItem m_RootNode = null;
         private CancellationTokenSource m_CancellationTokenSource = null;
         private volatile bool m_GenerationInProgress = false;
+        private DirectoryItem m_RootNode = null;
+        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
 
-        #endregion
+        #endregion Private Members
 
         #region Public Properties
+
+        public List<KeyValuePair<string, string>> AlgorithimList
+        {
+            get { return m_AlgorithimList; }
+
+            // Set in the constructor, and not editable after that, as it's just
+            // a lookup.
+            private set { }
+        }
 
         public DirectoryItem RootNode
         {
@@ -43,15 +52,6 @@ namespace DirectoryContents.ViewModels
                     RaisePropertyChanged(nameof(RootNode));
                 }
             }
-        }
-
-        public List<KeyValuePair<string, string>> AlgorithimList
-        {
-            get { return m_AlgorithimList; }
-
-            // Set in the constructor, and not editable after that,
-            // as it's just a lookup.
-            private set { }
         }
 
         public Enumerations.ChecksumAlgorithim SelectedAlgorithim
@@ -71,7 +71,7 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region constructor
 
@@ -83,13 +83,13 @@ namespace DirectoryContents.ViewModels
             RootNode = rootNode;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Public Methods
 
-        internal bool IsAlgorithimSelected()
+        internal void CancelGeneration()
         {
-            return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
+            m_CancellationTokenSource.Cancel(true);
         }
 
         internal async Task GenerateChecksumsAsync(CancellationTokenSource tokenSource)
@@ -110,7 +110,6 @@ namespace DirectoryContents.ViewModels
                 {
                     await GenerateChecksumAsync(childNode, hasher, token);
                 }
-
             }
             finally
             {
@@ -120,9 +119,9 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        internal void CancelGeneration()
+        internal bool IsAlgorithimSelected()
         {
-            m_CancellationTokenSource.Cancel(true);
+            return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
         }
 
         internal bool IsGenerationInProgress()
@@ -130,7 +129,7 @@ namespace DirectoryContents.ViewModels
             return m_GenerationInProgress;
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -179,9 +178,8 @@ namespace DirectoryContents.ViewModels
             {
                 await GenerateChecksumAsync(childNode, hasher, token);
             }
-
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

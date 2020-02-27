@@ -1,11 +1,11 @@
-﻿using System;
+﻿using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
@@ -18,15 +18,15 @@ namespace DirectoryContents.ViewModels
 
         public static RoutedCommand GenerateCommand = new RoutedCommand();
 
-        #endregion
+        #endregion Public Members
 
         #region Private Members
 
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
-        private DirectoryItem m_SelectedItem = null;
-        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
-        private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
         private string m_ComputedChecksum = string.Empty;
+        private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
+        private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
+        private DirectoryItem m_SelectedItem = null;
 
         #endregion Private Members
 
@@ -36,9 +36,30 @@ namespace DirectoryContents.ViewModels
         {
             get { return m_AlgorithimList; }
 
-            // Set in the constructor, and not editable after that,
-            // as it's just a lookup.
+            // Set in the constructor, and not editable after that, as it's just
+            // a lookup.
             private set { }
+        }
+
+        public string ComputedChecksum
+        {
+            get { return m_ComputedChecksum; }
+
+            set
+            {
+                if (string.IsNullOrWhiteSpace(m_ComputedChecksum) ||
+                    m_ComputedChecksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                {
+                    m_ComputedChecksum = value;
+
+                    RaisePropertyChanged(nameof(ComputedChecksum));
+                }
+            }
+        }
+
+        public ObservableCollection<string> ComputedChecksumList
+        {
+            get { return m_ComputedChecksumList; }
         }
 
         public Enumerations.ChecksumAlgorithim SelectedAlgorithim
@@ -62,7 +83,7 @@ namespace DirectoryContents.ViewModels
         {
             get { return m_SelectedItem; }
 
-            private set 
+            private set
             {
                 if (m_SelectedItem is null ||
                     m_SelectedItem.Equals(value) == false)
@@ -72,29 +93,6 @@ namespace DirectoryContents.ViewModels
                     RaisePropertyChanged(nameof(SelectedItem));
                 }
             }
-        }
-
-        public ObservableCollection<string> ComputedChecksumList
-        {
-            get { return m_ComputedChecksumList; }
-        }
-
-        public string ComputedChecksum
-        {
-            get { return m_ComputedChecksum; }
-
-            set
-            {
-                if (string.IsNullOrWhiteSpace(m_ComputedChecksum) ||
-                    m_ComputedChecksum.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
-                {
-                    m_ComputedChecksum = value;
-
-                    RaisePropertyChanged(nameof(ComputedChecksum));
-                }
-
-            }
-
         }
 
         #endregion Public Properties
@@ -113,11 +111,6 @@ namespace DirectoryContents.ViewModels
 
         #region Public Methods
 
-        internal bool IsAlgorithimSelected()
-        {
-            return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
-        }
-
         internal async Task ComputeChecksumAsync()
         {
             Log($"{nameof(FileChecksumViewModel)}.{nameof(ComputeChecksumAsync)}: Start");
@@ -127,7 +120,7 @@ namespace DirectoryContents.ViewModels
 
             string checksum = string.Empty;
 
-            bool? result =  await Task.Run(() => hasher.TryGetFileChecksum(SelectedItem.FullyQualifiedFilename, out checksum));
+            bool? result = await Task.Run(() => hasher.TryGetFileChecksum(SelectedItem.FullyQualifiedFilename, out checksum));
 
             if (result.HasValue &&
                 result.Value)
@@ -140,10 +133,13 @@ namespace DirectoryContents.ViewModels
             }
 
             Log($"{nameof(FileChecksumViewModel)}.{nameof(ComputeChecksumAsync)}: End");
-
         }
 
-        #endregion
+        internal bool IsAlgorithimSelected()
+        {
+            return SelectedAlgorithim.Equals(Enumerations.ChecksumAlgorithim.None) == false;
+        }
 
+        #endregion Public Methods
     }
 }

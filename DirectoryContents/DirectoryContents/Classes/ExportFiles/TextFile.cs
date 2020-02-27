@@ -6,6 +6,30 @@ namespace DirectoryContents.Classes.ExportFiles
 {
     internal class TextFile : IFileExport
     {
+        private void ExportNode(StringBuilder sb, DirectoryItem node)
+        {
+            string tabs = new string('\t', node.Depth);
+
+            foreach (DirectoryItem childNode in node.Items)
+            {
+                if (string.IsNullOrWhiteSpace(childNode.Checksum))
+                {
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
+                }
+                else
+                {
+                    sb.AppendLine($"{tabs}|\t{childNode.ItemName} ({childNode.Checksum})");
+                }
+
+                if (childNode.HasChildren)
+                {
+                    ExportNode(sb, childNode);
+
+                    continue;
+                }
+            }
+        }
+
         public void Export(DirectoryItem rootNode, string fullyQualifiedFilepath, StringBuilder sb)
         {
             sb.AppendLine(rootNode.ItemName);
@@ -31,30 +55,6 @@ namespace DirectoryContents.Classes.ExportFiles
             {
                 writer.Write(sb.ToString());
                 writer.Flush();
-            }
-        }
-
-        private void ExportNode(StringBuilder sb, DirectoryItem node)
-        {
-            string tabs = new string('\t', node.Depth);
-
-            foreach (DirectoryItem childNode in node.Items)
-            {
-                if (string.IsNullOrWhiteSpace(childNode.Checksum))
-                {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName}");
-                }
-                else
-                {
-                    sb.AppendLine($"{tabs}|\t{childNode.ItemName} ({childNode.Checksum})");
-                }
-
-                if (childNode.HasChildren)
-                {
-                    ExportNode(sb, childNode);
-
-                    continue;
-                }
             }
         }
     }

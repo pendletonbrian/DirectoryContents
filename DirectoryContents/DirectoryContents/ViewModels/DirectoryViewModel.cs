@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Classes.ExportFiles;
+using DirectoryContents.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -8,10 +12,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Classes.ExportFiles;
-using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
@@ -39,10 +39,17 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand ExportCommand = new RoutedCommand();
 
+        public static RoutedCommand GenerateAllChecksumsCommand = new RoutedCommand();
+
         /// <summary>
         /// Context menu command to show the generate file hash page.
         /// </summary>
         public static RoutedCommand GenerateFileHashCommand = new RoutedCommand();
+
+        /// <summary>
+        /// Main menu command to show the search bar.
+        /// </summary>
+        public static RoutedCommand SearchCommand = new RoutedCommand();
 
         /// <summary>
         /// Context menu command to open a file explorer at the selected file's
@@ -55,13 +62,6 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         public static RoutedCommand ViewSettingsCommand = new RoutedCommand();
 
-        /// <summary>
-        /// Main menu command to show the search bar.
-        /// </summary>
-        public static RoutedCommand SearchCommand = new RoutedCommand();
-
-        public static RoutedCommand GenerateAllChecksumsCommand = new RoutedCommand();
-
         #endregion Public Members
 
         #region Private Members
@@ -72,9 +72,9 @@ namespace DirectoryContents.ViewModels
         private string m_DirectoryToParse = string.Empty;
         private int m_FileCount;
         private DirectoryItem m_RootNode;
-        private DirectoryItem m_SelectedItem;
-        private Enumerations.ExportFileStructure m_SelectedExportStructure = Enumerations.ExportFileStructure.None;
         private string m_SearchString = string.Empty;
+        private Enumerations.ExportFileStructure m_SelectedExportStructure = Enumerations.ExportFileStructure.None;
+        private DirectoryItem m_SelectedItem;
 
         #endregion Private Members
 
@@ -130,6 +130,8 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        public SortedDictionary<Enumerations.ExportFileStructure, string> ExportFileStructureList { get; private set; }
+
         public DirectoryItem RootNode
         {
             get { return m_RootNode; }
@@ -142,20 +144,23 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        public DirectoryItem SelectedItem
+        public string SearchString
         {
-            get { return m_SelectedItem; }
+            get { return m_SearchString; }
 
             set
             {
-                if (m_SelectedItem is null ||
-                    m_SelectedItem.Equals(value).Equals(false))
+                if (string.IsNullOrWhiteSpace(m_SearchString) ||
+                    m_SearchString.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
                 {
-                    Log($"Updating {nameof(SelectedItem)} from \"{m_SelectedItem}\" to \"{value}\".");
+                    m_SearchString = value;
 
-                    m_SelectedItem = value;
+                    RaisePropertyChanged(nameof(SearchString));
 
-                    RaisePropertyChanged(nameof(SelectedItem));
+                    if (string.IsNullOrWhiteSpace(m_SearchString))
+                    {
+                        ResetSearch();
+                    }
                 }
             }
         }
@@ -177,33 +182,51 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        public SortedDictionary<Enumerations.ExportFileStructure, string> ExportFileStructureList { get; private set; }
-
-        public string SearchString
+        public DirectoryItem SelectedItem
         {
-            get { return m_SearchString; }
+            get { return m_SelectedItem; }
 
             set
             {
-                if (string.IsNullOrWhiteSpace(m_SearchString) ||
-                    m_SearchString.Equals(value, StringComparison.OrdinalIgnoreCase) == false)
+                if (m_SelectedItem is null ||
+                    m_SelectedItem.Equals(value).Equals(false))
                 {
-                    m_SearchString = value;
+                    Log($"Updating {nameof(SelectedItem)} from \"{m_SelectedItem}\" to \"{value}\".");
 
-                    RaisePropertyChanged(nameof(SearchString));
+                    m_SelectedItem = value;
 
-                    if (string.IsNullOrWhiteSpace(m_SearchString))
-                    {
-                        ResetSearch();
-                    }
+                    RaisePropertyChanged(nameof(SelectedItem));
                 }
-
             }
         }
 
         #endregion Public Properties
 
         #region Private Methods
+
+        private static void ResetSearch(DirectoryItem node)
+        {
+            SetFont(node, false);
+
+            foreach (DirectoryItem childNode in node.Items)
+            {
+                ResetSearch(childNode);
+            }
+        }
+
+        private static void SetFont(DirectoryItem node, bool isFound)
+        {
+            if (isFound)
+            {
+                node.FontStyle = FontStyles.Italic;
+                node.FontWeight = FontWeights.Bold;
+            }
+            else
+            {
+                node.FontStyle = FontStyles.Normal;
+                node.FontWeight = FontWeights.Normal;
+            }
+        }
 
         private void ParseDirectory(DirectoryItem node, string directoryPath)
         {
@@ -259,16 +282,6 @@ namespace DirectoryContents.ViewModels
             }
         }
 
-        private void SetIsExpanded(DirectoryItem node, bool isExpanded)
-        {
-            node.IsExpanded = isExpanded;
-
-            foreach (DirectoryItem childNode in node.Items)
-            {
-                SetIsExpanded(childNode, isExpanded);
-            }
-        }
-
         private bool Search(DirectoryItem node, string term)
         {
             /*
@@ -297,34 +310,19 @@ namespace DirectoryContents.ViewModels
                     found = true;
 
                     node.IsExpanded = true;
-
                 }
             }
 
             return found;
         }
 
-        private static void SetFont(DirectoryItem node, bool isFound)
+        private void SetIsExpanded(DirectoryItem node, bool isExpanded)
         {
-            if (isFound)
-            {
-                node.FontStyle = FontStyles.Italic;
-                node.FontWeight = FontWeights.Bold;
-            }
-            else
-            {
-                node.FontStyle = FontStyles.Normal;
-                node.FontWeight = FontWeights.Normal;
-            }
-        }
-
-        private static void ResetSearch(DirectoryItem node)
-        {
-            SetFont(node, false);
+            node.IsExpanded = isExpanded;
 
             foreach (DirectoryItem childNode in node.Items)
             {
-                ResetSearch(childNode);
+                SetIsExpanded(childNode, isExpanded);
             }
         }
 
@@ -334,17 +332,19 @@ namespace DirectoryContents.ViewModels
 
         #region debug variables
 
-        private bool m_PrevIsItemSelected = false;
         private bool m_IsItemSelected = true;
+        private bool m_PrevIsItemSelected = false;
 
-        #endregion
+        #endregion debug variables
 
         /// <summary>
-        /// Checks the Directory FileAttribute to see if the given
-        /// filepath is a file and not a directory.
+        /// Checks the Directory FileAttribute to see if the given filepath is a
+        /// file and not a directory.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static bool IsItemFile(string fullyQualifiedFilePath)
         {
             FileAttributes attr = File.GetAttributes(fullyQualifiedFilePath);
@@ -355,11 +355,6 @@ namespace DirectoryContents.ViewModels
             }
 
             return true;
-        }
-
-        internal bool IsLoaded()
-        {
-            return RootNode != null;
         }
 
         internal void CollapseAll()
@@ -416,7 +411,8 @@ namespace DirectoryContents.ViewModels
         /// <summary>
         /// Check to see if anything is selected.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         internal bool IsItemSelected()
         {
             m_PrevIsItemSelected = m_IsItemSelected;
@@ -430,10 +426,17 @@ namespace DirectoryContents.ViewModels
             return m_IsItemSelected;
         }
 
+        internal bool IsLoaded()
+        {
+            return RootNode != null;
+        }
+
         /// <summary>
         /// Check to see if the selected item is a file.
         /// </summary>
-        /// <returns>Null, if nothing is selected.</returns>
+        /// <returns>
+        /// Null, if nothing is selected.
+        /// </returns>
         internal bool? IsSelectedItemFile()
         {
             if (SelectedItem is null)
@@ -501,9 +504,7 @@ namespace DirectoryContents.ViewModels
                     RootNode.IsExpanded = true;
 
                     ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -513,6 +514,30 @@ namespace DirectoryContents.ViewModels
             {
                 Log($"{nameof(DirectoryViewModel)}.{nameof(ParseAsync)}: End");
             }
+        }
+
+        internal void ResetSearch()
+        {
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                ResetSearch(node);
+            }
+        }
+
+        internal void Search()
+        {
+            Log($"Search for: \"{SearchString}\".");
+
+            Stopwatch timer = Stopwatch.StartNew();
+
+            foreach (DirectoryItem node in RootNode.Items)
+            {
+                Search(node, SearchString);
+            }
+
+            timer.Stop();
+
+            ShowStatusMessage($"Time to search {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
         }
 
         internal void ShowSelectedItemInFileExplorer()
@@ -570,30 +595,6 @@ namespace DirectoryContents.ViewModels
             finally
             {
                 NativeMethods.ILFree(intPtr);
-            }
-        }
-
-        internal void Search()
-        {
-            Log($"Search for: \"{SearchString}\".");
-
-            Stopwatch timer = Stopwatch.StartNew();
-
-            foreach (DirectoryItem node in RootNode.Items)
-            {
-                Search(node, SearchString);
-            }
-
-            timer.Stop();
-
-            ShowStatusMessage($"Time to search {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
-        }
-
-        internal void ResetSearch()
-        {
-            foreach (DirectoryItem node in RootNode.Items)
-            {
-                ResetSearch(node);
             }
         }
 

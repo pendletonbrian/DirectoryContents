@@ -1,22 +1,10 @@
 ﻿using DirectoryContents.Classes;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DirectoryContents.Views
 {
@@ -29,7 +17,7 @@ namespace DirectoryContents.Views
 
         private TreeChecksumViewModel m_ViewModel;
 
-        #endregion
+        #endregion Private Members
 
         #region constructor
 
@@ -42,9 +30,28 @@ namespace DirectoryContents.Views
             DataContext = m_ViewModel;
         }
 
-        #endregion
+        #endregion constructor
 
         #region Private Methods
+
+        private void CancelCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsGenerationInProgress();
+            }
+
+            e.Handled = true;
+        }
+
+        private void CancelCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.CancelGeneration();
+        }
 
         private void GenerateCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -90,26 +97,6 @@ namespace DirectoryContents.Views
             }
         }
 
-        private void CancelCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = false;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.IsGenerationInProgress();
-            }
-
-            e.Handled = true;
-        }
-
-        private void CancelCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            m_ViewModel.CancelGeneration();
-        }
-
-        #endregion
-
+        #endregion Private Methods
     }
 }

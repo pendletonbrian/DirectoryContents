@@ -7,23 +7,19 @@ namespace DirectoryContents.Classes
 {
     public static class Extensions
     {
-        public static string GetDescription(this Enum val)
+        internal static bool Contains(this string sourceString, string term, StringComparison comparison)
         {
-            var attribute = (DescriptionAttribute)val
-                .GetType()
-                .GetField(val.ToString())
-                .GetCustomAttributes(typeof(DescriptionAttribute), false)
-                .SingleOrDefault();
-
-            return attribute == default(DescriptionAttribute) ? val.ToString() : attribute.Description;
+            return sourceString?.IndexOf(term, comparison) >= 0;
         }
 
         /// <summary>
         /// Gets a string representation of the given TimeSpan in a easily human
         /// readable format.
         /// </summary>
-        /// <param name="timespan"></param>
-        /// <returns></returns>
+        /// <param name="timespan">
+        /// </param>
+        /// <returns>
+        /// </returns>
         internal static string GetTimeFromTimeSpan(this TimeSpan timespan)
         {
             bool hasDays = false;
@@ -131,9 +127,15 @@ namespace DirectoryContents.Classes
             return s.ToString();
         }
 
-        internal static bool Contains(this string sourceString, string term, StringComparison comparison)
+        public static string GetDescription(this Enum val)
         {
-            return sourceString?.IndexOf(term, comparison) >= 0;
+            var attribute = (DescriptionAttribute)val
+                .GetType()
+                .GetField(val.ToString())
+                .GetCustomAttributes(typeof(DescriptionAttribute), false)
+                .SingleOrDefault();
+
+            return attribute == default(DescriptionAttribute) ? val.ToString() : attribute.Description;
         }
     }
 }

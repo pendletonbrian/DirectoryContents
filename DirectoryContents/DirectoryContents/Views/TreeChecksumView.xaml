@@ -1,24 +1,24 @@
 ﻿<local:BaseUserControlView x:Class="DirectoryContents.Views.TreeChecksumView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DirectoryContents.Views"
                 xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static vm:BaseUserControlViewModel.BackCommand}"
-                        Executed="BackCommand_Executed"/>
+                        Executed="BackCommand_Executed" />
         <CommandBinding Command="{x:Static vm:TreeChecksumViewModel.GenerateCommand}"
                         CanExecute="GenerateCommand_CanExecute"
-                        Executed="GenerateCommand_ExecutedAsync"/>
+                        Executed="GenerateCommand_ExecutedAsync" />
         <CommandBinding Command="{x:Static vm:TreeChecksumViewModel.CancelCommand}"
                         CanExecute="CancelCommand_CanExecute"
-                        Executed="CancelCommand_Executed"/>
+                        Executed="CancelCommand_Executed" />
     </UserControl.CommandBindings>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -39,7 +39,7 @@
             <RowDefinition Height="Auto" />
 
             <!-- Generate and Cancel buttons -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
 
             <!-- Spacer -->
             <RowDefinition Height="*" />
@@ -64,7 +64,7 @@
                   Grid.Row="2"
                   Header="Directory"
                   Margin="4">
-            <TextBlock Text="{Binding RootNode.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="{Binding RootNode.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch" />
         </GroupBox>
 
         <!-- Algorithim selection -->
@@ -128,7 +128,6 @@
                        Width="26"
                        Height="26" />-->
             </Button>
-
         </Grid>
 
         <!-- Spacer -->
@@ -161,8 +160,6 @@
                        Width="26"
                        Height="26" />
             </Button>
-
         </Grid>
-        
     </Grid>
 </local:BaseUserControlView>

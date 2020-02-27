@@ -10,12 +10,12 @@
                            d:DesignWidth="800">
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static vm:BaseUserControlViewModel.BackCommand}"
-                        Executed="BackCommand_Executed"/>
+                        Executed="BackCommand_Executed" />
         <CommandBinding Command="{x:Static vm:FileChecksumViewModel.GenerateCommand}"
                         CanExecute="GenerateCommand_CanExecute"
-                        Executed="GenerateCommand_ExecutedAsync"/>
+                        Executed="GenerateCommand_ExecutedAsync" />
     </UserControl.CommandBindings>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -28,7 +28,7 @@
 
             <!-- Seperator -->
             <RowDefinition Height="Auto" />
-            
+
             <!-- Filename -->
             <RowDefinition Height="Auto" />
 
@@ -39,11 +39,11 @@
             <RowDefinition Height="Auto" />
 
             <!-- Generate button -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
 
             <!-- Spacer -->
             <RowDefinition Height="*" />
-            
+
             <!-- Buttons -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -64,9 +64,9 @@
                   Grid.Row="2"
                   Header="Filename"
                   Margin="4">
-            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch" />
         </GroupBox>
-        
+
         <!-- Algorithim selection -->
         <GroupBox Grid.Column="0"
                   Grid.Row="3"
@@ -91,7 +91,7 @@
                   Grid.Row="4"
                   Header="Results"
                   Margin="4">
-            <TextBox IsReadOnly="True" 
+            <TextBox IsReadOnly="True"
                      HorizontalAlignment="Stretch"
                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
                      Margin="4"
@@ -123,7 +123,6 @@
                        Width="26"
                        Height="26" />
             </Button>
-
         </Grid>
 
         <!-- Spacer -->
@@ -131,7 +130,7 @@
               Grid.Row="6"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch" />
-        
+
         <!-- Back button -->
         <Grid Grid.Column="0"
               Grid.Row="7"
@@ -144,7 +143,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <Button HorizontalAlignment="Left"
                     Margin="4"
                     Command="{x:Static vm:BaseUserControlViewModel.BackCommand}">
@@ -156,9 +155,6 @@
                        Width="26"
                        Height="26" />
             </Button>
-            
         </Grid>
-        
-        
     </Grid>
 </local:BaseUserControlView>

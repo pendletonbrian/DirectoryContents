@@ -2,6 +2,8 @@
 {
     public interface IHashAlgorithim
     {
+        string AlgorithimName { get; }
+
         /// <summary>
         /// Gets the hash of the given data.
         /// </summary>
@@ -10,7 +12,5 @@
         /// <returns>
         /// </returns>
         byte[] GetHash(byte[] data);
-
-        string AlgorithimName { get; }
     }
 }

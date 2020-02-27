@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using DirectoryContents.Classes;
+using System.Collections.Generic;
 using System.Windows.Input;
-using DirectoryContents.Classes;
 
 namespace DirectoryContents.ViewModels
 {

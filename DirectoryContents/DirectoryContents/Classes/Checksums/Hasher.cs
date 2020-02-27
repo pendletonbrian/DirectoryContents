@@ -25,7 +25,7 @@ namespace DirectoryContents.Classes.Checksums
 
         internal string AlgorithimName { get { return m_Algorithim.AlgorithimName; } }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
 
@@ -40,7 +40,7 @@ namespace DirectoryContents.Classes.Checksums
         /// the value is set to string.Empty.
         /// </param>
         /// <returns>
-        /// Whether or not the file was able to be hashed.   If the file does not
+        /// Whether or not the file was able to be hashed. If the file does not
         /// exist, null is returned.
         /// </returns>
         public bool? TryGetFileChecksum(string filename, out string checksum)

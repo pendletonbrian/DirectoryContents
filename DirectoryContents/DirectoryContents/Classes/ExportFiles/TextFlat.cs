@@ -6,6 +6,28 @@ namespace DirectoryContents.Classes.ExportFiles
 {
     internal class TextFlat : IFileExport
     {
+        private void ExportNode(StringBuilder sb, DirectoryItem node)
+        {
+            foreach (DirectoryItem childNode in node.Items)
+            {
+                if (string.IsNullOrWhiteSpace(childNode.Checksum))
+                {
+                    sb.AppendLine($"{childNode.FullyQualifiedFilename}");
+                }
+                else
+                {
+                    sb.AppendLine($"{childNode.Checksum} : {childNode.FullyQualifiedFilename}");
+                }
+
+                if (childNode.HasChildren)
+                {
+                    ExportNode(sb, childNode);
+
+                    continue;
+                }
+            }
+        }
+
         public void Export(DirectoryItem rootNode, string fullyQualifiedFilepath, StringBuilder sb)
         {
             sb.AppendLine(rootNode.ItemName);
@@ -14,7 +36,7 @@ namespace DirectoryContents.Classes.ExportFiles
             {
                 if (string.IsNullOrWhiteSpace(node.Checksum))
                 {
-                    sb.AppendLine($"{node.FullyQualifiedFilename}");                    
+                    sb.AppendLine($"{node.FullyQualifiedFilename}");
                 }
                 else
                 {
@@ -31,28 +53,6 @@ namespace DirectoryContents.Classes.ExportFiles
             {
                 writer.Write(sb.ToString());
                 writer.Flush();
-            }
-        }
-
-        private void ExportNode(StringBuilder sb, DirectoryItem node)
-        {
-            foreach (DirectoryItem childNode in node.Items)
-            {
-                if (string.IsNullOrWhiteSpace(childNode.Checksum))
-                {
-                    sb.AppendLine($"{childNode.FullyQualifiedFilename}");
-                }
-                else
-                {
-                    sb.AppendLine($"{childNode.Checksum} : {childNode.FullyQualifiedFilename}");
-                }
-                
-                if (childNode.HasChildren)
-                {
-                    ExportNode(sb, childNode);
-
-                    continue;
-                }
             }
         }
     }

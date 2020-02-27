@@ -1,14 +1,13 @@
-﻿using System;
+﻿using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
+using DirectoryContents.ViewModels;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Models;
-using DirectoryContents.ViewModels;
 using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.Views
@@ -38,46 +37,6 @@ namespace DirectoryContents.Views
         #endregion constructor
 
         #region Private Methods
-
-        private void GenerateAllChecksumsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = false;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.IsLoaded();
-            }
-
-            e.Handled = true;
-        }
-
-        private void GenerateAllChecksumsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            m_ViewModel.ShowNextPage(PageControl.TreeChecksum,
-                additionalData: m_ViewModel.RootNode,
-                transitionType: PageTransitionType.SlideAndFade);
-        }
-
-        private void SearchCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            if (m_ViewModel is null)
-            {
-                e.CanExecute = false;
-            }
-            else
-            {
-                e.CanExecute = m_ViewModel.IsLoaded();
-            }
-
-            e.Handled = true;
-        }
-
-        private void SearchCommand_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            m_ViewModel.Search();
-        }
 
         private void BrowseCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -226,6 +185,27 @@ namespace DirectoryContents.Views
             }
         }
 
+        private void GenerateAllChecksumsCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsLoaded();
+            }
+
+            e.Handled = true;
+        }
+
+        private void GenerateAllChecksumsCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.ShowNextPage(PageControl.TreeChecksum,
+                additionalData: m_ViewModel.RootNode,
+                transitionType: PageTransitionType.SlideAndFade);
+        }
+
         private void GenerateFileHashCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
@@ -250,7 +230,6 @@ namespace DirectoryContents.Views
                     {
                         ShowStatusMessage($"Cannot generate checksum: \"{m_ViewModel.SelectedItem.ItemName}\" is a directory.");
                     }
-
                 }
             }
 
@@ -288,7 +267,6 @@ namespace DirectoryContents.Views
                 treeView.Items.Add(m_ViewModel.RootNode);
 
                 treeView.UpdateLayout();
-
             }
             catch
             {
@@ -299,6 +277,25 @@ namespace DirectoryContents.Views
 
                 ShowProgressBar(false);
             }
+        }
+
+        private void SearchCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (m_ViewModel is null)
+            {
+                e.CanExecute = false;
+            }
+            else
+            {
+                e.CanExecute = m_ViewModel.IsLoaded();
+            }
+
+            e.Handled = true;
+        }
+
+        private void SearchCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            m_ViewModel.Search();
         }
 
         private void TreeView_DragEnter(object sender, DragEventArgs e)
@@ -326,7 +323,7 @@ namespace DirectoryContents.Views
             }
 
             // If the luser is dragging a file, in direct opposition of the name
-            //   of the app, then do directly to the File Checksum page.
+            // of the app, then do directly to the File Checksum page.
             if (DirectoryViewModel.IsItemFile(filenameList[0]))
             {
                 FileInfo fileInfo = new FileInfo(filenameList[0]);
@@ -385,7 +382,6 @@ namespace DirectoryContents.Views
                 MessageBox.Show($"Exception: {ex.Message}", TitleText, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         #endregion Private Methods
     }

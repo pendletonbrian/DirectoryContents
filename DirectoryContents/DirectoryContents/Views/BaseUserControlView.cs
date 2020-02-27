@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using DirectoryContents.ViewModels;
+﻿using DirectoryContents.ViewModels;
+using System.Windows.Controls;
 
 namespace DirectoryContents.Views
 {
@@ -45,9 +45,9 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowPreviousPage();
         }
 
-        internal void ShowStatusMessage(string msg, bool autoRemove = true)
+        internal void ShowPreviousPage()
         {
-            m_ViewModel?.ShowStatusMessage(msg, autoRemove);
+            m_ViewModel.ShowPreviousPage();
         }
 
         internal void ShowProgressBar(bool isVisible)
@@ -60,9 +60,9 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowProgressBar = isVisible;
         }
 
-        internal void ShowPreviousPage()
+        internal void ShowStatusMessage(string msg, bool autoRemove = true)
         {
-            m_ViewModel.ShowPreviousPage();
+            m_ViewModel?.ShowStatusMessage(msg, autoRemove);
         }
 
         #endregion Protected Methods
