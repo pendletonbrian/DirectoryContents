@@ -9,5 +9,4 @@
 
     <SolidColorBrush x:Key="SCB_PageBackground"
                      Color="White" />
-    
 </ResourceDictionary>

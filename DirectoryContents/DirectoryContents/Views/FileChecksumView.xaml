@@ -64,7 +64,9 @@
                   Grid.Row="2"
                   Header="Filename"
                   Margin="4">
-            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}" Margin="4" HorizontalAlignment="Stretch" />
+            <TextBlock Text="{Binding SelectedItem.FullyQualifiedFilename}"
+                       Margin="4"
+                       HorizontalAlignment="Stretch" />
         </GroupBox>
 
         <!-- Algorithim selection -->
@@ -96,7 +98,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Visible"
                      Margin="4"
                      Padding="4"
-                       Text="{Binding ComputedChecksum}" />
+                     Text="{Binding ComputedChecksum}" />
         </GroupBox>
 
         <!-- Generate button -->

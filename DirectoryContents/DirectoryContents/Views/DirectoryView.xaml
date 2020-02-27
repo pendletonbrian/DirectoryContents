@@ -26,10 +26,14 @@
     <local:BaseUserControlView.Resources>
         <classes:NullStringVisibilityConverter x:Key="NullStringVisibilityConverter" />
 
-        <Style x:Key="MenuItemGroupHeader" TargetType="MenuItem">
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="IsEnabled" Value="False" />
+        <Style x:Key="MenuItemGroupHeader"
+               TargetType="MenuItem">
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="IsEnabled"
+                    Value="False" />
         </Style>
     </local:BaseUserControlView.Resources>
 
@@ -63,10 +67,10 @@
             <MenuItem>
                 <MenuItem.Header>
                     <ComboBox HorizontalAlignment="Stretch"
-                        ItemsSource="{Binding ExportFileStructureList}"
-                          DisplayMemberPath="Value"
-                          SelectedValue="{Binding SelectedExportStructure, Mode=TwoWay}"
-                          SelectedValuePath="Key" />
+                              ItemsSource="{Binding ExportFileStructureList}"
+                              DisplayMemberPath="Value"
+                              SelectedValue="{Binding SelectedExportStructure, Mode=TwoWay}"
+                              SelectedValuePath="Key" />
                 </MenuItem.Header>
             </MenuItem>
 
@@ -83,10 +87,17 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBox Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" />
-                        <Button Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right"
+                        <TextBox Grid.Column="0"
+                                 Grid.Row="0"
+                                 HorizontalAlignment="Stretch"
+                                 Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Grid.Column="1"
+                                Grid.Row="0"
+                                HorizontalAlignment="Right"
                                 Command="{x:Static vm:DirectoryViewModel.SearchCommand}">
-                            <Image Height="14" Width="14" Style="{StaticResource EnableDisableImageStyle}"
+                            <Image Height="14"
+                                   Width="14"
+                                   Style="{StaticResource EnableDisableImageStyle}"
                                    Source="/Images/search-14.png" />
                         </Button>
                     </Grid>
@@ -142,7 +153,9 @@
                         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ExpandAllCommand}"
                                         CanExecute="ExpandAllCommand_CanExecute"
                                         Executed="ExpandAllCommand_Executed" />
-                        <CommandBinding Command="{x:Static vm:DirectoryViewModel.GenerateAllChecksumsCommand}" CanExecute="GenerateAllChecksumsCommand_CanExecute" Executed="GenerateAllChecksumsCommand_Executed" />
+                        <CommandBinding Command="{x:Static vm:DirectoryViewModel.GenerateAllChecksumsCommand}"
+                                        CanExecute="GenerateAllChecksumsCommand_CanExecute"
+                                        Executed="GenerateAllChecksumsCommand_Executed" />
                         <CommandBinding Command="{x:Static vm:DirectoryViewModel.ViewInFileExplorerCommand}"
                                         CanExecute="ViewInFileExplorerCommand_CanExecute"
                                         Executed="ViewInFileExplorerCommand_Executed" />
@@ -151,7 +164,8 @@
                                         Executed="GenerateFileHashCommand_Executed" />
                     </ContextMenu.CommandBindings>
 
-                    <MenuItem Header="Entire Tree" Style="{StaticResource MenuItemGroupHeader}" />
+                    <MenuItem Header="Entire Tree"
+                              Style="{StaticResource MenuItemGroupHeader}" />
 
                     <MenuItem Header="Expand All"
                               Margin="2"
@@ -171,7 +185,8 @@
                         </MenuItem.Icon>
                     </MenuItem>
 
-                    <MenuItem Header="Generate all checksums" Margin="2"
+                    <MenuItem Header="Generate all checksums"
+                              Margin="2"
                               Command="{x:Static vm:DirectoryViewModel.GenerateAllChecksumsCommand}" />
 
                     <Separator />
