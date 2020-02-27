@@ -71,6 +71,8 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        public bool WasCancelled { get; private set; }
+
         #endregion Public Properties
 
         #region constructor
@@ -90,6 +92,7 @@ namespace DirectoryContents.ViewModels
         internal void CancelGeneration()
         {
             m_CancellationTokenSource.Cancel(true);
+            WasCancelled = true;
         }
 
         internal async Task GenerateChecksumsAsync(CancellationTokenSource tokenSource)
@@ -103,6 +106,7 @@ namespace DirectoryContents.ViewModels
 
                 m_CancellationTokenSource = tokenSource;
                 CancellationToken token = tokenSource.Token;
+                token.ThrowIfCancellationRequested();
 
                 m_GenerationInProgress = true;
 
@@ -116,6 +120,8 @@ namespace DirectoryContents.ViewModels
                 Log($"{nameof(TreeChecksumViewModel)}.{nameof(GenerateChecksumsAsync)}: End");
 
                 m_GenerationInProgress = false;
+
+                m_CancellationTokenSource.Dispose();
             }
         }
 
@@ -147,6 +153,8 @@ namespace DirectoryContents.ViewModels
                 }
 
                 string checksum = string.Empty;
+
+                ShowStatusMessage($"Hashing {node.FullyQualifiedFilename}");
 
                 bool? result = await Task.Run(() => hasher.TryGetFileChecksum(node.FullyQualifiedFilename, out checksum));
 

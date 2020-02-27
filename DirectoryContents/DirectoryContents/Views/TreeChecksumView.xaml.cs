@@ -85,9 +85,18 @@ namespace DirectoryContents.Views
 
                 timer.Stop();
 
+                bool wasCancelled = m_ViewModel.WasCancelled;
+
                 ShowPreviousPage();
 
-                ShowStatusMessage($"Time to generate hashes: {timer.Elapsed.GetTimeFromTimeSpan()}");
+                if (wasCancelled)
+                {
+                    ShowStatusMessage($"Hash generation was cancelled after: {timer.Elapsed.GetTimeFromTimeSpan()}");
+                }
+                else
+                {
+                    ShowStatusMessage($"Time to generate hashes: {timer.Elapsed.GetTimeFromTimeSpan()}");
+                }
             }
             finally
             {
