@@ -126,7 +126,7 @@
                                    FontStyle="{Binding FontStyle}"
                                    FontWeight="{Binding FontWeight}" />
                         <TextBlock Visibility="{Binding FormattedChecksum, Converter={StaticResource NullStringVisibilityConverter}}"
-                            Text="{Binding FormattedChecksum, Mode=OneWay}"
+                                   Text="{Binding FormattedChecksum, Mode=OneWay}"
                                    FontStyle="{Binding FontStyle}"
                                    FontWeight="{Binding FontWeight}" />
                     </StackPanel>

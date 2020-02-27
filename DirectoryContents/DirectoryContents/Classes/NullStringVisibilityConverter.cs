@@ -9,7 +9,9 @@ namespace DirectoryContents.Classes
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool isVisible = string.IsNullOrWhiteSpace(value.ToString()).Equals(false);
+            string s = value as string;
+
+            bool isVisible = string.IsNullOrWhiteSpace(s).Equals(false);
 
             if (ConverterMethods.IsVisibilityInverted(parameter))
             {

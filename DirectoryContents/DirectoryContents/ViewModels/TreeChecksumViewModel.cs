@@ -141,7 +141,7 @@ namespace DirectoryContents.ViewModels
 
                 if (token.IsCancellationRequested)
                 {
-                    Log($"{nameof(TreeChecksumViewModel)}.{nameof(GenerateChecksumAsync)}: cancellation requested.");
+                    Log("    Cancellation requested.");
 
                     return;
                 }
@@ -154,6 +154,8 @@ namespace DirectoryContents.ViewModels
                     result.Value)
                 {
                     node.Checksum = checksum;
+
+                    Log($"    Checksum: {checksum}");
                 }
                 else
                 {

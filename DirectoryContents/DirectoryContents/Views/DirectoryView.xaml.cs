@@ -384,5 +384,6 @@ namespace DirectoryContents.Views
         }
 
         #endregion Private Methods
+
     }
 }

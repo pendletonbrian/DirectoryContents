@@ -35,6 +35,7 @@ namespace DirectoryContents.Models
                     m_Checksum = value;
 
                     RaisePropertyChanged(nameof(Checksum));
+                    RaisePropertyChanged(nameof(FormattedChecksum));
                 }
             }
         }

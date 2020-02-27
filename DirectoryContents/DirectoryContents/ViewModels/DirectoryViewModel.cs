@@ -598,6 +598,19 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        internal void Refresh()
+        {
+            if (IsLoaded() == false)
+            {
+                return;
+            }
+            DirectoryItems.Clear();
+
+            DirectoryItems.Add(RootNode);
+
+            RaisePropertyChanged(nameof(DirectoryItems));
+        }
+
         #endregion Public Methods
     }
 }
