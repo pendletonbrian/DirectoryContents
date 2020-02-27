@@ -359,7 +359,7 @@ namespace DirectoryContents.ViewModels
 
         internal bool IsLoaded()
         {
-            return m_RootNode != null;
+            return RootNode != null;
         }
 
         internal void CollapseAll()
@@ -390,7 +390,7 @@ namespace DirectoryContents.ViewModels
         {
             Log($"{nameof(DirectoryViewModel)}.{nameof(ExportAsync)} => Filepath: \"{fullyQualifiedPath}\"");
 
-            if (m_RootNode is null)
+            if (RootNode is null)
             {
                 throw new ArgumentException("Root node is null.", nameof(fullyQualifiedPath));
             }
@@ -408,7 +408,7 @@ namespace DirectoryContents.ViewModels
 
             IFileExport exporter = FileExporterFactory.Get(SelectedExportStructure);
 
-            await Task.Run(() => exporter.Export(m_RootNode, fullyQualifiedPath, sb));
+            await Task.Run(() => exporter.Export(RootNode, fullyQualifiedPath, sb));
 
             Log($"File written to: \"{fullyQualifiedPath}\".");
         }
@@ -453,9 +453,9 @@ namespace DirectoryContents.ViewModels
 
             try
             {
-                if (string.IsNullOrWhiteSpace(m_DirectoryToParse))
+                if (string.IsNullOrWhiteSpace(DirectoryToParse))
                 {
-                    LogError($"{nameof(ParseAsync)} => {nameof(m_DirectoryToParse)} is empty/null.  Returning.");
+                    LogError($"{nameof(ParseAsync)} => {nameof(DirectoryToParse)} is empty/null.  Returning.");
 
                     return;
                 }
@@ -465,11 +465,11 @@ namespace DirectoryContents.ViewModels
 
                 DirectoryItems.Clear();
 
-                if (IsItemFile(m_DirectoryToParse))
+                if (IsItemFile(DirectoryToParse))
                 {
-                    FileInfo fi = new FileInfo(m_DirectoryToParse);
+                    FileInfo fi = new FileInfo(DirectoryToParse);
 
-                    m_RootNode = new DirectoryItem(fi)
+                    RootNode = new DirectoryItem(fi)
                     {
                         Depth = 0
                     };
@@ -478,27 +478,27 @@ namespace DirectoryContents.ViewModels
                 }
                 else
                 {
-                    DirectoryInfo dirInfo = new DirectoryInfo(m_DirectoryToParse);
+                    DirectoryInfo dirInfo = new DirectoryInfo(DirectoryToParse);
 
-                    m_RootNode = new DirectoryItem(dirInfo)
+                    RootNode = new DirectoryItem(dirInfo)
                     {
                         Depth = 0
                     };
 
-                    DirectoryItems.Add(m_RootNode);
+                    DirectoryItems.Add(RootNode);
 
                     m_DirectoryCount = 0;
                     m_FileCount = 0;
 
                     Stopwatch timer = Stopwatch.StartNew();
 
-                    await Task.Run(() => ParseDirectory(m_RootNode, dirInfo.FullName));
+                    await Task.Run(() => ParseDirectory(RootNode, dirInfo.FullName));
 
                     timer.Stop();
 
                     RaisePropertyChanged(nameof(DirectoryItems));
 
-                    m_RootNode.IsExpanded = true;
+                    RootNode.IsExpanded = true;
 
                     ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
 
@@ -595,11 +595,6 @@ namespace DirectoryContents.ViewModels
             {
                 ResetSearch(node);
             }
-        }
-
-        internal void RefreshTree()
-        {
-            RaisePropertyChanged(nameof(DirectoryItems));
         }
 
         #endregion Public Methods

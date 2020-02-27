@@ -18,7 +18,7 @@
         Icon="/Images/folder-tree-48.png">
 
     <Window.Resources>
-        <classes:VisibilityConverter x:Key="VisibilityConverter" />
+        <classes:BooleanVisibilityConverter x:Key="VisibilityConverter" />
     </Window.Resources>
 
     <Grid>

@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace DirectoryContents.Classes
 {
-    public class VisibilityConverter : IValueConverter
+    public class NullStringVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool isVisible = (bool)value;
+            bool isVisible = string.IsNullOrWhiteSpace(value.ToString()).Equals(false);
 
             if (ConverterMethods.IsVisibilityInverted(parameter))
             {
@@ -18,7 +23,7 @@ namespace DirectoryContents.Classes
             return (isVisible ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool isVisible = ((Visibility)value == Visibility.Visible);
 

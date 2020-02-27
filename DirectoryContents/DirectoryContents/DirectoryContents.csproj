@@ -85,7 +85,8 @@
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\NativeMethods.cs" />
     <Compile Include="Classes\NotifyObject.cs" />
-    <Compile Include="Classes\VisibilityConverter.cs" />
+    <Compile Include="Classes\BooleanVisibilityConverter.cs" />
+    <Compile Include="Classes\NullStringVisibilityConverter.cs" />
     <Compile Include="Classes\WpfPageTransitions\CenterConverter.cs" />
     <Compile Include="Classes\WpfPageTransitions\HeightConverter.cs" />
     <Compile Include="Classes\WpfPageTransitions\InvertConverter.cs" />

@@ -388,16 +388,5 @@ namespace DirectoryContents.Views
 
 
         #endregion Private Methods
-
-        private void DirectoryView_Loaded(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine("DirectoryView_Loaded");
-
-            if (m_ViewModel.IsLoaded())
-            {
-                m_ViewModel.RefreshTree();
-            }
-
-        }
     }
 }

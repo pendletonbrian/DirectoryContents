@@ -41,6 +41,21 @@ namespace DirectoryContents.Models
             }
         }
 
+        public string FormattedChecksum
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(Checksum))
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return $" : {Checksum}";
+                }
+            }
+        } 
+
         public string FullyQualifiedFilename { get; private set; }
 
         public bool HasChildren

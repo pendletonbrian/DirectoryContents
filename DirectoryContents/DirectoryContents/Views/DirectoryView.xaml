@@ -7,7 +7,6 @@
                            xmlns:models="clr-namespace:DirectoryContents.Models"
                            xmlns:vm="clr-namespace:DirectoryContents.ViewModels"
                            xmlns:classes="clr-namespace:DirectoryContents.Classes"
-                           Loaded="DirectoryView_Loaded"
                            mc:Ignorable="d"
                            d:DesignHeight="600"
                            d:DesignWidth="700">
@@ -25,7 +24,7 @@
     </local:BaseUserControlView.CommandBindings>
 
     <local:BaseUserControlView.Resources>
-        <classes:VisibilityConverter x:Key="VisibilityConverter" />
+        <classes:NullStringVisibilityConverter x:Key="NullStringVisibilityConverter" />
 
         <Style x:Key="MenuItemGroupHeader" TargetType="MenuItem">
             <Setter Property="FontWeight" Value="Bold"/>
@@ -113,7 +112,7 @@
                   Width="700"
                   Height="500"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   SelectedItemChanged="TreeView_SelectedItemChanged"
                   DragEnter="TreeView_DragEnter"
                   Drop="TreeView_DropAsync"
@@ -126,6 +125,10 @@
                         <Image Source="{Binding IconUri}"
                                Margin="0,0,5,0" />
                         <TextBlock Text="{Binding ItemName}" 
+                                   FontStyle="{Binding FontStyle}"
+                                   FontWeight="{Binding FontWeight}"/>
+                        <TextBlock Visibility="{Binding FormattedChecksum, Converter={StaticResource NullStringVisibilityConverter}}"
+                            Text="{Binding FormattedChecksum, Mode=OneWay}" 
                                    FontStyle="{Binding FontStyle}"
                                    FontWeight="{Binding FontWeight}"/>
                     </StackPanel>
