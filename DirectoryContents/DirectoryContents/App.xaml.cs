@@ -29,6 +29,7 @@ namespace DirectoryContents
         private const int SUCCESS = 0;
         private const string m_Export_TextFlat = "-TFlat";
         private const string m_Export_TextFile = "-TFile";
+        private const string m_Export_CsvFile = "-TCsv";
         private const int NumberOfRequiredArguments = 4;
 
         #endregion Private Members
@@ -87,19 +88,21 @@ namespace DirectoryContents
             if (flag.Equals(m_Export_TextFile, StringComparison.OrdinalIgnoreCase))
             {
                 export = Enumerations.ExportFileStructure.TextFile;
-
-                Log($"Export is {export}");
             }
             else if (flag.Equals(m_Export_TextFlat, StringComparison.OrdinalIgnoreCase))
             {
-                export = Enumerations.ExportFileStructure.TextFlat;
-
-                Log($"Export is {export}");
+                export = Enumerations.ExportFileStructure.TextFlat;                
+            }
+            else if (flag.Equals(m_Export_CsvFile, StringComparison.OrdinalIgnoreCase))
+            {
+                export = Enumerations.ExportFileStructure.CSV;
             }
             else
             {
                 throw new ArgumentException($"The export flag is unhandled: \"{flag}\".");
             }
+
+            Log($"Export is {export}");
 
             return FileExporterFactory.Get(export);
         }
@@ -127,7 +130,7 @@ namespace DirectoryContents
             sb.AppendLine($"{startString} [{m_Directory_Path}]");
             sb.AppendLine($"{spacing.ToString()} [{m_Results_File}]");
             sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Md5} | {m_Algorithim_Sha_1} | {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
-            sb.AppendLine($"{spacing.ToString()} [{m_Export_TextFile} | {m_Export_TextFlat}]");
+            sb.AppendLine($"{spacing.ToString()} [{m_Export_TextFile} | {m_Export_TextFlat} | {m_Export_CsvFile}]");
 
             sb.AppendLine(string.Empty);
             sb.AppendLine("Where");
@@ -155,6 +158,7 @@ namespace DirectoryContents
             sb.AppendLine(string.Empty);
             sb.AppendLine($"\t{ m_Export_TextFile}\t\tExport into a text file, keeping the directory structure.");
             sb.AppendLine($"\t{ m_Export_TextFlat}\t\tExport into a text file, listing every file and folder with the fully qualified path.");
+            sb.AppendLine($"\t{ m_Export_CsvFile}\t\tExport into a CSV file, listing every file and folder with the fully qualified path.");
 
             sb.AppendLine(string.Empty);
             sb.AppendLine($"NOTE: All algorithims generate the same value for a given file as their Linux counterparts (md5sum, sha512sum, etc).");
@@ -273,6 +277,8 @@ namespace DirectoryContents
             }
             else
             {
+                ShowUsage();
+
                 Views.MainWindow mainWindow = new Views.MainWindow();
 
                 mainWindow.Show();

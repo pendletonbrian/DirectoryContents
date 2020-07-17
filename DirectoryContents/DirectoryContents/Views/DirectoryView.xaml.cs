@@ -169,6 +169,13 @@ namespace DirectoryContents.Views
 
                         break;
 
+                    case ExportFileStructure.CSV:
+
+                        diag.Filter = "Comma Separated Files | *.csv";
+                        diag.DefaultExt = "csv";
+
+                        break;
+
                     default:
                         throw new ArgumentException("There is no export type selected.");
                 }
@@ -347,7 +354,7 @@ namespace DirectoryContents.Views
             }
 
             // If the luser is dragging a file, in direct opposition of the name
-            // of the app, then do directly to the File Checksum page.
+            // of the app, then go directly to the File Checksum page.
             if (DirectoryViewModel.IsItemFile(filenameList[0]))
             {
                 FileInfo fileInfo = new FileInfo(filenameList[0]);

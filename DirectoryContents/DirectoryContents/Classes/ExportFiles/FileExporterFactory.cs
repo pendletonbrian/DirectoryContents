@@ -24,6 +24,10 @@ namespace DirectoryContents.Classes.ExportFiles
                     exportType = new TextFlat();
                     break;
 
+                case Enumerations.ExportFileStructure.CSV:
+                    exportType = new CsvFile();
+                    break;
+
                 default:
                     throw new ArgumentException($"Unhandled {nameof(Enumerations.ExportFileStructure)}: {exportFileStructure}");
             }

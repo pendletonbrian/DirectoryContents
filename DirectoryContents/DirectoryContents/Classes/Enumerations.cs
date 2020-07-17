@@ -48,7 +48,13 @@ namespace DirectoryContents.Classes
             /// Exports a flat list into a *.txt file.
             /// </summary>
             [Description("Flat text file")]
-            TextFlat
+            TextFlat,
+
+            /// <summary>
+            /// A regular CSV file.
+            /// </summary>
+            [Description("CSV")]
+            CSV
         }
 
         /// <summary>

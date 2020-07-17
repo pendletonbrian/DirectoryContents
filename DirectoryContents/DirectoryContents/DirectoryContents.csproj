@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\Tools\Directory Contents\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -76,6 +76,7 @@
     <Compile Include="Classes\Checksums\SHA256.cs" />
     <Compile Include="Classes\Checksums\SHA384.cs" />
     <Compile Include="Classes\Checksums\SHA512.cs" />
+    <Compile Include="Classes\ExportFiles\CsvFile.cs" />
     <Compile Include="Classes\ExportFiles\Empty.cs" />
     <Compile Include="Classes\ExportFiles\FileExporterFactory.cs" />
     <Compile Include="Classes\ExportFiles\IFileExport.cs" />

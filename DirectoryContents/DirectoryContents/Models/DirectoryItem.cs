@@ -87,6 +87,11 @@ namespace DirectoryContents.Models
 
         public string FullyQualifiedFilename { get; private set; }
 
+        /// <summary>
+        /// The fully qualified filepath, not including the file name.
+        /// </summary>
+        public string Filepath { get; private set; }
+
         public bool HasChildren => Items.Count > 0;
 
         public string IconUri { get; private set; }
@@ -117,6 +122,10 @@ namespace DirectoryContents.Models
             }
         }
 
+        /// <summary>
+        /// The name of the file, with extension. For directories,
+        /// this is the directory name.
+        /// </summary>
         public string ItemName { get; private set; }
 
         public ObservableCollection<DirectoryItem> Items { get; private set; }
@@ -139,6 +148,7 @@ namespace DirectoryContents.Models
         public DirectoryItem(DirectoryInfo directoryInfo) : this()
         {
             FullyQualifiedFilename = directoryInfo.FullName;
+            Filepath = directoryInfo.FullName;
 
             if (FullyQualifiedFilename.EndsWith(DirectorySeparator) == false)
             {
@@ -154,6 +164,7 @@ namespace DirectoryContents.Models
         public DirectoryItem(FileInfo fileInfo) : this()
         {
             FullyQualifiedFilename = fileInfo.FullName;
+            Filepath = fileInfo.DirectoryName;
             ItemName = fileInfo.Name;
             IsDirectory = false;
 
