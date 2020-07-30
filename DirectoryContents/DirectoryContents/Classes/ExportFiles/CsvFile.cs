@@ -14,11 +14,11 @@ namespace DirectoryContents.Classes.ExportFiles
         {
             if (string.IsNullOrWhiteSpace(node.Checksum))
             {
-                return $"\"{node.Filepath}\",\"{node.ItemName}\"";
+                return $"\"{node.Filepath}\",\"{node.ItemName}\",";
             }
             else
             {
-                return $"{node.Checksum},\"{node.Filepath}\",\"{node.ItemName}\"";
+                return $"\"{node.Filepath}\",\"{node.ItemName}\",\"{node.Checksum}\"";
             }
         }
 

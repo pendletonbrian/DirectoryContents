@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DirectoryContents.Classes.Checksums;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -137,5 +138,33 @@ namespace DirectoryContents.Classes
 
             return attribute == default(DescriptionAttribute) ? val.ToString() : attribute.Description;
         }
+
+        public static IHashAlgorithim GetAlgorithimInterface(this Enumerations.ChecksumAlgorithim val)
+        {
+            switch (val)
+            {
+                case Enumerations.ChecksumAlgorithim.None:
+                    return new Empty();
+
+                case Enumerations.ChecksumAlgorithim.MD5:
+                    return new MD5();
+
+                case Enumerations.ChecksumAlgorithim.SHA1:
+                    return new SHA1();
+
+                case Enumerations.ChecksumAlgorithim.SHA256:
+                    return new SHA256();
+
+                case Enumerations.ChecksumAlgorithim.SHA384:
+                    return new SHA384();
+
+                case Enumerations.ChecksumAlgorithim.SHA512:
+                    return new SHA512();
+
+                default:
+                    throw new Exception($"Unhandled {nameof(Enumerations.ChecksumAlgorithim)}: {val}");
+            }
+        }
+
     }
 }

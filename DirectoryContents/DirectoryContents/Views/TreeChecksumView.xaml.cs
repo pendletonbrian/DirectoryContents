@@ -87,7 +87,7 @@ namespace DirectoryContents.Views
 
                 bool wasCancelled = m_ViewModel.WasCancelled;
 
-                ShowPreviousPage();
+                ShowPreviousPage(m_ViewModel.SelectedAlgorithim);
 
                 if (wasCancelled)
                 {

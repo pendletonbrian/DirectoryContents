@@ -25,11 +25,11 @@ namespace DirectoryContents.Views
 
         #region constructor
 
-        public DirectoryView(MainWindowViewModel viewModel, IHashAlgorithim hashAlgorithim) : base(viewModel)
+        public DirectoryView(MainWindowViewModel viewModel) : base(viewModel)
         {
             InitializeComponent();
 
-            m_ViewModel = new DirectoryViewModel(viewModel, hashAlgorithim);
+            m_ViewModel = new DirectoryViewModel(viewModel);
 
             DataContext = m_ViewModel;
         }
@@ -158,6 +158,7 @@ namespace DirectoryContents.Views
                 diag.OverwritePrompt = true;
                 diag.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 diag.AddExtension = true;
+                diag.FileName = m_ViewModel.RootNode.ItemName;
 
                 switch (m_ViewModel.SelectedExportStructure)
                 {
@@ -415,5 +416,10 @@ namespace DirectoryContents.Views
         }
 
         #endregion Private Methods
+
+        public void SetHashAlgorithim(IHashAlgorithim hashAlgorithim)
+        {
+            m_ViewModel.HashAlgorithim = hashAlgorithim;
+        }
     }
 }

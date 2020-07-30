@@ -1,4 +1,5 @@
 ﻿using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Classes.WpfPageTransitions;
 using DirectoryContents.Models;
 using DirectoryContents.Views;
@@ -149,7 +150,7 @@ namespace DirectoryContents.ViewModels
                     break;
 
                 case Enumerations.PageControl.Directory:
-                    newPage = new DirectoryView(this, null);
+                    newPage = new DirectoryView(this);
                     break;
 
                 case Enumerations.PageControl.Settings:
@@ -330,7 +331,7 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         /// <param name="transitionType">
         /// </param>
-        internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade)
+        internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade, object additionalData = null)
         {
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: Start");
 
@@ -363,11 +364,21 @@ namespace DirectoryContents.ViewModels
                 Log($"  New page is {newPageControl}.");
             }
 
+            if (additionalData != null)
+            {
+                if (newPageControl is DirectoryView)
+                {
+                    IHashAlgorithim hashAlgorithim = ((ChecksumAlgorithim)additionalData).GetAlgorithimInterface();
+
+                    ((DirectoryView)newPageControl).SetHashAlgorithim(hashAlgorithim);
+                }
+            }
+
             // Set back button text.
 
             if (newPageControl is null)
             {
-                newPageControl = new DirectoryView(this, null);
+                newPageControl = new DirectoryView(this);
             }
 
             CurrentPage = GetPageEnumerationType(newPageControl);

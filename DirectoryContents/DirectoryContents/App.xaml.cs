@@ -262,7 +262,7 @@ namespace DirectoryContents
                     return;
                 }
 
-                ViewModels.DirectoryViewModel vm = new ViewModels.DirectoryViewModel(null, hashAlgorithim)
+                ViewModels.DirectoryViewModel vm = new ViewModels.DirectoryViewModel(null)
                 {
                     DirectoryToParse = directoryToParse
                 };

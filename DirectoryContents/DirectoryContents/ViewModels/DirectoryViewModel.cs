@@ -72,7 +72,6 @@ namespace DirectoryContents.ViewModels
         #region Private Members
 
         private const string m_FmtInt = "###,###,###,##0";
-        private readonly Hasher m_Hasher = null;
         private int m_DirectoryCount;
         private string m_DirectoryToParse = string.Empty;
         private int m_FileCount;
@@ -85,7 +84,7 @@ namespace DirectoryContents.ViewModels
 
         #region constructor
 
-        public DirectoryViewModel(MainWindowViewModel viewModel, IHashAlgorithim hashAlgorithim) : base(viewModel)
+        public DirectoryViewModel(MainWindowViewModel viewModel) : base(viewModel)
         {
             DirectoryItems = new ObservableCollection<DirectoryItem>();
 
@@ -103,12 +102,6 @@ namespace DirectoryContents.ViewModels
 
             SelectedExportStructure = Enumerations.ExportFileStructure.TextFile;
 
-            if (hashAlgorithim is null)
-            {
-                return;
-            }
-
-            m_Hasher = new Hasher(hashAlgorithim);
         }
 
         #endregion constructor
@@ -205,6 +198,8 @@ namespace DirectoryContents.ViewModels
             }
         }
 
+        public IHashAlgorithim HashAlgorithim { get; set; }
+
         #endregion Public Properties
 
         #region Private Methods
@@ -255,6 +250,12 @@ namespace DirectoryContents.ViewModels
                 ParseDirectory(directoryNode, directory.FullName);
             }
 
+            Hasher hasher = null;
+            if (HashAlgorithim != null)
+            {
+                hasher = new Hasher(HashAlgorithim);
+            }
+
             foreach (FileInfo file in dirInfo.GetFiles())
             {
                 m_FileCount++;
@@ -264,11 +265,11 @@ namespace DirectoryContents.ViewModels
                     Depth = node.Depth + 1
                 };
 
-                if (m_Hasher != null)
+                if (hasher != null)
                 {
                     Log($"  Hashing \"{file.Name}\".");
 
-                    bool? result = m_Hasher.TryGetFileChecksum(file.FullName, out string checksum);
+                    bool? result = hasher.TryGetFileChecksum(file.FullName, out string checksum);
 
                     if (result.HasValue &&
                         result.Value)
@@ -397,13 +398,13 @@ namespace DirectoryContents.ViewModels
 
             StringBuilder sb = new StringBuilder();
 
-            if (m_Hasher is null)
+            if (HashAlgorithim is null)
             {
                 sb.AppendLine("No hashing selected.");
             }
             else
             {
-                sb.AppendLine($"Hashing algorithm: {m_Hasher.AlgorithimName}");
+                sb.AppendLine($"Hashing algorithm: {HashAlgorithim.AlgorithimName}");
             }
 
             IFileExport exporter = FileExporterFactory.Get(SelectedExportStructure);

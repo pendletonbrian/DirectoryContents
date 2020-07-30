@@ -45,9 +45,9 @@ namespace DirectoryContents.Views
             m_ViewModel.ShowPreviousPage();
         }
 
-        internal void ShowPreviousPage()
+        internal void ShowPreviousPage(object additionalData = null)
         {
-            m_ViewModel.ShowPreviousPage();
+            m_ViewModel.ShowPreviousPage(additionalData: additionalData);
         }
 
         internal void ShowProgressBar(bool isVisible)

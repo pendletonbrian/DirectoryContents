@@ -79,7 +79,11 @@ namespace DirectoryContents.ViewModels
 
         public TreeChecksumViewModel(MainWindowViewModel viewModel, DirectoryItem rootNode) : base(viewModel)
         {
+            string nameOfNone = Enumerations.ChecksumAlgorithim.None.GetDescription();
+
             m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
+            m_AlgorithimList.Remove(new KeyValuePair<string, string>(nameOfNone, nameOfNone));
+
             RaisePropertyChanged(nameof(AlgorithimList));
 
             RootNode = rootNode;
