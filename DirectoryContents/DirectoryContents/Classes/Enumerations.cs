@@ -63,7 +63,7 @@ namespace DirectoryContents.Classes
         public enum PageControl
         {
             /// <summary>
-            /// User for initialization.
+            /// Used for initialization.
             /// </summary>
             None = 0,
 

@@ -56,7 +56,7 @@ namespace DirectoryContents.ViewModels
 
         #region Public Properties
 
-        internal Enumerations.PageControl CurrentPage { get; private set; } = Enumerations.PageControl.None;
+        internal PageControl CurrentPage { get; private set; } = Enumerations.PageControl.None;
 
         public string DebugText
         {
@@ -140,7 +140,7 @@ namespace DirectoryContents.ViewModels
 
         #region Private Methods
 
-        private UserControl GetPageUserControl(Enumerations.PageControl pageControl, object additionalData = null)
+        private UserControl GetPageUserControl(PageControl pageControl, object additionalData = null)
         {
             UserControl newPage = null;
 
@@ -218,9 +218,9 @@ namespace DirectoryContents.ViewModels
         /// </param>
         /// <returns>
         /// </returns>
-        internal static Enumerations.PageControl GetPageEnumerationType(UserControl pageControl)
+        internal static PageControl GetPageEnumerationType(UserControl pageControl)
         {
-            Enumerations.PageControl currentPage = Enumerations.PageControl.None;
+            PageControl currentPage = Enumerations.PageControl.None;
 
             if (pageControl is DirectoryView)
             {
@@ -286,7 +286,7 @@ namespace DirectoryContents.ViewModels
             Log(msg, prependTimeStamp);
         }
 
-        internal void ShowNextPage(Enumerations.PageControl pageControl,
+        internal void ShowNextPage(PageControl pageControl,
             object additionalData = null,
             PageTransitionType transitionType = PageTransitionType.SlideAndFade)
         {

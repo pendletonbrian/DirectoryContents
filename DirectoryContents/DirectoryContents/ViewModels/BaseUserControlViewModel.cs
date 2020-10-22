@@ -79,7 +79,7 @@ namespace DirectoryContents.ViewModels
         /// <param name="transitionType">
         /// Defaults to sliding to the left.
         /// </param>
-        public void ShowNextPage(Enumerations.PageControl pageControl,
+        public void ShowNextPage(PageControl pageControl,
             object additionalData = null,
             PageTransitionType transitionType = PageTransitionType.SlideAndFade)
         {

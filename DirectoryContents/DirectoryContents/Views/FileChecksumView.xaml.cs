@@ -32,7 +32,7 @@ namespace DirectoryContents.Views
 
         #region Private Methods
 
-        private void GenerateCommand_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+        private void GenerateCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             if (m_ViewModel is null)
             {
@@ -46,7 +46,7 @@ namespace DirectoryContents.Views
             e.Handled = true;
         }
 
-        private async void GenerateCommand_ExecutedAsync(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        private async void GenerateCommand_ExecutedAsync(object sender, ExecutedRoutedEventArgs e)
         {
             try
             {
