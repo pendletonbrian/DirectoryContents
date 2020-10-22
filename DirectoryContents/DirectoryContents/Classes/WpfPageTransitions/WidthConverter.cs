@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace DirectoryContents.Classes.WpfPageTransitions
 {
-    public class WidthConverter : IValueConverter
+    internal class WidthConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

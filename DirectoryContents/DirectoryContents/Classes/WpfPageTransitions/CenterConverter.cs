@@ -3,7 +3,7 @@ using System.Windows.Data;
 
 namespace DirectoryContents.Classes.WpfPageTransitions
 {
-    public class CenterConverter : IValueConverter
+    internal class CenterConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
