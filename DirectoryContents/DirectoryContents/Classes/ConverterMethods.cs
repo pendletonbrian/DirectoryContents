@@ -24,11 +24,13 @@ namespace DirectoryContents.Classes
                 // throwing an exception when the parsing fails
                 try
                 {
-                    mode = (Visibility)Enum.Parse(typeof(Visibility), parameter.ToString(), true);
+                    mode = (Visibility)Enum.Parse(typeof(Visibility), 
+                        parameter.ToString(), true);
                 }
                 catch (FormatException e)
                 {
-                    throw new FormatException("Invalid Visibility specified as the ConverterParameter.  Use Visible or Collapsed.", e);
+                    throw new FormatException("Invalid Visibility specified as " +
+                        "the ConverterParameter.  Use Visible or Collapsed.", e);
                 }
             }
 

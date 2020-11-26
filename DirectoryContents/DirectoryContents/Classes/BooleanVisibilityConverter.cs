@@ -6,7 +6,10 @@ namespace DirectoryContents.Classes
 {
     public class BooleanVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, 
+            Type targetType, 
+            object parameter, 
+            System.Globalization.CultureInfo culture)
         {
             bool isVisible = (bool)value;
 
@@ -18,7 +21,10 @@ namespace DirectoryContents.Classes
             return (isVisible ? Visibility.Visible : Visibility.Collapsed);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, 
+            Type targetType, 
+            object parameter, 
+            System.Globalization.CultureInfo culture)
         {
             bool isVisible = ((Visibility)value == Visibility.Visible);
 

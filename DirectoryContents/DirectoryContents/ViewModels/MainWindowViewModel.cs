@@ -140,7 +140,8 @@ namespace DirectoryContents.ViewModels
 
         #region Private Methods
 
-        private UserControl GetPageUserControl(PageControl pageControl, object additionalData = null)
+        private UserControl GetPageUserControl(PageControl pageControl, 
+            object additionalData = null)
         {
             UserControl newPage = null;
 
@@ -161,14 +162,16 @@ namespace DirectoryContents.ViewModels
 
                     if (additionalData is null)
                     {
-                        throw new ArgumentException($"The {nameof(FileChecksumView)} requires the {nameof(DirectoryItem)} parameter.");
+                        throw new ArgumentException($"The {nameof(FileChecksumView)} " +
+                            $"requires the {nameof(DirectoryItem)} parameter.");
                     }
 
                     DirectoryItem item = additionalData as DirectoryItem;
 
                     if (item is null)
                     {
-                        throw new ArgumentException($"The additional data wasn't of type {nameof(DirectoryItem)}.");
+                        throw new ArgumentException($"The additional data " +
+                            $"wasn't of type {nameof(DirectoryItem)}.");
                     }
 
                     newPage = new FileChecksumView(this, item);
@@ -179,14 +182,16 @@ namespace DirectoryContents.ViewModels
 
                     if (additionalData is null)
                     {
-                        throw new ArgumentException($"The {nameof(TreeChecksumView)} requires the {nameof(DirectoryItem)} parameter.");
+                        throw new ArgumentException($"The {nameof(TreeChecksumView)}" +
+                            $" requires the {nameof(DirectoryItem)} parameter.");
                     }
 
                     DirectoryItem rootNode = additionalData as DirectoryItem;
 
                     if (rootNode is null)
                     {
-                        throw new ArgumentException($"The additional data wasn't of type {nameof(DirectoryItem)}.");
+                        throw new ArgumentException($"The additional data " +
+                            $"wasn't of type {nameof(DirectoryItem)}.");
                     }
 
                     newPage = new TreeChecksumView(this, rootNode);
@@ -194,7 +199,8 @@ namespace DirectoryContents.ViewModels
                     break;
 
                 default:
-                    throw new DirectoryContentsException($"Unhandled PageControl enumeration: {pageControl}");
+                    throw new DirectoryContentsException($"Unhandled PageControl" +
+                        $" enumeration: {pageControl}");
             }
 
             return newPage;
@@ -331,7 +337,9 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         /// <param name="transitionType">
         /// </param>
-        internal void ShowPreviousPage(PageTransitionType transitionType = PageTransitionType.SlideBackAndFade, object additionalData = null)
+        internal void ShowPreviousPage(
+            PageTransitionType transitionType = PageTransitionType.SlideBackAndFade, 
+            object additionalData = null)
         {
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: Start");
 

@@ -509,7 +509,10 @@ namespace DirectoryContents.ViewModels
 
                     RootNode.IsExpanded = true;
 
-                    ShowStatusMessage($"Time to parse {m_DirectoryCount.ToString(m_FmtInt)} directories and {m_FileCount.ToString(m_FmtInt)} files: {timer.Elapsed.GetTimeFromTimeSpan()}");
+                    ShowStatusMessage($"Time to parse " +
+                        $"{m_DirectoryCount.ToString(m_FmtInt)} directories and" +
+                        $" {m_FileCount.ToString(m_FmtInt)} files: " +
+                        $"{timer.Elapsed.GetTimeFromTimeSpan()}");
                 }
             }
             catch (Exception ex)
