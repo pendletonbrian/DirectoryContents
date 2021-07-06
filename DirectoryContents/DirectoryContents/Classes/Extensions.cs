@@ -1,8 +1,8 @@
-﻿using DirectoryContents.Classes.Checksums;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using DirectoryContents.Classes.Checksums;
 
 namespace DirectoryContents.Classes
 {
@@ -165,6 +165,5 @@ namespace DirectoryContents.Classes
                     throw new Exception($"Unhandled {nameof(Enumerations.ChecksumAlgorithim)}: {val}");
             }
         }
-
     }
 }

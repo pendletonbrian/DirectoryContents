@@ -1,8 +1,8 @@
-﻿using DirectoryContents.Classes;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using DirectoryContents.Classes;
 
 namespace DirectoryContents.Models
 {

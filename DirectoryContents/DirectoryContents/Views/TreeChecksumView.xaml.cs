@@ -1,10 +1,10 @@
-﻿using DirectoryContents.Classes;
-using DirectoryContents.Models;
-using DirectoryContents.ViewModels;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DirectoryContents.Classes;
+using DirectoryContents.Models;
+using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
 {
@@ -15,7 +15,7 @@ namespace DirectoryContents.Views
     {
         #region Private Members
 
-        private TreeChecksumViewModel m_ViewModel;
+        private readonly TreeChecksumViewModel m_ViewModel;
 
         #endregion Private Members
 

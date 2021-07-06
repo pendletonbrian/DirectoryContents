@@ -1,8 +1,8 @@
-﻿using DirectoryContents.Classes;
+﻿using System.Diagnostics;
+using System.Windows.Input;
+using DirectoryContents.Classes;
 using DirectoryContents.Models;
 using DirectoryContents.ViewModels;
-using System.Diagnostics;
-using System.Windows.Input;
 
 namespace DirectoryContents.Views
 {

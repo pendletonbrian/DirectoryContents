@@ -24,7 +24,7 @@ namespace DirectoryContents.Classes
                 // throwing an exception when the parsing fails
                 try
                 {
-                    mode = (Visibility)Enum.Parse(typeof(Visibility), 
+                    mode = (Visibility)Enum.Parse(typeof(Visibility),
                         parameter.ToString(), true);
                 }
                 catch (FormatException e)

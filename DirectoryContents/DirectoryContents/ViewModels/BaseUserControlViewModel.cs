@@ -1,5 +1,5 @@
-﻿using DirectoryContents.Classes;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using DirectoryContents.Classes;
 using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.ViewModels

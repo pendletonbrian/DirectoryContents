@@ -15,7 +15,7 @@ namespace DirectoryContents.Classes
             [Description("None")]
             None = 0,
 
-            [Description("MD5")]
+            [Description("MD5 (Not FIPS compliant)")]
             MD5,
 
             [Description("SHA-1")]

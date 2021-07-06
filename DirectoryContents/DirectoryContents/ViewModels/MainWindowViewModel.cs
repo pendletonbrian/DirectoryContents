@@ -1,15 +1,15 @@
-﻿using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Classes.WpfPageTransitions;
-using DirectoryContents.Models;
-using DirectoryContents.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Timers;
 using System.Windows.Controls;
+using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Classes.WpfPageTransitions;
+using DirectoryContents.Models;
+using DirectoryContents.Views;
 using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.ViewModels
@@ -28,7 +28,7 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         private const int MAX_STATUS_MSG_COUNT = 8;
 
-        private static readonly Logger m_Logger;
+        private static readonly Logger m_Logger = null;
 
         /// <summary>
         /// The list of the controls that have been used in the current path.
@@ -42,7 +42,7 @@ namespace DirectoryContents.ViewModels
         /// </summary>
         private readonly Timer m_StatusMsgTimer = new Timer();
 
-        private StringBuilder m_DebugText = new StringBuilder();
+        private readonly StringBuilder m_DebugText = new StringBuilder();
 
         /// <summary>
         /// The current number of seconds for which the timer has been counting.
@@ -56,7 +56,7 @@ namespace DirectoryContents.ViewModels
 
         #region Public Properties
 
-        internal PageControl CurrentPage { get; private set; } = Enumerations.PageControl.None;
+        internal PageControl CurrentPage { get; private set; } = PageControl.None;
 
         public string DebugText
         {
@@ -115,13 +115,15 @@ namespace DirectoryContents.ViewModels
             {
                 string startupDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-                m_Logger = new Logger(Path.Combine(startupDirectory, $"log_{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log"));
+                m_Logger = new Logger(
+                    Path.Combine(startupDirectory,
+                    $"log_{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.log"));
 
                 Log($"{nameof(MainWindowViewModel)} static constructor.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception in static constructor:{Environment.NewLine}{ex.ToString()}");
+                Debug.WriteLine($"Exception in static constructor:{Environment.NewLine}{ex}");
             }
         }
 
@@ -140,25 +142,25 @@ namespace DirectoryContents.ViewModels
 
         #region Private Methods
 
-        private UserControl GetPageUserControl(PageControl pageControl, 
+        private UserControl GetPageUserControl(PageControl pageControl,
             object additionalData = null)
         {
             UserControl newPage = null;
 
             switch (pageControl)
             {
-                case Enumerations.PageControl.None:
+                case PageControl.None:
                     break;
 
-                case Enumerations.PageControl.Directory:
+                case PageControl.Directory:
                     newPage = new DirectoryView(this);
                     break;
 
-                case Enumerations.PageControl.Settings:
+                case PageControl.Settings:
                     newPage = new SettingsView(this);
                     break;
 
-                case Enumerations.PageControl.FileChecksum:
+                case PageControl.FileChecksum:
 
                     if (additionalData is null)
                     {
@@ -226,19 +228,19 @@ namespace DirectoryContents.ViewModels
         /// </returns>
         internal static PageControl GetPageEnumerationType(UserControl pageControl)
         {
-            PageControl currentPage = Enumerations.PageControl.None;
+            PageControl currentPage = PageControl.None;
 
             if (pageControl is DirectoryView)
             {
-                currentPage = Enumerations.PageControl.Directory;
+                currentPage = PageControl.Directory;
             }
             else if (pageControl is SettingsView)
             {
-                currentPage = Enumerations.PageControl.Settings;
+                currentPage = PageControl.Settings;
             }
             else if (pageControl is FileChecksumView)
             {
-                currentPage = Enumerations.PageControl.FileChecksum;
+                currentPage = PageControl.FileChecksum;
             }
             else
             {
@@ -298,7 +300,7 @@ namespace DirectoryContents.ViewModels
         {
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowNextPage)}: Start");
 
-            if (pageControl.Equals(Enumerations.PageControl.None))
+            if (pageControl.Equals(PageControl.None))
             {
                 Log($"  The page control type \"{pageControl}\" is unhandled.");
             }
@@ -314,7 +316,7 @@ namespace DirectoryContents.ViewModels
 
             Log($"  The page type is \"{pageControl}\".");
 
-            if (CurrentPage.Equals(pageControl) == true)
+            if (CurrentPage.Equals(pageControl))
             {
                 return;
             }
@@ -338,7 +340,7 @@ namespace DirectoryContents.ViewModels
         /// <param name="transitionType">
         /// </param>
         internal void ShowPreviousPage(
-            PageTransitionType transitionType = PageTransitionType.SlideBackAndFade, 
+            PageTransitionType transitionType = PageTransitionType.SlideBackAndFade,
             object additionalData = null)
         {
             Log($"{nameof(MainWindowViewModel)}.{nameof(ShowPreviousPage)}: Start");

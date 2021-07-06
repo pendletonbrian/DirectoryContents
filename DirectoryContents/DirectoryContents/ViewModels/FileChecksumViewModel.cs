@@ -1,11 +1,11 @@
-﻿using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
 
 namespace DirectoryContents.ViewModels
 {
@@ -24,7 +24,7 @@ namespace DirectoryContents.ViewModels
 
         private readonly List<KeyValuePair<string, string>> m_AlgorithimList = new List<KeyValuePair<string, string>>();
         private string m_ComputedChecksum = string.Empty;
-        private ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
+        private readonly ObservableCollection<string> m_ComputedChecksumList = new ObservableCollection<string>();
         private Enumerations.ChecksumAlgorithim m_SelectedAlgorithim = Enumerations.ChecksumAlgorithim.None;
         private DirectoryItem m_SelectedItem = null;
 

@@ -12,7 +12,7 @@ namespace DirectoryContents.Classes.WpfPageTransitions
     /// </summary>
     public partial class PageTransition : UserControl
     {
-        private Stack<UserControl> pages = new Stack<UserControl>();
+        private readonly Stack<UserControl> pages = new Stack<UserControl>();
 
         private void HidePage_Completed(object sender, EventArgs e)
         {

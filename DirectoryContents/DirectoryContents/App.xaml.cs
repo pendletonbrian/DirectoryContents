@@ -91,7 +91,7 @@ namespace DirectoryContents
             }
             else if (flag.Equals(m_Export_TextFlat, StringComparison.OrdinalIgnoreCase))
             {
-                export = Enumerations.ExportFileStructure.TextFlat;                
+                export = Enumerations.ExportFileStructure.TextFlat;
             }
             else if (flag.Equals(m_Export_CsvFile, StringComparison.OrdinalIgnoreCase))
             {
@@ -250,7 +250,7 @@ namespace DirectoryContents
                 {
                     fileExport = GetExport(e.Args[3]);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LogError($"The export format could not be determined from the argument \"{e.Args[3]}\"..");
                     LogError(ex.Message);

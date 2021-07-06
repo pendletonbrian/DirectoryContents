@@ -1,10 +1,11 @@
-﻿using DirectoryContents.Classes;
-using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DirectoryContents.Classes;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
+using Microsoft.Win32;
 
 namespace DirectoryContents.ViewModels
 {
@@ -84,6 +85,16 @@ namespace DirectoryContents.ViewModels
             m_AlgorithimList = Enumerations.GetEnumValueDescriptionPairs(typeof(Enumerations.ChecksumAlgorithim));
             m_AlgorithimList.Remove(new KeyValuePair<string, string>(nameOfNone, nameOfNone));
 
+            var enabled = IsFIPSEnabled();
+
+            if (enabled.HasValue &&
+                enabled.Value)
+            {
+                m_AlgorithimList.Remove(new KeyValuePair<string, string>(
+                    Enumerations.ChecksumAlgorithim.MD5.ToString(),
+                    Enumerations.ChecksumAlgorithim.MD5.GetDescription()));
+            }
+
             RaisePropertyChanged(nameof(AlgorithimList));
 
             RootNode = rootNode;
@@ -109,7 +120,9 @@ namespace DirectoryContents.ViewModels
                 Hasher hasher = new Hasher(algorithim);
 
                 m_CancellationTokenSource = tokenSource;
+
                 CancellationToken token = tokenSource.Token;
+
                 token.ThrowIfCancellationRequested();
 
                 m_GenerationInProgress = true;
@@ -137,6 +150,22 @@ namespace DirectoryContents.ViewModels
         internal bool IsGenerationInProgress()
         {
             return m_GenerationInProgress;
+        }
+
+        /// <summary>
+        /// Check the Registry to see if FIPS is enabled.
+        /// </summary>
+        /// <returns></returns>
+        internal bool? IsFIPSEnabled()
+        {
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy");
+
+            if (key is null)
+            {
+                return null;
+            }
+
+            return key.GetValue("Enabled").Equals(1);
         }
 
         #endregion Public Methods
@@ -172,6 +201,11 @@ namespace DirectoryContents.ViewModels
                 else
                 {
                     Log($"    There was no result from the hashing.");
+
+                    if (string.IsNullOrWhiteSpace(checksum) == false)
+                    {
+                        Log(checksum);
+                    }
                 }
 
                 return;

@@ -1,5 +1,5 @@
-﻿using DirectoryContents.Models;
-using System.Text;
+﻿using System.Text;
+using DirectoryContents.Models;
 
 namespace DirectoryContents.Classes.ExportFiles
 {

@@ -79,9 +79,11 @@ namespace DirectoryContents.Classes.Checksums
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
-                checksum = string.Empty;
+                Console.Error.WriteLine(ex.StackTrace);
+
+                checksum = ex.StackTrace;
 
                 return false;
             }

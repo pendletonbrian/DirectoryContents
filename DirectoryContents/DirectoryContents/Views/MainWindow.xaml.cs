@@ -1,5 +1,5 @@
-﻿using DirectoryContents.ViewModels;
-using System.Windows;
+﻿using System.Windows;
+using DirectoryContents.ViewModels;
 
 namespace DirectoryContents.Views
 {

@@ -1,13 +1,13 @@
-﻿using DirectoryContents.Classes.Checksums;
-using DirectoryContents.Models;
-using DirectoryContents.ViewModels;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DirectoryContents.Classes.Checksums;
+using DirectoryContents.Models;
+using DirectoryContents.ViewModels;
 using static DirectoryContents.Classes.Enumerations;
 
 namespace DirectoryContents.Views
