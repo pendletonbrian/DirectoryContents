@@ -5,6 +5,7 @@ using System.Windows;
 using DirectoryContents.Classes;
 using DirectoryContents.Classes.Checksums;
 using DirectoryContents.Classes.ExportFiles;
+using DirectoryContents.ViewModels;
 
 namespace DirectoryContents
 {
@@ -119,6 +120,9 @@ namespace DirectoryContents
 
         private static void ShowUsage()
         {
+            var val = TreeChecksumViewModel.IsFIPSEnabled();
+            bool isFipsEnabled = val ?? false;
+
             string startString = $"Usage: { AppDomain.CurrentDomain.FriendlyName}";
 
             // 32 is the ASCII code for a space.
@@ -128,9 +132,18 @@ namespace DirectoryContents
 
             sb.AppendLine(string.Empty);
             sb.AppendLine($"{startString} [{m_Directory_Path}]");
-            sb.AppendLine($"{spacing.ToString()} [{m_Results_File}]");
-            sb.AppendLine($"{spacing.ToString()} [{m_Algorithim_Md5} | {m_Algorithim_Sha_1} | {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
-            sb.AppendLine($"{spacing.ToString()} [{m_Export_TextFile} | {m_Export_TextFlat} | {m_Export_CsvFile}]");
+            sb.AppendLine($"{spacing} [{m_Results_File}]");
+
+            if (isFipsEnabled)
+            {
+                sb.AppendLine($"{spacing} [{m_Algorithim_Md5} (Disabled) | {m_Algorithim_Sha_1} | {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
+            }
+            else
+            {
+                sb.AppendLine($"{spacing} [{m_Algorithim_Md5} | {m_Algorithim_Sha_1} | {m_Algorithim_Sha_256} | {m_Algorithim_Sha_384} | {m_Algorithim_Sha_512}]");
+            }
+
+            sb.AppendLine($"{spacing} [{m_Export_TextFile} | {m_Export_TextFlat} | {m_Export_CsvFile}]");
 
             sb.AppendLine(string.Empty);
             sb.AppendLine("Where");
@@ -140,8 +153,15 @@ namespace DirectoryContents
             sb.AppendLine(string.Empty);
             sb.AppendLine("Options (flags are not case-sensitive)");
 
-            // RFC 1321
-            sb.AppendLine($"\t{m_Algorithim_Md5}\t\tCalculate the 128-bit/16 byte MD5 message digest, as defined in RFC 1321.");
+            if (isFipsEnabled)
+            {
+                sb.AppendLine($"\t{m_Algorithim_Md5}\t\tOption is disabled: FIPS is enabled on this machine.");
+            }
+            else
+            {
+                // RFC 1321
+                sb.AppendLine($"\t{m_Algorithim_Md5}\t\tCalculate the 128-bit/16 byte MD5 message digest, as defined in RFC 1321.");
+            }
 
             // FIPS-180-1
             sb.AppendLine($"\t{m_Algorithim_Sha_1}\t\tCalculate the 160-bit/20 byte SHA-1 message digest, as defined in FIPS-180-1.");
@@ -208,7 +228,7 @@ namespace DirectoryContents
                     return;
                 }
 
-                // First agrument should be the source directory.
+                // First argument should be the source directory.
                 string directoryToParse = e.Args[0];
 
                 if (Directory.Exists(directoryToParse) == false)
@@ -231,6 +251,20 @@ namespace DirectoryContents
                 try
                 {
                     hashAlgorithim = GetAlgorithim(e.Args[2]);
+
+                    var val = TreeChecksumViewModel.IsFIPSEnabled();
+                    bool isFipsEnabled = val ?? false;
+
+                    if (isFipsEnabled &&
+                        hashAlgorithim.Equals(Enumerations.ChecksumAlgorithim.MD5))
+                    {
+                        LogError("FIPS is enabled, cannot use MD5.");
+
+                        ShowUsage();
+
+                        Shutdown(FAILURE);
+                    }
+
                 }
                 catch (Exception ex)
                 {
@@ -262,7 +296,7 @@ namespace DirectoryContents
                     return;
                 }
 
-                ViewModels.DirectoryViewModel vm = new ViewModels.DirectoryViewModel(null)
+                DirectoryViewModel vm = new DirectoryViewModel(null)
                 {
                     DirectoryToParse = directoryToParse
                 };

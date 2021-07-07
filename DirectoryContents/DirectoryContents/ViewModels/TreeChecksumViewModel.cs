@@ -156,7 +156,7 @@ namespace DirectoryContents.ViewModels
         /// Check the Registry to see if FIPS is enabled.
         /// </summary>
         /// <returns></returns>
-        internal bool? IsFIPSEnabled()
+        internal static bool? IsFIPSEnabled()
         {
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Control\Lsa\FipsAlgorithmPolicy");
 
